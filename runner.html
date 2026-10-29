@@ -1,3 +1,4 @@
+<meta charset="utf-8">
 <title>Torre da Disciplina Runner</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -81,7 +82,39 @@ summary{cursor:pointer;font-weight:700;color:var(--gold)}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;font-size:12px}
 .stats div{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:6px 8px;display:flex;justify-content:space-between;gap:6px;font-variant-numeric:tabular-nums}
 .stats span{color:var(--mute)}
-@media (max-width:560px){.hud{inset:4px 4px auto 4px}.hud .who,.hud .where{padding:4px 6px}.bars{width:96px}.bars .nm{display:none}.bar{height:7px}.bar span{font-size:7px;line-height:7px}.where b{font-size:12px}.skillbar{grid-template-columns:repeat(4,1fr)}.auto{grid-column:1/-1;flex-direction:row;justify-content:center}.actions{grid-template-columns:1fr}.hud .where small{display:none}}
+.states{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.states button{border:1px solid var(--line);background:var(--panel2);border-radius:999px;padding:5px 12px;font-size:12px;font-weight:700;color:var(--mute)}
+.states button[aria-pressed="true"]{border-color:var(--gold);color:var(--gold)}
+.cutwrap{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;margin-top:10px}
+#cPrev{width:120px;height:120px;background:#0f0d16;border:1px solid var(--line);border-radius:8px;image-rendering:pixelated}
+.seq{display:flex;gap:4px;flex-wrap:wrap;min-width:0}
+.seq button{border:1px solid var(--gold);background:var(--panel2);border-radius:6px;padding:2px 7px;font-size:12px;font-weight:700;font-variant-numeric:tabular-nums}
+.frames{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:6px;max-height:340px;overflow:auto;margin-top:10px;padding:2px}
+.fr{display:flex;flex-direction:column;align-items:center;gap:2px;border:1px solid var(--line);background:#0f0d16;border-radius:6px;padding:4px;font-size:11px;color:var(--mute);font-variant-numeric:tabular-nums}
+.fr canvas{width:56px;height:56px;image-rendering:pixelated}
+.fr.used{border-color:var(--gold);color:var(--gold)}
+.chk{display:flex;gap:8px;align-items:center;font-size:13px}
+.chk input{width:18px;height:18px}
+.btn.go{background:var(--gold);color:#241a05;border-color:#b8862a}
+.pickers{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.urlrow{display:flex;gap:8px;margin-top:10px}
+.urlrow input{flex:1;min-width:0;background:#0f0d16;border:1px solid var(--line);border-radius:8px;padding:8px;color:var(--ink)}
+.drop{margin-top:10px;border:2px dashed var(--line);border-radius:10px;padding:14px;text-align:center;font-size:13px;color:var(--mute);line-height:1.5}
+.drop.on{border-color:var(--gold);color:var(--ink);background:color-mix(in srgb,var(--gold) 8%,transparent)}
+.linkish{color:var(--gold);font-weight:700;text-decoration:underline;cursor:pointer}
+.roster{display:flex;flex-direction:column;gap:10px;margin-top:10px}
+.roster h4{margin:0;font-family:var(--display);font-size:14px;color:var(--mute);font-weight:500}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px}
+.rrow{display:grid;grid-template-columns:44px 1fr;gap:8px;align-items:center;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:6px;min-width:0}
+.rrow.custom{border-color:var(--ok)}
+.rrow.sel{outline:2px solid var(--gold)}
+.rrow canvas{width:44px;height:44px;image-rendering:pixelated;background:#0f0d16;border-radius:6px}
+.rrow b{font-size:13px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rrow small{font-size:11px;color:var(--mute)}
+.rrow.custom small{color:var(--ok)}
+.rrow .ra{display:flex;gap:4px;flex-wrap:wrap;margin-top:3px}
+.rrow .ra button{font-size:11px;padding:2px 7px;border-radius:6px;border:1px solid var(--line);background:#0f0d16;font-weight:600}
+@media (max-width:560px){.pickers{grid-template-columns:1fr}.cutwrap{grid-template-columns:1fr}.hud{inset:4px 4px auto 4px}.hud .who,.hud .where{padding:4px 6px}.bars{width:96px}.bars .nm{display:none}.bar{height:7px}.bar span{font-size:7px;line-height:7px}.where b{font-size:12px}.skillbar{grid-template-columns:repeat(4,1fr)}.auto{grid-column:1/-1;flex-direction:row;justify-content:center}.actions{grid-template-columns:1fr}.hud .where small{display:none}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -114,10 +147,47 @@ summary{cursor:pointer;font-weight:700;color:var(--gold)}
     <button class="act" id="bFocus" type="button"><b>Iniciar modo foco</b><small>Demo de 30 s: +20% de ataque e regeneração de SP dobrada</small></button>
   </div>
 
+  <div class="pickers">
+    <label class="fld">Mapa<select id="mapSel"></select></label>
+    <label class="fld">Classe do herói<select id="clsSel"></select></label>
+  </div>
+
   <div class="stats" id="stats"></div>
 
+  <details id="autoBox" open>
+    <summary>Carregar sprites por URL, arquivo ou preset</summary>
+    <p class="note">Escolha o personagem e cole o link direto de um PNG, ou solte vários arquivos de uma vez. O recorte é automático: o fundo sai pela cor do canto (magenta, verde ou qualquer cor lisa), cada quadro é encontrado sozinho e as linhas viram as animações. O resultado fica salvo neste navegador.</p>
+    <div class="form">
+      <label class="fld">Personagem<select id="aKey"></select></label>
+      <label class="fld">Organização da folha<select id="aLayout"><option value="auto">Detectar sozinho</option><option value="rows">Uma linha por animação</option><option value="sequence">Tudo em sequência</option></select></label>
+      <label class="fld">Ordem das linhas<select id="aOrder"><option value="IDLE,RUN,ATTACK,HIT">Parado, andando, ataque, dano</option><option value="RUN,ATTACK,HIT">Andando, ataque, dano</option><option value="IDLE,RUN,ATTACK,HIT,SKILL">Parado, andando, ataque, dano, habilidade</option><option value="IDLE,RUN,ATTACK,SKILL,HIT">Grade deste jogo (5 linhas)</option></select></label>
+      <label class="fld">Máximo de quadros por animação<input id="aMax" type="number" min="1" max="16" value="8"></label>
+      <label class="chk"><input type="checkbox" id="aFlip"> Espelhar (sprite olha para a esquerda)</label>
+    </div>
+    <div class="urlrow"><input id="aUrl" type="url" placeholder="https://raw.githubusercontent.com/.../poring.png" aria-label="Link direto do PNG"><button class="btn go" id="aGo" type="button">Baixar e aplicar</button></div>
+    <div class="drop" id="aDrop">Solte aqui um ou vários PNG, cole uma imagem copiada (Ctrl+V) ou <label class="linkish">escolha arquivos<input id="aFiles" type="file" accept="image/png,image/gif,image/webp,image/bmp" multiple hidden></label>.<br>Arquivo com o nome do personagem (poring.png, orc_hero.png, knight.png) vai direto para ele.</div>
+    <p class="note" id="aStatus" role="status"></p>
+    <div class="roster" id="roster"></div>
+  </details>
+
+  <details id="cutBox">
+    <summary>Recorte manual (para ajustar quadro a quadro)</summary>
+    <p class="note">Baixe a folha de sprites no seu aparelho (por exemplo, no Spriters Resource) e escolha o arquivo aqui. O fundo é removido pela cor do canto, cada quadro é detectado sozinho, e você monta cada animação tocando nos quadros na ordem. Tudo fica salvo só neste navegador.</p>
+    <div class="form">
+      <label class="fld">Personagem<select id="cWho"><option value="hero">Herói</option><option value="slime">Monstro 1 (slime)</option><option value="shroom">Monstro 2 (cogumelo)</option></select></label>
+      <label class="fld">Arquivo da folha<input id="cFile" type="file" accept="image/png,image/gif,image/webp,image/bmp"></label>
+      <label class="fld">Juntar partes a até (px)<input id="cGap" type="number" min="0" max="16" value="3"></label>
+      <label class="fld">Escala no jogo<input id="cScale" type="number" min="0.2" max="4" step="0.05" placeholder="automática"></label>
+    </div>
+    <p class="note" id="cInfo">Nenhuma folha carregada.</p>
+    <div class="states" id="cStates"></div>
+    <label class="chk" style="margin-top:8px"><input type="checkbox" id="cFlip"> Espelhar (o sprite original olha para a esquerda)</label>
+    <div class="cutwrap"><canvas id="cPrev" width="120" height="120" aria-label="Prévia da animação"></canvas><div><span class="fld" style="margin-bottom:4px">Sequência do estado (toque para tirar)</span><div class="seq" id="cSeq"></div></div></div>
+    <div class="frames" id="cFrames"></div>
+    <div class="row"><button class="btn go" id="cApply" type="button">Aplicar no jogo</button><button class="btn" id="cClear" type="button">Limpar este estado</button><button class="btn" id="cForget" type="button">Apagar sprite salvo</button></div>
+  </details>
   <details>
-    <summary>Carregar sua própria spritesheet</summary>
+    <summary>Carregar spritesheet em grade</summary>
     <div class="form">
       <label class="fld">Personagem<select id="spWho"><option value="hero">Herói</option><option value="slime">Slime</option><option value="shroom">Cogumelo</option></select></label>
       <label class="fld">Largura do quadro (px)<input id="spW" type="number" min="8" max="512" value="48"></label>
@@ -236,8 +306,8 @@ function makeSheet(fw,fh,frames,drawFrame){
 /* pinta "pixels" de 2x2 numa grade de 24x24 dentro do quadro de 48x48 */
 const P=(g,x,y,w,h,c)=>{g.fillStyle=c;g.fillRect(x*2,y*2,w*2,h*2)};
 const HERO_PAL={skin:'#f6d5b4',hair:'#5a3420',tunic:'#b0553a',trim:'#f2c14e',belt:'#6b4a24',pants:'#3b3f6b',boot:'#4a2f1d',blade:'#dfe8f2',hilt:'#c8a24a',out:'#1a1426',cape:'#3f5fa8'};
-function drawHeroFrame(g,st,f,n){
-  const C=HERO_PAL,t=f/n;
+const drawHeroFrame=pal=>(g,st,f,n)=>{
+  const C=pal,t=f/n;
   let bob=0,legA=0,legB=0,lean=0,sw='rest',flash=false;
   if(st==='IDLE')bob=f%2;
   if(st==='RUN'){bob=[0,1,0,1,0,1][f];legA=[2,1,-1,-2,-1,1][f];legB=-legA;lean=1}
@@ -276,13 +346,13 @@ function drawSlimeFrame(color,eye){return (g,st,f,n)=>{
   P(g,x+w-6,y+3,1,2,eye);P(g,x+w-3,y+3,1,2,eye);P(g,x+w-5,y+6,3,1,'#1a1426');
   if(flash){g.globalCompositeOperation='source-atop';g.fillStyle='rgba(255,255,255,.6)';g.fillRect(0,0,48,48);g.globalCompositeOperation='source-over'}
 }}
-function drawShroomFrame(g,st,f,n){
+const drawShroomFrame=cap=>(g,st,f,n)=>{
   let bob=0,lean=0,flash=false;
   if(st==='IDLE')bob=f%2;
   if(st==='RUN'){bob=[0,1,0,1][f];lean=[0,1,0,-1][f]}
   if(st==='ATTACK'){lean=[0,-2,3,0][f]}
   if(st==='HIT'){lean=2;flash=true}
-  const cap='#d85a4a',x=6+lean,y=6+bob;
+  const x=6+lean,y=6+bob;
   P(g,x+2,y,8,1,cap);P(g,x,y+1,12,4,cap);P(g,x+2,y+2,2,2,'#fff1e6');P(g,x+8,y+1,2,2,'#fff1e6');
   P(g,x+3,y+5,6,6,'#efe6cf');P(g,x+4,y+7,1,2,'#1a1426');P(g,x+7,y+7,1,2,'#1a1426');
   P(g,x+3,y+11,2,3-(st==='RUN'&&f%2?1:0),'#c9a06f');P(g,x+7,y+11,2,3-(st==='RUN'&&!(f%2)?1:0),'#c9a06f');
@@ -300,28 +370,65 @@ const FB={
     g.save();g.translate(w*.66,h*.58);g.rotate(-1.1+sw);g.fillStyle='#dfe8f2';g.fillRect(-2,-h*.34,4,h*.34);g.restore();
   },
   slime(color){return (g,w,h,st,t,hit)=>{const sq=st==='RUN'?Math.sin(t*6.28)*3:0;g.fillStyle=hit?'#ffffff':color;g.beginPath();g.ellipse(w*.5,h*.86-sq,w*.3+sq/2,h*.2-sq/3,0,Math.PI,0);g.fill();g.fillRect(w*.2-sq/2,h*.86-sq,w*.6+sq,4);g.fillStyle='#1a1426';g.fillRect(w*.56,h*.74-sq,3,4);g.fillRect(w*.66,h*.74-sq,3,4)}},
-  shroom(g,w,h,st,t,hit){g.fillStyle=hit?'#ffffff':'#d85a4a';g.beginPath();g.ellipse(w*.5,h*.36,w*.26,h*.14,0,Math.PI,0);g.fill();g.fillRect(w*.24,h*.36,w*.52,4);g.fillStyle='#efe6cf';g.fillRect(w*.37,h*.4,w*.26,h*.3);g.fillStyle='#1a1426';g.fillRect(w*.42,h*.48,2,4);g.fillRect(w*.54,h*.48,2,4)}
+  shroom:cap=>(g,w,h,st,t,hit)=>{g.fillStyle=hit?'#ffffff':cap;g.beginPath();g.ellipse(w*.5,h*.36,w*.26,h*.14,0,Math.PI,0);g.fill();g.fillRect(w*.24,h*.36,w*.52,4);g.fillStyle='#efe6cf';g.fillRect(w*.37,h*.4,w*.26,h*.3);g.fillStyle='#1a1426';g.fillRect(w*.42,h*.48,2,4);g.fillRect(w*.54,h*.48,2,4)}
 };
 
-const SHEETS={
-  hero:{fw:48,fh:48,frames:[4,6,4,4,2],draw:drawHeroFrame,fallback:FB.hero,
-    anims:{IDLE:{row:0,frames:4,fps:5,loop:true},RUN:{row:1,frames:6,fps:12,loop:true},ATTACK:{row:2,frames:4,fps:12,loop:false,hit:2},SKILL:{row:3,frames:4,fps:9,loop:false,hit:2},HIT:{row:4,frames:2,fps:8,loop:false}}},
-  slime:{fw:48,fh:48,frames:[4,4,4,2,2],draw:drawSlimeFrame('#8fd3ff','#1a1426'),fallback:FB.slime('#8fd3ff'),
-    anims:{IDLE:{row:0,frames:4,fps:5,loop:true},RUN:{row:1,frames:4,fps:8,loop:true},ATTACK:{row:2,frames:4,fps:9,loop:false,hit:2},SKILL:{row:3,frames:2,fps:6,loop:false},HIT:{row:4,frames:2,fps:10,loop:false}}},
-  shroom:{fw:48,fh:48,frames:[4,4,4,2,2],draw:drawShroomFrame,fallback:FB.shroom,
-    anims:{IDLE:{row:0,frames:4,fps:4,loop:true},RUN:{row:1,frames:4,fps:8,loop:true},ATTACK:{row:2,frames:4,fps:9,loop:false,hit:2},SKILL:{row:3,frames:2,fps:6,loop:false},HIT:{row:4,frames:2,fps:10,loop:false}}},
+/* animações padrão dos sprites gerados */
+const ANIM_HERO={IDLE:{row:0,frames:4,fps:5,loop:true},RUN:{row:1,frames:6,fps:12,loop:true},ATTACK:{row:2,frames:4,fps:12,loop:false,hit:2},SKILL:{row:3,frames:4,fps:9,loop:false,hit:2},HIT:{row:4,frames:2,fps:8,loop:false}};
+const ANIM_MOB={IDLE:{row:0,frames:4,fps:5,loop:true},RUN:{row:1,frames:4,fps:8,loop:true},ATTACK:{row:2,frames:4,fps:9,loop:false,hit:2},SKILL:{row:3,frames:2,fps:6,loop:false,hit:1},HIT:{row:4,frames:2,fps:10,loop:false}};
+/* geradores de sprite provisório: usados até um PNG de verdade ser carregado para aquela chave */
+const GENS={
+  hero:pal=>({fw:48,fh:48,frames:[4,6,4,4,2],draw:drawHeroFrame({...HERO_PAL,...(pal||{})}),fallback:FB.hero,anims:ANIM_HERO,color:(pal&&pal.tunic)||HERO_PAL.tunic}),
+  slime:col=>({fw:48,fh:48,frames:[4,4,4,2,2],draw:drawSlimeFrame(col,'#1a1426'),fallback:FB.slime(col),anims:ANIM_MOB,color:col}),
+  shroom:col=>({fw:48,fh:48,frames:[4,4,4,2,2],draw:drawShroomFrame(col),fallback:FB.shroom(col),anims:ANIM_MOB,color:col}),
 };
-/* gera o PNG padrão de cada personagem uma vez */
-Object.values(SHEETS).forEach(S=>{S.png=makeSheet(S.fw,S.fh,S.frames,S.draw);S.src=S.png;S.scale=1.25;S.anims0=JSON.stringify(S.anims)});
-const makeAnimator=key=>{const S=SHEETS[key];return new SpriteAnimator({src:S.src,frameWidth:S.fw,frameHeight:S.fh,animations:JSON.parse(JSON.stringify(S.anims)),scale:S.scale,fallback:S.fallback})};
+/* registro de sprites: chave (ex.: "poring", "knight") -> spritesheet em grade + animações */
+const SHEETS={};
+function ensureSheet(key,gen){
+  if(SHEETS[key])return SHEETS[key];
+  const [g,arg]=gen||(DB[key]&&DB[key].gen)||(CLS[key]&&CLS[key].gen)||['slime','#8fd3ff'];
+  const S=GENS[g](arg);S.anims=JSON.parse(JSON.stringify(S.anims));S.png=makeSheet(S.fw,S.fh,S.frames,S.draw);S.src=S.png;S.scale=1.25;S.anims0=JSON.stringify(S.anims);S.custom=false;
+  return SHEETS[key]=S;
+}
+const makeAnimator=key=>{const S=ensureSheet(key);const a=new SpriteAnimator({src:S.src,frameWidth:S.fw,frameHeight:S.fh,animations:JSON.parse(JSON.stringify(S.anims)),scale:S.scale,fallback:S.fallback});a.forceFallback=!!window.__fb;return a};
 
 /* =====================================================================
    3. ESTADO DO JOGO
    ===================================================================== */
-const MONSTERS={
-  slime:{n:'Slime Sonolento',hp:46,atk:7,def:1,spd:22,xp:9,gold:[3,6],card:'Carta do Slime Sonolento',size:1},
-  shroom:{n:'Cogumelo Preguiçoso',hp:62,atk:9,def:3,spd:16,xp:12,gold:[4,8],card:'Carta do Cogumelo Preguiçoso',size:1},
-};
+/* classes do herói: cada uma é uma chave de sprite; "url" pode apontar para um PNG público */
+const HERO_CLASSES=[
+  {id:'novice',n:'Aprendiz',gen:['hero',{}],url:''},
+  {id:'swordman',n:'Espadachim',gen:['hero',{tunic:'#5a6a8a',cape:'#2a3a5a',trim:'#c9d1db'}],url:''},
+  {id:'knight',n:'Cavaleiro',gen:['hero',{tunic:'#8a8f99',cape:'#b0202a',trim:'#f2c14e'}],url:''},
+  {id:'mage',n:'Mago',gen:['hero',{tunic:'#4b3a8c',cape:'#2a1a5a',trim:'#b06aff'}],url:''},
+  {id:'archer',n:'Arqueiro',gen:['hero',{tunic:'#3f7a3a',cape:'#5a4a2a',trim:'#e8d5a0'}],url:''},
+  {id:'acolyte',n:'Noviço',gen:['hero',{tunic:'#e3d9b0',cape:'#6a2a2a',trim:'#c8202a'}],url:''},
+];
+/* mapas: cada um com paleta de cenário e a sua lista de monstros (monstersDatabase) */
+const MAPS=[
+  {id:'prontera',city:'Prontera',n:'Campos de Prontera',lv:'1 a 10',pal:{sky:['#f2a85a','#ffd9a0','#ffe9b0'],mt:'#d9a54a',hill:['#c8963e','#b8862e'],tree:['#3f7a3a','#58b85c'],ground:'#7a5a2a',grass:['#58b85c','#3f9a50'],sun:'rgba(255,246,200,'}},
+  {id:'payon',city:'Payon',n:'Floresta de Payon',lv:'10 a 25',pal:{sky:['#3d7a5a','#8fcf98','#c8ecc0'],mt:'#2f6448',hill:['#245038','#1f4a33'],tree:['#1f5a33','#3f9a50'],ground:'#4a3420',grass:['#4fa84c','#2f7a3a'],sun:'rgba(240,255,220,'}},
+  {id:'orcs',city:'Geffen',n:'Vila dos Orcs',lv:'25 a 40',pal:{sky:['#5a2a3a','#c8704a','#f2b87a'],mt:'#6a3a3a',hill:['#5a3a2a','#4a2a20'],tree:['#4a5a2a','#6b7a3a'],ground:'#3a2a1a',grass:['#6b7a3a','#4a5a2a'],sun:'rgba(255,200,150,'}},
+];
+/* banco de monstros: atributos base, mapa, carta e sprite. Para trocar o visual, preencha "url"
+   (PNG público com CORS liberado) ou carregue o arquivo no painel; a chave do sprite é o próprio "id". */
+const monstersDatabase=[
+  {id:'poring',n:'Poring',map:'prontera',hp:40,atk:6,def:0,spd:24,xp:8,gold:[2,5],card:'Carta Poring',gen:['slime','#ff9ec8'],url:''},
+  {id:'lunatic',n:'Lunatic',map:'prontera',hp:44,atk:7,def:1,spd:30,xp:9,gold:[3,5],card:'Carta Lunatic',gen:['slime','#f6f1e6'],url:''},
+  {id:'fabre',n:'Fabre',map:'prontera',hp:50,atk:6,def:2,spd:16,xp:9,gold:[2,6],card:'Carta Fabre',gen:['slime','#9fdc6a'],url:''},
+  {id:'drops',n:'Drops',map:'prontera',hp:48,atk:8,def:1,spd:22,xp:10,gold:[3,6],card:'Carta Drops',gen:['slime','#ffb35a'],url:''},
+  {id:'spore',n:'Spore',map:'payon',hp:90,atk:12,def:3,spd:16,xp:18,gold:[4,8],card:'Carta Spore',gen:['shroom','#4f6fd8'],url:''},
+  {id:'poporing',n:'Poporing',map:'payon',hp:96,atk:13,def:3,spd:22,xp:19,gold:[4,9],card:'Carta Poporing',gen:['slime','#7bd86a'],url:''},
+  {id:'willow',n:'Willow',map:'payon',hp:110,atk:12,def:5,spd:14,xp:21,gold:[5,9],card:'Carta Willow',gen:['shroom','#8a5a2b'],url:''},
+  {id:'rocker',n:'Rocker',map:'payon',hp:100,atk:14,def:4,spd:26,xp:20,gold:[5,10],card:'Carta Rocker',gen:['slime','#c9a06f'],url:''},
+  {id:'orc_warrior',n:'Orc Warrior',map:'orcs',hp:190,atk:22,def:8,spd:20,xp:40,gold:[8,14],card:'Carta Orc Warrior',gen:['shroom','#5f8a3a'],url:''},
+  {id:'orc_lady',n:'Orc Lady',map:'orcs',hp:170,atk:20,def:6,spd:24,xp:38,gold:[8,13],card:'Carta Orc Lady',gen:['slime','#7aa84a'],url:''},
+  {id:'orc_zombie',n:'Orc Zombie',map:'orcs',hp:210,atk:21,def:9,spd:14,xp:42,gold:[9,15],card:'Carta Orc Zombie',gen:['slime','#8aa070'],url:''},
+  {id:'orc_hero',n:'Orc Hero',map:'orcs',boss:true,hp:1400,atk:34,def:14,spd:14,xp:500,gold:[120,180],card:'Carta Orc Hero',gen:['shroom','#3f6a2a'],url:''},
+];
+const DB=Object.fromEntries(monstersDatabase.map(m=>[m.id,m]));
+const CLS=Object.fromEntries(HERO_CLASSES.map(c=>[c.id,c]));
+const mapOf=id=>MAPS.find(m=>m.id===id)||MAPS[0];
 const G={
   scroll:0,          // quanto o mundo andou (px)
   time:0,
@@ -332,14 +439,15 @@ const G={
   buffs:{mission:0,focus:0},
   auto:true,
   kills:0,cards:0,
+  map:'prontera',mapKills:0,  // mapa atual e abates desde o último chefe
 };
 const hero={
-  name:'Kaio',cls:'Aprendiz',lv:1,xp:0,gold:0,
+  name:'Kaio',key:'novice',lv:1,xp:0,gold:0,
   hp:120,mhp:120,sp:60,msp:60,atk:16,def:4,crit:12,
   x:120,baseX:120,dash:0,           // posição fixa na tela; dash = deslocamento temporário da Investida
   speed:58,                         // px/s de corrida
   atkInterval:.95,atkT:0,busy:false,dead:0,flash:0,
-  anim:makeAnimator('hero'),
+  anim:makeAnimator('novice'),
 };
 const needXp=l=>Math.round(40*Math.pow(l,1.35));
 const luck=()=>1+(G.buffs.mission>0?.5:0);
@@ -395,11 +503,15 @@ const after=(s,fn)=>timers.push({t:s,fn});
    ===================================================================== */
 function spawn(){
   if(G.monsters.length>=4)return;
-  const key=Math.random()<.6?'slime':'shroom',D=MONSTERS[key],elite=Math.random()<.1,k=1+(hero.lv-1)*.22;
-  const n=elite?1:Math.random()<.35?2:1;
-  for(let i=0;i<n;i++)G.monsters.push({key,name:(elite?'Elite: ':'')+D.n,elite,x:W+20+i*26,y:GROUND,hp:Math.round(D.hp*k*(elite?3:1)),mhp:Math.round(D.hp*k*(elite?3:1)),
-    atk:Math.round(D.atk*k*(elite?1.6:1)),def:D.def*k,spd:D.spd,xp:Math.round(D.xp*k*(elite?3:1)),gold:D.gold,card:D.card,
-    atkT:rand(.4,1),flash:0,kb:0,stun:0,dying:0,anim:makeAnimator(key)});
+  const list=monstersDatabase.filter(m=>m.map===G.map&&!m.boss),boss=monstersDatabase.find(m=>m.map===G.map&&m.boss),k=1+(hero.lv-1)*.18;
+  const mk=(D,elite,i)=>{const hp=Math.round(D.hp*k*(elite?3:1));G.monsters.push({key:D.id,name:(elite?'Elite: ':'')+D.n,elite,boss:!!D.boss,x:W+20+i*26,y:GROUND,hp,mhp:hp,
+    atk:Math.round(D.atk*k*(elite?1.6:1)),def:D.def*k,spd:D.spd,xp:Math.round(D.xp*k*(elite?3:1)),gold:D.gold,card:D.card,color:ensureSheet(D.id).color,
+    atkT:rand(.4,1),flash:0,kb:0,stun:0,dying:0,anim:makeAnimator(D.id)})};
+  // chefe do mapa a cada 25 abates (se o mapa tiver um)
+  if(boss&&G.mapKills>=25&&!G.monsters.some(m=>m.boss)){G.mapKills=0;mk(boss,false,0);toast(`${boss.n} apareceu!`);shake(.4);return}
+  if(!list.length)return;
+  const D=list[Math.floor(Math.random()*list.length)],elite=Math.random()<.1,n=elite?1:Math.random()<.35?2:1;
+  for(let i=0;i<n;i++)mk(i===0?D:list[Math.floor(Math.random()*list.length)],elite,i);
 }
 const alive=()=>G.monsters.filter(m=>!m.dying);
 const visible=()=>alive().filter(m=>m.x<W-8);
@@ -420,15 +532,15 @@ function strike(m,mult,opt={}){
   if(m.hp<=0)kill(m);else m.anim.play('HIT',{restart:true,onEnd:()=>m.anim.play('IDLE')});
 }
 function kill(m){
-  m.dying=.001;G.kills++;
-  for(let i=0;i<16;i++)G.fx.push({kind:'spark',x:m.x+rand(-8,8),y:m.y-rand(4,20),vx:rand(-60,60),vy:rand(-90,-20),t:0,dur:rand(.4,.7),col:m.key==='slime'?'#8fd3ff':'#d85a4a',grav:1});
+  m.dying=.001;G.kills++;G.mapKills++;
+  for(let i=0;i<16;i++)G.fx.push({kind:'spark',x:m.x+rand(-8,8),y:m.y-rand(4,20),vx:rand(-60,60),vy:rand(-90,-20),t:0,dur:rand(.4,.7),col:m.color||'#ffffff',grav:1});
   // ouro: moedas voam até o HUD
-  const g=Math.round(rand(m.gold[0],m.gold[1])*(m.elite?3:1)*(1+(hero.lv-1)*.1));
+  const g=Math.round(rand(m.gold[0],m.gold[1])*(m.elite?3:1)*(1+(hero.lv-1)*.1));if(m.boss){shake(.6);G.hitStop=.18;addPop(m.x,m.y-80,'MVP!','lvl')}
   for(let i=0;i<Math.min(6,g);i++)G.coins.push({x:m.x,y:m.y-14,vx:rand(-50,50),vy:rand(-120,-60),t:0,val:i===0?g:0});
   gainXp(m.xp);
   // drops com sorte (buff de missão)
   if(Math.random()<.04*luck()){toast('Item: Poção Vermelha');addPop(m.x,m.y-56,'Poção!','drop')}
-  if(Math.random()<(m.elite?.05:.008)*luck()){G.cards++;toast(m.card+'!');addPop(m.x,m.y-60,'CARTA!','card');shake(.3)}
+  if(Math.random()<(m.boss?.25:m.elite?.05:.008)*luck()){G.cards++;toast(m.card+'!');addPop(m.x,m.y-60,'CARTA!','card');shake(.3)}
 }
 function gainXp(x){
   hero.xp+=x;
@@ -472,35 +584,37 @@ function drawPops(g,dt){
    7. CENÁRIO EM PARALLAX (céu, montanhas, árvores e casas, chão, grama da frente)
    cada camada anda numa fração da rolagem do mundo
    ===================================================================== */
-const sky=ctx.createLinearGradient(0,0,0,GROUND);sky.addColorStop(0,'#f2a85a');sky.addColorStop(.55,'#ffd9a0');sky.addColorStop(1,'#ffe9b0');
+let skyKey='',sky=null;
+const PAL=()=>mapOf(G.map).pal;
+function skyGrad(){const p=PAL();if(skyKey!==G.map){skyKey=G.map;sky=ctx.createLinearGradient(0,0,0,GROUND);sky.addColorStop(0,p.sky[0]);sky.addColorStop(.55,p.sky[1]);sky.addColorStop(1,p.sky[2])}return sky}
 function drawBackground(g){
-  g.fillStyle=sky;g.fillRect(0,0,W,GROUND);
+  const p=PAL();g.fillStyle=skyGrad();g.fillRect(0,0,W,GROUND);
   // sol
-  g.fillStyle='rgba(255,246,200,.85)';g.beginPath();g.arc(380,62,22,0,7);g.fill();g.fillStyle='rgba(255,246,200,.25)';g.beginPath();g.arc(380,62,34,0,7);g.fill();
+  g.fillStyle=p.sun+'.85)';g.beginPath();g.arc(380,62,22,0,7);g.fill();g.fillStyle=p.sun+'.25)';g.beginPath();g.arc(380,62,34,0,7);g.fill();
   // nuvens: 5% da rolagem + vento próprio
   const cOff=G.scroll*.05+G.time*4;
   for(let i=-1;i<6;i++){const n=Math.floor(cOff/110)+i,x=Math.round(n*110-cOff+hash(n)*40),y=24+hash(n+3)*50;
     g.fillStyle='rgba(255,255,255,.85)';g.fillRect(x,y,46,8);g.fillRect(x+8,y-6,26,6);g.fillRect(x+18,y-10,12,4);g.fillStyle='rgba(240,200,170,.6)';g.fillRect(x,y+8,46,2)}
   // montanhas distantes: 15%
-  layer(g,.15,90,(x,n)=>{const h=50+hash(n)*40;tri(g,x,GROUND-30,60,h,'#d9a54a');tri(g,x+3,GROUND-30-h+12,10,12,'#fff2c8')});
+  layer(g,.15,90,(x,n)=>{const h=50+hash(n)*40;tri(g,x,GROUND-30,60,h,p.mt);tri(g,x+3,GROUND-30-h+12,10,12,'#fff2c8')});
   // colinas: 30%
-  g.fillStyle='#c8963e';g.fillRect(0,GROUND-34,W,34);
-  layer(g,.3,70,(x,n)=>{const r=26+hash(n+9)*18;g.fillStyle='#b8862e';for(let d=-r;d<=r;d+=2){const hh=Math.round(Math.sqrt(r*r-d*d)*.7);g.fillRect(x+d,GROUND-34-hh,2,hh)}});
+  g.fillStyle=p.hill[0];g.fillRect(0,GROUND-34,W,34);
+  layer(g,.3,70,(x,n)=>{const r=26+hash(n+9)*18;g.fillStyle=p.hill[1];for(let d=-r;d<=r;d+=2){const hh=Math.round(Math.sqrt(r*r-d*d)*.7);g.fillRect(x+d,GROUND-34-hh,2,hh)}});
   // árvores e casas da vila: 60%
   layer(g,.6,64,(x,n)=>{const v=hash(n+21);
     if(v<.22){house(g,x,GROUND-6,n)}
-    else if(v<.8){const h=24+hash(n+5)*16;g.fillStyle='#6b4a24';g.fillRect(x-2,GROUND-14,4,14);tri(g,x,GROUND-10,13,h,'#3f7a3a');tri(g,x,GROUND-10-h*.45,10,h*.6,'#58b85c')}
+    else if(v<.8){const h=24+hash(n+5)*16;g.fillStyle='#6b4a24';g.fillRect(x-2,GROUND-14,4,14);tri(g,x,GROUND-10,13,h,p.tree[0]);tri(g,x,GROUND-10-h*.45,10,h*.6,p.tree[1])}
     else{g.fillStyle='#8a5a2b';g.fillRect(x-14,GROUND-12,2,12);g.fillRect(x+12,GROUND-12,2,12);g.fillRect(x-14,GROUND-10,28,2);g.fillRect(x-14,GROUND-5,28,2)}});
 }
 function drawGround(g){
   // chão: 100% da rolagem
-  g.fillStyle='#7a5a2a';g.fillRect(0,GROUND,W,H-GROUND);g.fillStyle='#58b85c';g.fillRect(0,GROUND,W,3);g.fillStyle='#3f9a50';g.fillRect(0,GROUND+3,W,2);
+  const p=PAL();g.fillStyle=p.ground;g.fillRect(0,GROUND,W,H-GROUND);g.fillStyle=p.grass[0];g.fillRect(0,GROUND,W,3);g.fillStyle=p.grass[1];g.fillRect(0,GROUND+3,W,2);
   const off=G.scroll%16;g.fillStyle='rgba(0,0,0,.18)';for(let x=-off;x<W;x+=16)g.fillRect(Math.round(x),GROUND+10,8,2);
   layer(g,1,37,(x,n)=>{if(hash(n)<.5){g.fillStyle='#a8845a';g.fillRect(x,GROUND+16+Math.round(hash(n+2)*20),4,3)}});
 }
 function drawForeground(g){
   // tufos de grama na frente: 130%, dão profundidade
-  layer(g,1.3,48,(x,n)=>{if(hash(n+40)<.55){g.fillStyle='#3f9a50';for(let i=0;i<5;i++)g.fillRect(x+i*2,H-8-Math.round(hash(n+i)*8),2,12)}});
+  layer(g,1.3,48,(x,n)=>{if(hash(n+40)<.55){g.fillStyle=PAL().grass[1];for(let i=0;i<5;i++)g.fillRect(x+i*2,H-8-Math.round(hash(n+i)*8),2,12)}});
 }
 function layer(g,factor,spacing,fn){const off=G.scroll*factor;for(let i=-1;i<=Math.ceil(W/spacing)+1;i++){const n=Math.floor(off/spacing)+i;fn(Math.round(n*spacing-off+hash(n+7)*spacing*.3),n)}}
 function tri(g,cx,base,w,h,col){g.fillStyle=col;const steps=Math.max(1,Math.round(h/2));for(let r=0;r<steps;r++){const ww=Math.round(w*(r+1)/steps);g.fillRect(Math.round(cx-ww),Math.round(base-h+r*2),ww*2,2)}}
@@ -613,7 +727,7 @@ function render(dt){
   // monstros (de trás para frente)
   [...G.monsters].sort((a,b)=>b.x-a.x).forEach(m=>{
     const a=m.dying?Math.max(0,1-m.dying/.35):1;
-    ctx.save();if(m.elite){ctx.translate(m.x,m.y);ctx.scale(1.3,1.3);ctx.translate(-m.x,-m.y)}
+    ctx.save();if(m.elite||m.boss){const z=m.boss?1.7:1.3;ctx.translate(m.x,m.y);ctx.scale(z,z);ctx.translate(-m.x,-m.y)}
     m.anim.draw(ctx,m.x+m.kb,m.y+2,{flip:true,flash:m.flash,alpha:a,tint:m.elite?'#ff4a4a':null});ctx.restore();
     if(!m.dying&&m.hp<m.mhp){const w=26;ctx.fillStyle='#000';ctx.fillRect(Math.round(m.x-w/2)-1,GROUND+5,w+2,4);ctx.fillStyle=m.elite?'#ff8a3a':'#e8585a';ctx.fillRect(Math.round(m.x-w/2),GROUND+6,Math.round(w*m.hp/m.mhp),2)}
     if(m.stun>0&&!m.dying){for(let i=0;i<3;i++){const ang=G.time*6+i*2.1;ctx.fillStyle='#ffe066';ctx.fillRect(Math.round(m.x+Math.cos(ang)*9),Math.round(m.y-40+Math.sin(ang)*2),2,2)}}
@@ -666,9 +780,9 @@ $('bFocus').addEventListener('click',()=>{G.buffs.focus=30;toast('Modo foco: +20
 let tt;function toast(t){const el=$('toast');el.textContent=t;el.hidden=false;clearTimeout(tt);tt=setTimeout(()=>el.hidden=true,1600)}
 let lastHud='';
 function hud(){
-  const key=[Math.round(hero.hp),hero.mhp,Math.round(hero.sp),hero.msp,hero.lv,hero.xp,hero.gold,Math.ceil(G.buffs.mission),Math.ceil(G.buffs.focus),G.kills,G.cards].join();
+  const key=[G.map,hero.key,Math.round(hero.hp),hero.mhp,Math.round(hero.sp),hero.msp,hero.lv,hero.xp,hero.gold,Math.ceil(G.buffs.mission),Math.ceil(G.buffs.focus),G.kills,G.cards].join();
   if(key!==lastHud){lastHud=key;
-    $('hLv').textContent=hero.lv;$('hName').textContent=`${hero.name} · ${hero.cls}`;
+    $('hLv').textContent=hero.lv;$('hName').textContent=`${hero.name} · ${CLS[hero.key]?CLS[hero.key].n:'Herói'}`;const mp=mapOf(G.map);$('hCity').textContent=mp.city;$('hMap').textContent=mp.n;
     $('hHp').style.width=hero.hp/hero.mhp*100+'%';$('tHp').textContent=`${Math.round(hero.hp)}/${hero.mhp}`;
     $('hSp').style.width=hero.sp/hero.msp*100+'%';$('tSp').textContent=`${Math.floor(hero.sp)}/${hero.msp}`;
     $('hXp').style.width=hero.xp/needXp(hero.lv)*100+'%';$('hGold').textContent=fmt(hero.gold);
@@ -685,10 +799,14 @@ function hud(){
    13. CARREGAR SPRITESHEET PRÓPRIA
    lê o PNG, conta quantos quadros não vazios há em cada linha e troca o animador
    ===================================================================== */
-function applySheet(who,src,fw,fh,scale){
+/* troca o animador de quem usa essa chave (herói ou monstros na tela) */
+function refreshAnim(who){if(who===hero.key){const st=hero.anim.state;hero.anim=makeAnimator(who);hero.anim.play(st)}G.monsters.filter(m=>m.key===who).forEach(m=>{m.anim=makeAnimator(who);m.color=SHEETS[who].color||m.color});renderRoster&&renderRoster()}
+const nameOf=k=>(DB[k]&&DB[k].n)||(CLS[k]&&CLS[k].n)||k;
+const isHeroKey=k=>!!CLS[k];
+function applySheet(who,src,fw,fh,scale,opt){
   const img=new Image();
   img.onload=()=>{
-    const S=SHEETS[who],c=document.createElement('canvas');c.width=img.width;c.height=img.height;const x=c.getContext('2d',{willReadFrequently:true});x.drawImage(img,0,0);
+    const S=ensureSheet(who),c=document.createElement('canvas');c.width=img.width;c.height=img.height;const x=c.getContext('2d',{willReadFrequently:true});x.drawImage(img,0,0);
     const cols=Math.floor(img.width/fw),rows=Math.floor(img.height/fh);
     if(!cols||!rows){toast('O quadro é maior que a imagem');return}
     STATES.forEach((st,r)=>{
@@ -697,21 +815,259 @@ function applySheet(who,src,fw,fh,scale){
       S.anims[st].row=row;S.anims[st].frames=Math.max(1,n);if(S.anims[st].hit!=null)S.anims[st].hit=Math.min(S.anims[st].hit,Math.max(0,n-1));
     });
     S.fw=fw;S.fh=fh;S.src=src;S.scale=scale;
-    if(who==='hero'){const st=hero.anim.state;hero.anim=makeAnimator('hero');hero.anim.play(st)}
-    else G.monsters.filter(m=>m.key===who).forEach(m=>m.anim=makeAnimator(who));
-    tintCache.clear();toast('Spritesheet carregada');
+    S.custom=true;refreshAnim(who);
+    tintCache.clear();if(!opt||!opt.quiet)toast(`Sprite de ${nameOf(who)} carregado`);if(opt&&opt.done)opt.done();
   };
   img.onerror=()=>toast('Não foi possível ler esse arquivo de imagem');
   img.src=src;
 }
 $('spFile').addEventListener('change',e=>{
   const f=e.target.files&&e.target.files[0];if(!f)return;const r=new FileReader();
-  r.onload=()=>applySheet($('spWho').value,r.result,clamp(+$('spW').value||48,8,512),clamp(+$('spH').value||48,8,512),clamp(+$('spS').value||1,.25,4));
+  r.onload=()=>{const who=$('spWho').value,fw=clamp(+$('spW').value||48,8,512),fh=clamp(+$('spH').value||48,8,512),sc=clamp(+$('spS').value||1,.25,4);applySheet(who,r.result,fw,fh,sc,{done:()=>saveSprite(who,{src:r.result,fw,fh,scale:sc,anims:SHEETS[who].anims})})};
   r.readAsDataURL(f);
 });
-$('spReset').addEventListener('click',()=>{const who=$('spWho').value,S=SHEETS[who];S.anims=JSON.parse(S.anims0);S.fw=48;S.fh=48;S.src=S.png;S.scale=1.25;tintCache.clear();if(who==='hero')hero.anim=makeAnimator('hero');else G.monsters.filter(m=>m.key===who).forEach(m=>m.anim=makeAnimator(who));toast('Sprite padrão restaurado')});
+function resetSheet(who){const S=ensureSheet(who);S.anims=JSON.parse(S.anims0);S.fw=48;S.fh=48;S.src=S.png;S.scale=1.25;S.custom=false;tintCache.clear();refreshAnim(who)}
+$('spReset').addEventListener('click',()=>{const who=$('spWho').value;resetSheet(who);forgetSprite(who);toast('Sprite padrão restaurado')});
 let fbOn=false;
 $('spFallback').addEventListener('click',e=>{fbOn=!fbOn;e.currentTarget.textContent=fbOn?'Voltar aos sprites':'Ver desenho provisório';hero.anim.forceFallback=fbOn;G.monsters.forEach(m=>m.anim.forceFallback=fbOn);window.__fb=fbOn});
 /* monstros novos herdam o modo de visualização */
-const _spawn=spawn;spawn=function(){_spawn();G.monsters.forEach(m=>m.anim.forceFallback=!!window.__fb)};
+
+/* =====================================================================
+   14. RECORTADOR AUTOMÁTICO (folhas sem grade, como as do Ragnarök)
+   1) remove o fundo pela cor do canto  2) acha cada quadro por regiões conectadas
+   3) você monta a sequência de cada estado  4) gera uma spritesheet em grade e aplica
+   ===================================================================== */
+const CUT={src:null,cv:null,boxes:[],seq:{IDLE:[],RUN:[],ATTACK:[],SKILL:[],HIT:[]},st:'IDLE',pf:0};
+const STN={IDLE:'Parado',RUN:'Correndo',ATTACK:'Ataque',SKILL:'Habilidade',HIT:'Dano'};
+function detectFrames(img,gap){
+  const w=img.width,h=img.height,c=document.createElement('canvas');c.width=w;c.height=h;
+  const x=c.getContext('2d',{willReadFrequently:true});x.drawImage(img,0,0);
+  const id=x.getImageData(0,0,w,h),d=id.data,k=[d[0],d[1],d[2],d[3]],transBg=k[3]<10;
+  // fundo vira transparente (cor do canto, com tolerância; magenta também é tratado como fundo)
+  for(let i=0;i<d.length;i+=4){const near=Math.abs(d[i]-k[0])+Math.abs(d[i+1]-k[1])+Math.abs(d[i+2]-k[2])<36,mag=d[i]>240&&d[i+1]<16&&d[i+2]>240;
+    if(d[i+3]<10||(!transBg&&near)||mag)d[i+3]=0}
+  x.putImageData(id,0,0);
+  // regiões conectadas de pixels visíveis
+  const N=w*h,seen=new Uint8Array(N),q=new Int32Array(N);let boxes=[];
+  for(let p=0;p<N;p++){
+    if(seen[p]||d[p*4+3]===0)continue;let qh=0,qt=0;q[qt++]=p;seen[p]=1;let x0=w,y0=h,x1=0,y1=0,n=0;
+    while(qh<qt){const cc=q[qh++],cx=cc%w,cy=(cc/w)|0;n++;if(cx<x0)x0=cx;if(cx>x1)x1=cx;if(cy<y0)y0=cy;if(cy>y1)y1=cy;
+      if(cx>0&&!seen[cc-1]&&d[(cc-1)*4+3]){seen[cc-1]=1;q[qt++]=cc-1}
+      if(cx<w-1&&!seen[cc+1]&&d[(cc+1)*4+3]){seen[cc+1]=1;q[qt++]=cc+1}
+      if(cy>0&&!seen[cc-w]&&d[(cc-w)*4+3]){seen[cc-w]=1;q[qt++]=cc-w}
+      if(cy<h-1&&!seen[cc+w]&&d[(cc+w)*4+3]){seen[cc+w]=1;q[qt++]=cc+w}}
+    boxes.push({x:x0,y:y0,w:x1-x0+1,h:y1-y0+1,n});
+  }
+  // junta pedaços próximos (arma solta, sombra, efeitos) num quadro só
+  let changed=true;
+  while(changed){changed=false;
+    outer:for(let i=0;i<boxes.length;i++)for(let j=i+1;j<boxes.length;j++){const a=boxes[i],b=boxes[j];
+      if(a.x-gap<=b.x+b.w&&b.x-gap<=a.x+a.w&&a.y-gap<=b.y+b.h&&b.y-gap<=a.y+a.h){
+        const nx=Math.min(a.x,b.x),ny=Math.min(a.y,b.y);a.w=Math.max(a.x+a.w,b.x+b.w)-nx;a.h=Math.max(a.y+a.h,b.y+b.h)-ny;a.x=nx;a.y=ny;a.n+=b.n;boxes.splice(j,1);changed=true;break outer}}}
+  boxes=boxes.filter(b=>b.n>=24&&b.w>=5&&b.h>=5);
+  // ordem de leitura: linhas de cima para baixo, depois da esquerda para a direita
+  boxes.sort((a,b)=>a.y-b.y);const rows=[];
+  boxes.forEach(b=>{const r=rows.find(r=>b.y<r.y+r.h*.5&&b.y+b.h>r.y+r.h*.5);if(r){r.list.push(b);r.h=Math.max(r.h,b.y+b.h-r.y)}else rows.push({y:b.y,h:b.h,list:[b]})});
+  rows.forEach(r=>r.list.sort((a,b)=>a.x-b.x));
+  return{cv:c,boxes:rows.flatMap(r=>r.list),rows:rows.map(r=>r.list)};
+}
+function cutLoad(src){
+  const img=new Image();
+  img.onload=()=>{
+    if(img.width*img.height>16e6){toast('Imagem grande demais (máximo de 4000 por 4000)');return}
+    const r=detectFrames(img,clamp(+$('cGap').value||0,0,16));CUT.src=src;CUT.cv=r.cv;CUT.boxes=r.boxes;Object.keys(CUT.seq).forEach(k=>CUT.seq[k]=[]);CUT.st='IDLE';
+    $('cInfo').textContent=r.boxes.length?`${r.boxes.length} quadros encontrados. Escolha o estado e toque nos quadros na ordem da animação.`:'Nenhum quadro encontrado. Tente uma folha com fundo liso ou transparente.';
+    cutUi();
+  };
+  img.onerror=()=>toast('Não foi possível ler essa imagem');img.src=src;
+}
+function frameThumb(cv,b,size,flip){
+  cv.width=size;cv.height=size;const x=cv.getContext('2d');x.imageSmoothingEnabled=false;x.clearRect(0,0,size,size);
+  const k=Math.min(size/b.w,size/b.h,4),w=b.w*k,h=b.h*k;
+  x.save();if(flip){x.translate(size,0);x.scale(-1,1)}x.drawImage(CUT.cv,b.x,b.y,b.w,b.h,(size-w)/2,size-h,w,h);x.restore();
+}
+function cutUi(){
+  $('cStates').innerHTML=STATES.map(st=>`<button type="button" data-cst="${st}" aria-pressed="${CUT.st===st}">${STN[st]} (${CUT.seq[st].length})</button>`).join('');
+  $('cSeq').innerHTML=CUT.seq[CUT.st].map((n,i)=>`<button type="button" data-cseq="${i}">${n+1}</button>`).join('')||'<span class="note" style="margin:0">vazia</span>';
+  const used=new Set(Object.values(CUT.seq).flat());
+  const box=$('cFrames');box.innerHTML=CUT.boxes.map((b,i)=>`<button type="button" class="fr ${used.has(i)?'used':''}" data-cfr="${i}"><canvas></canvas>${i+1}</button>`).join('');
+  box.querySelectorAll('.fr').forEach(el=>frameThumb(el.querySelector('canvas'),CUT.boxes[+el.dataset.cfr],56,$('cFlip').checked));
+}
+$('cutBox').addEventListener('click',e=>{
+  const s=e.target.closest('[data-cst]'),f=e.target.closest('[data-cfr]'),q=e.target.closest('[data-cseq]');
+  if(s){CUT.st=s.dataset.cst;CUT.pf=0;cutUi()}
+  if(f){CUT.seq[CUT.st].push(+f.dataset.cfr);cutUi()}
+  if(q){CUT.seq[CUT.st].splice(+q.dataset.cseq,1);cutUi()}
+});
+$('cFile').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>cutLoad(r.result);r.readAsDataURL(f)});
+$('cGap').addEventListener('change',()=>{if(CUT.src)cutLoad(CUT.src)});
+$('cFlip').addEventListener('change',()=>{if(CUT.cv)cutUi()});
+$('cClear').addEventListener('click',()=>{CUT.seq[CUT.st]=[];cutUi()});
+/* prévia animada do estado escolhido */
+setInterval(()=>{
+  const cv=$('cPrev'),x=cv.getContext('2d');x.imageSmoothingEnabled=false;x.fillStyle='#0f0d16';x.fillRect(0,0,120,120);
+  const list=CUT.seq[CUT.st];if(!CUT.cv||!list.length)return;
+  CUT.pf=(CUT.pf+1)%list.length;const b=CUT.boxes[list[CUT.pf]];if(!b)return;
+  const all=list.map(i=>CUT.boxes[i]),mh=Math.max(...all.map(o=>o.h)),mw=Math.max(...all.map(o=>o.w)),k=Math.min(110/mw,110/mh,4);
+  x.save();if($('cFlip').checked){x.translate(120,0);x.scale(-1,1)}x.drawImage(CUT.cv,b.x,b.y,b.w,b.h,(120-b.w*k)/2,116-b.h*k,b.w*k,b.h*k);x.restore();
+},140);
+/* monta a grade: cada estado numa linha, quadros alinhados pelo pé (centro de baixo) */
+$('cApply').addEventListener('click',()=>{
+  if(!CUT.cv){toast('Escolha a folha primeiro');return}
+  const seq={...CUT.seq},any=STATES.find(st=>seq[st].length);
+  if(!any){toast('Monte pelo menos uma animação');return}
+  STATES.forEach(st=>{if(!seq[st].length)seq[st]=(st==='SKILL'?seq.ATTACK:st==='RUN'?seq.IDLE:null)||seq.IDLE.length&&seq.IDLE||seq[any]});
+  const all=STATES.flatMap(st=>seq[st].map(i=>CUT.boxes[i])),fw=Math.max(...all.map(b=>b.w))+2,fh=Math.max(...all.map(b=>b.h))+2,cols=Math.max(...STATES.map(st=>seq[st].length));
+  const out=document.createElement('canvas');out.width=fw*cols;out.height=fh*STATES.length;const x=out.getContext('2d');x.imageSmoothingEnabled=false;const flip=$('cFlip').checked;
+  STATES.forEach((st,r)=>seq[st].forEach((i,f)=>{const b=CUT.boxes[i],dx=f*fw+Math.round((fw-b.w)/2),dy=r*fh+fh-1-b.h;
+    x.save();if(flip){x.translate(dx+b.w,dy);x.scale(-1,1);x.drawImage(CUT.cv,b.x,b.y,b.w,b.h,0,0,b.w,b.h)}else x.drawImage(CUT.cv,b.x,b.y,b.w,b.h,dx,dy,b.w,b.h);x.restore()}));
+  const who=$('cWho').value,auto=(isHeroKey(who)?64:46)/fh,sc=clamp(+$('cScale').value||auto,.2,4);
+  // velocidade padrão por estado e quadro de impacto no meio do ataque
+  const S=ensureSheet(who);STATES.forEach(st=>{const a=S.anims[st];a.fps=st==='RUN'?10:st==='IDLE'?5:st==='HIT'?8:10;if(a.hit!=null||st==='ATTACK'||st==='SKILL')a.hit=Math.floor(seq[st].length/2)});
+  const png=out.toDataURL('image/png');applySheet(who,png,fw,fh,sc,{done:()=>saveSprite(who,{src:png,fw,fh,scale:sc,anims:SHEETS[who].anims})});
+});
+$('cForget').addEventListener('click',()=>{const who=$('cWho').value;resetSheet(who);forgetSprite(who);toast('Sprite salvo apagado')});
+
+/* =====================================================================
+   15. AUTO-FETCHER, AUTO-SPRITE MAPPER E BANCO DE SPRITES
+   ===================================================================== */
+/* --- armazenamento: IndexedDB (aguenta várias folhas grandes) --- */
+const IDB={db:null,
+  open(){if(this.db)return Promise.resolve(this.db);return new Promise((res,rej)=>{let r;try{r=indexedDB.open('runner-sprites',1)}catch(e){rej(e);return}r.onupgradeneeded=()=>r.result.createObjectStore('s');r.onsuccess=()=>{this.db=r.result;res(r.result)};r.onerror=()=>rej(r.error)})},
+  async tx(mode,fn){try{const db=await this.open();return await new Promise((res,rej)=>{const tx=db.transaction('s',mode),st=tx.objectStore('s'),out=fn(st);tx.oncomplete=()=>res(out&&out.result);tx.onerror=()=>rej(tx.error)})}catch(e){return null}},
+  put(k,v){return this.tx('readwrite',s=>s.put(v,k))},del(k){return this.tx('readwrite',s=>s.delete(k))},
+  async all(){const keys=await this.tx('readonly',s=>s.getAllKeys())||[],vals=await this.tx('readonly',s=>s.getAll())||[];return keys.map((k,i)=>[k,vals[i]])}};
+function saveSprite(who,o){IDB.put(who,o)}
+function forgetSprite(who){IDB.del(who)}
+
+/* --- monta a grade final a partir dos quadros escolhidos (pé alinhado no centro de baixo) --- */
+function buildGrid(srcCv,boxes,seq,flip){
+  const all=STATES.flatMap(st=>seq[st].map(i=>boxes[i])),fw=Math.max(...all.map(b=>b.w))+2,fh=Math.max(...all.map(b=>b.h))+2,cols=Math.max(...STATES.map(st=>seq[st].length));
+  const out=document.createElement('canvas');out.width=fw*cols;out.height=fh*STATES.length;const x=out.getContext('2d');x.imageSmoothingEnabled=false;
+  STATES.forEach((st,r)=>seq[st].forEach((i,f)=>{const b=boxes[i],dx=f*fw+Math.round((fw-b.w)/2),dy=r*fh+fh-1-b.h;
+    x.save();if(flip){x.translate(dx+b.w,dy);x.scale(-1,1);x.drawImage(srcCv,b.x,b.y,b.w,b.h,0,0,b.w,b.h)}else x.drawImage(srcCv,b.x,b.y,b.w,b.h,dx,dy,b.w,b.h);x.restore()}));
+  return{src:out.toDataURL('image/png'),fw,fh};
+}
+/* --- AUTO-SPRITE MAPPER ---
+   1) cor do pixel (0,0) vira transparência (chroma key: magenta, verde, qualquer cor lisa)
+   2) varre o ImageData e acha a caixa de cada quadro (regiões conectadas + junção de pedaços próximos)
+   3) descarta textos e restos (área muito diferente da mediana)
+   4) agrupa em sequências: cada linha da folha vira um estado, ou divide em ordem quando há poucas linhas */
+function autoCropAndMapSheet(imageElement,options={}){
+  const o={gap:3,layout:'auto',order:['IDLE','RUN','ATTACK','HIT'],maxFrames:8,flip:false,counts:{IDLE:4,RUN:4,ATTACK:4,SKILL:3,HIT:2},...options};
+  const det=detectFrames(imageElement,o.gap);
+  if(!det.boxes.length)throw new Error('Nenhum quadro encontrado. A folha precisa ter fundo liso ou transparente.');
+  const area=b=>b.w*b.h,med=det.boxes.map(area).sort((a,b)=>a-b)[Math.floor(det.boxes.length/2)];
+  const ok=b=>area(b)>=med*.18&&area(b)<=med*6&&b.h>=med**.5*.35;
+  const rows=det.rows.map(r=>r.filter(ok)).filter(r=>r.length);
+  const index=new Map(det.boxes.map((b,i)=>[b,i]));
+  const seq={IDLE:[],RUN:[],ATTACK:[],SKILL:[],HIT:[]};
+  let layout=o.layout;if(layout==='auto')layout=rows.length>=Math.min(3,o.order.length)?'rows':'sequence';
+  if(layout==='rows'){o.order.forEach((st,i)=>{if(rows[i])seq[st]=rows[i].slice(0,o.maxFrames).map(b=>index.get(b))})}
+  else{const flat=rows.flat().map(b=>index.get(b));let p=0;o.order.forEach(st=>{const n=Math.min(o.counts[st]||4,o.maxFrames);seq[st]=flat.slice(p,p+n);p+=n});
+    if(!seq.IDLE.length&&flat.length)seq.IDLE=flat.slice(0,Math.min(4,flat.length))}
+  // estados que faltaram usam um parecido
+  const first=STATES.find(st=>seq[st].length);if(!first)throw new Error('Não deu para montar as animações com essa folha.');
+  if(!seq.IDLE.length)seq.IDLE=seq.RUN.length?seq.RUN.slice(0,2):seq[first].slice(0,2);
+  if(!seq.RUN.length)seq.RUN=seq.IDLE.slice();
+  if(!seq.ATTACK.length)seq.ATTACK=seq.RUN.slice();
+  if(!seq.SKILL.length)seq.SKILL=seq.ATTACK.slice();
+  if(!seq.HIT.length)seq.HIT=seq.IDLE.slice(0,1);
+  const g=buildGrid(det.cv,det.boxes,seq,o.flip);
+  const anims={};STATES.forEach((st,r)=>{anims[st]={row:r,frames:seq[st].length,fps:st==='RUN'?10:st==='IDLE'?5:st==='HIT'?8:10,loop:st==='IDLE'||st==='RUN'};if(st==='ATTACK'||st==='SKILL')anims[st].hit=Math.floor(seq[st].length/2)});
+  return{...g,anims,layout,frames:det.boxes.length,used:Object.values(seq).reduce((a,s)=>a+s.length,0)};
+}
+const loadImage=src=>new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=()=>rej(new Error('Não foi possível ler essa imagem.'));i.src=src});
+function autoOpts(){return{layout:$('aLayout').value,order:$('aOrder').value.split(','),maxFrames:clamp(+$('aMax').value||8,1,16),flip:$('aFlip').checked}}
+const aMsg=t=>{$('aStatus').textContent=t};
+/* aplica uma imagem já carregada numa chave e salva */
+async function processImage(key,img,extra={}){
+  const t0=performance.now(),r=autoCropAndMapSheet(img,{...autoOpts(),...(extra.opts||{})}),S=ensureSheet(key);
+  S.anims=r.anims;const scale=(isHeroKey(key)?64:DB[key]&&DB[key].boss?60:46)/r.fh;
+  await new Promise(res=>applySheet(key,r.src,r.fw,r.fh,clamp(scale,.2,4),{quiet:true,done:res}));
+  saveSprite(key,{src:r.src,fw:r.fw,fh:r.fh,scale:SHEETS[key].scale,anims:SHEETS[key].anims,url:extra.url||''});
+  return{...r,ms:Math.round(performance.now()-t0)};
+}
+/* --- DIRECT LINK LOADER: baixa o PNG pela URL (o site precisa liberar CORS) --- */
+async function loadSpriteFromURL(key,url,opts){
+  if(!/^https?:\/\//i.test(url))throw new Error('Cole um link que comece com http:// ou https://');
+  let blob;
+  try{const res=await fetch(url,{mode:'cors'});if(!res.ok)throw new Error('HTTP '+res.status);blob=await res.blob()}
+  catch(e){throw new Error('O link não pôde ser baixado. O site pode não liberar acesso de outras páginas (CORS), ou esta página está num lugar que bloqueia links externos. Baixe o PNG e solte o arquivo aqui.')}
+  if(!/^image\//.test(blob.type))throw new Error('O link não é uma imagem.');
+  const src=await new Promise(res=>{const fr=new FileReader();fr.onload=()=>res(fr.result);fr.readAsDataURL(blob)});
+  const img=await loadImage(src);return processImage(key,img,{url,opts});
+}
+async function loadSpriteFromFile(key,file){
+  const src=await new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>res(fr.result);fr.onerror=()=>rej(new Error('Não deu para ler o arquivo.'));fr.readAsDataURL(file)});
+  return processImage(key,await loadImage(src));
+}
+/* nome do arquivo -> chave (poring.png, Orc Hero.png, orc-hero_sheet.png) */
+const norm=s=>String(s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\.[a-z0-9]+$/,'').replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'');
+function keyFromName(name){const n=norm(name);const all=[...monstersDatabase,...HERO_CLASSES];
+  return(all.find(e=>e.id===n||norm(e.n)===n)||all.filter(e=>n.includes(e.id)||n.includes(norm(e.n))).sort((a,b)=>b.id.length-a.id.length)[0]||{}).id||null}
+async function handleFiles(files){
+  const list=[...files].filter(f=>/^image\//.test(f.type));if(!list.length)return;
+  let done=0,errs=[];
+  for(const f of list){const key=keyFromName(f.name)||$('aKey').value;aMsg(`Processando ${f.name}...`);
+    try{const r=await loadSpriteFromFile(key,f);done++;aMsg(`${nameOf(key)}: ${r.used} quadros em ${r.ms} ms.`)}catch(e){errs.push(`${f.name}: ${e.message}`)}}
+  aMsg(`${done} sprite${done===1?'':'s'} aplicado${done===1?'':'s'}.`+(errs.length?' '+errs.join(' '):''));renderRoster();
+}
+/* --- interface --- */
+const ALLKEYS=()=>[...HERO_CLASSES.map(c=>[c.id,`Herói: ${c.n}`]),...monstersDatabase.map(m=>[m.id,`${m.n}${m.boss?' (chefe)':''} · ${mapOf(m.map).n}`])];
+function fillSelects(){
+  const opts=ALLKEYS().map(([k,l])=>`<option value="${k}">${l}</option>`).join('');
+  ['aKey','spWho','cWho'].forEach(id=>{const v=$(id).value;$(id).innerHTML=opts;if(v&&[...$(id).options].some(o=>o.value===v))$(id).value=v});
+  $('mapSel').innerHTML=MAPS.map(m=>`<option value="${m.id}">${m.city} · ${m.n} (nível ${m.lv})</option>`).join('');$('mapSel').value=G.map;
+  $('clsSel').innerHTML=HERO_CLASSES.map(c=>`<option value="${c.id}">${c.n}</option>`).join('');$('clsSel').value=hero.key;
+}
+const thumbImgs=new Map();
+function thumb(cv,key){
+  const S=ensureSheet(key),x=cv.getContext('2d');cv.width=44;cv.height=44;x.imageSmoothingEnabled=false;
+  let img=thumbImgs.get(S.src);if(!img){img=new Image();img.src=S.src;thumbImgs.set(S.src,img)}
+  const paint=()=>{x.clearRect(0,0,44,44);const a=S.anims.IDLE,k=Math.min(44/S.fw,44/S.fh);x.drawImage(img,0,a.row*S.fh,S.fw,S.fh,(44-S.fw*k)/2,44-S.fh*k,S.fw*k,S.fh*k)};
+  if(img.complete&&img.width)paint();else img.addEventListener('load',paint,{once:true});
+}
+let savedMeta={};
+function renderRoster(){
+  const box=$('roster');if(!box)return;
+  const groups=[['Classes do herói',HERO_CLASSES.map(c=>c.id)],...MAPS.map(m=>[`${m.city} · ${m.n}`,monstersDatabase.filter(d=>d.map===m.id).map(d=>d.id)])];
+  box.innerHTML=groups.map(([h,keys])=>`<h4>${h}</h4><div class="rgrid">${keys.map(k=>{const S=ensureSheet(k),hero2=isHeroKey(k);return `<div class="rrow ${S.custom?'custom':''} ${$('aKey').value===k?'sel':''}"><canvas data-th="${k}"></canvas><div style="min-width:0"><b>${nameOf(k)}</b><small>${S.custom?'sprite próprio':'provisório'}${savedMeta[k]&&savedMeta[k].url?' · por link':''}</small>
+    <div class="ra"><button type="button" data-ra="pick" data-k="${k}">Escolher</button>${hero2?`<button type="button" data-ra="use" data-k="${k}">${hero.key===k?'Em uso':'Usar'}</button>`:''}${S.custom?`<button type="button" data-ra="edit" data-k="${k}">Ajustar</button><button type="button" data-ra="reset" data-k="${k}">Restaurar</button>`:''}</div></div></div>`}).join('')}</div>`).join('');
+  box.querySelectorAll('canvas[data-th]').forEach(cv=>thumb(cv,cv.dataset.th));
+}
+$('roster').addEventListener('click',e=>{
+  const b=e.target.closest('[data-ra]');if(!b)return;const k=b.dataset.k,a=b.dataset.ra;
+  if(a==='pick'){$('aKey').value=k;$('aUrl').value=(savedMeta[k]&&savedMeta[k].url)||(DB[k]||CLS[k]).url||'';renderRoster()}
+  if(a==='use')setClass(k);
+  if(a==='reset'){resetSheet(k);forgetSprite(k);delete savedMeta[k];aMsg(`${nameOf(k)} voltou ao sprite provisório.`);renderRoster()}
+  if(a==='edit'){$('cWho').value=k;$('cutBox').open=true;cutLoad(SHEETS[k].src);$('cutBox').scrollIntoView({behavior:REDUCED?'auto':'smooth'})}
+});
+$('aKey').addEventListener('change',()=>{const k=$('aKey').value;$('aUrl').value=(savedMeta[k]&&savedMeta[k].url)||(DB[k]||CLS[k]).url||'';renderRoster()});
+$('aGo').addEventListener('click',async()=>{const k=$('aKey').value,url=$('aUrl').value.trim();if(!url){aMsg('Cole o link direto de um PNG.');return}
+  aMsg('Baixando...');$('aGo').disabled=true;
+  try{const r=await loadSpriteFromURL(k,url);savedMeta[k]={url};aMsg(`${nameOf(k)}: ${r.frames} quadros achados, ${r.used} usados, em ${r.ms} ms.`);renderRoster()}catch(e){aMsg(e.message)}finally{$('aGo').disabled=false}});
+$('aFiles').addEventListener('change',e=>{handleFiles(e.target.files);e.target.value=''});
+const drop=$('aDrop');
+['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('on')}));
+['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('on')}));
+drop.addEventListener('drop',e=>handleFiles(e.dataTransfer.files));
+document.addEventListener('paste',e=>{if(e.target.matches&&e.target.matches('input[type=url],input[type=text]'))return;const files=[...(e.clipboardData&&e.clipboardData.files||[])];if(files.length){e.preventDefault();handleFiles(files)}});
+/* mapa e classe */
+function setMap(id){G.map=id;G.monsters=[];G.mapKills=0;G.spawnT=.6;skyKey='';$('mapSel').value=id;toast(mapOf(id).n)}
+function setClass(k){hero.key=k;hero.anim=makeAnimator(k);$('clsSel').value=k;renderRoster()}
+$('mapSel').addEventListener('change',e=>setMap(e.target.value));
+$('clsSel').addEventListener('change',e=>setClass(e.target.value));
+/* inicialização: sprites salvos, depois presets com URL */
+(async()=>{
+  fillSelects();renderRoster();
+  // sprites da versão anterior (salvos em localStorage)
+  try{const old=JSON.parse(localStorage.getItem('runner-sprites-v1')||'null');if(old){const map={hero:'novice',slime:'poring',shroom:'spore'};for(const [k,o] of Object.entries(old))if(map[k]&&o&&o.src)await IDB.put(map[k],o);localStorage.removeItem('runner-sprites-v1')}}catch(e){}
+  const saved=await IDB.all();
+  for(const [k,o] of saved){if(!o||!o.src||!(DB[k]||CLS[k]))continue;savedMeta[k]={url:o.url||''};const S=ensureSheet(k);if(o.anims)S.anims=o.anims;await new Promise(res=>applySheet(k,o.src,o.fw,o.fh,o.scale,{quiet:true,done:res}))}
+  const pending=[...monstersDatabase,...HERO_CLASSES].filter(e=>e.url&&!savedMeta[e.id]);
+  for(const e of pending){try{await loadSpriteFromURL(e.id,e.url);savedMeta[e.id]={url:e.url}}catch(err){}}
+  if(saved.length||pending.length)aMsg(`${saved.length} sprite${saved.length===1?'':'s'} salvo${saved.length===1?'':'s'} carregado${saved.length===1?'':'s'}.`);
+  renderRoster();
+})();
 </script>
