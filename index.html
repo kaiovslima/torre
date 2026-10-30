@@ -1,12 +1,12 @@
 <!doctype html>
 <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#201c2f"><title>Torre da Disciplina × RO</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;700&family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 /* Layout de app de celular (estilo original da Torre): barra do herói no topo, palco, conteúdo em coluna, abas fixas embaixo. */
 :root{--bg:#14121d;--panel:#201c2f;--panel2:#2a2540;--line:#3a3354;--ink:#f1ead9;--mute:#a7a0bb;--gold:#f2c14e;--xp:#6ec6ff;--hp:#e8585a;--sp:#5aa8ff;--ok:#5fcf8a;
 --forca:#ff8a5c;--intelecto:#6ec6ff;--disciplina:#f2c14e;--criatividade:#c58cff;
---display:"Pixelify Sans","Courier New",monospace;--body:"Rubik",system-ui,-apple-system,"Segoe UI",sans-serif;color-scheme:dark}
+--display:"Cinzel",Georgia,"Times New Roman",serif;--body:"Rubik",system-ui,-apple-system,"Segoe UI",sans-serif;color-scheme:dark}
 *{box-sizing:border-box}html,body{margin:0}[hidden]{display:none!important}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.45;-webkit-tap-highlight-color:transparent}
 button,input,select{font:inherit;color:inherit}button{cursor:pointer}:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
@@ -132,16 +132,38 @@ label.f{display:grid;gap:4px;font-size:12px;color:var(--mute);flex:1 1 130px}
 .mobs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.mob{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:6px;text-align:center;font-size:12px;min-width:0}
 .mob .m{height:56px;display:grid;place-items:center}.mob img{max-height:52px;max-width:100%;image-rendering:pixelated}.mob.elite{border-color:#8fd3ff}.mob.boss{border-color:var(--gold)}
 details summary{cursor:pointer;font-weight:600;color:var(--gold);list-style:none}details summary::-webkit-details-marker{display:none}
+/* números legíveis: tudo que é número usa a fonte do corpo */
+.lv,.lv b,.coins,.combat b,.stat b,.sum b,.focus-time,.dmg,.num,.top-name{font-family:var(--body);font-weight:700;letter-spacing:0}.top-name{font-weight:600}
+.sync{width:8px;height:8px;border-radius:50%;background:var(--mute);display:inline-block;margin-right:6px;vertical-align:middle}.sync.on{background:var(--ok)}.sync.err{background:var(--hp)}
+/* fases */
+.stages{display:grid;grid-template-columns:repeat(10,1fr);gap:4px}.stg{height:30px;border-radius:6px;border:1px solid var(--line);background:var(--panel2);font-size:12px;font-weight:700;color:var(--mute);padding:0}
+.stg.done{background:color-mix(in srgb,var(--ok) 22%,var(--panel2));color:var(--ink)}.stg.cur{border-color:var(--gold);color:var(--gold)}.stg.boss{font-size:15px}.stg:disabled{opacity:.35}
+.pips{display:flex;gap:5px;align-items:center}.pips i{width:12px;height:12px;border-radius:3px;background:#0f0d16;border:1px solid var(--line)}.pips i.on{background:var(--gold);border-color:var(--gold)}
+/* cores e visuais */
+.sw{display:flex;flex-wrap:wrap;gap:6px}.sw button{width:34px;height:34px;border-radius:8px;border:2px solid var(--line);background:var(--c,#555);font-size:11px;font-weight:700;color:#fff;text-shadow:0 1px 2px #000;padding:0}
+.sw button[aria-pressed="true"]{border-color:var(--gold);box-shadow:0 0 0 2px #f2c14e55}
+.costumes{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.cos{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:6px 4px;text-align:center;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0}
+.cos.on{border-color:var(--gold)}.cos .pic{width:40px;height:40px}
+/* forja */
+.forge{display:grid;grid-template-columns:96px 1fr;gap:12px;align-items:center;background:radial-gradient(circle at 30% 40%,#3a2a20,#1a1410 70%);border:1px solid #6b4a2a;border-radius:10px;padding:12px}
+.forge .big{width:96px;height:96px;border-radius:12px;background:#0f0d16;border:2px solid #b8862a;display:grid;place-items:center;position:relative;font-size:44px;box-shadow:0 0 22px #ff8a3a44 inset}
+.forge .big img{position:absolute;width:64px;height:64px;image-rendering:pixelated}.forge .ref{position:absolute;top:-8px;right:-8px;background:var(--gold);color:#241a05;border-radius:999px;padding:1px 7px;font-weight:700;font-size:13px}
+.sockets{display:flex;gap:10px;flex-wrap:wrap}.socket{width:72px;height:96px;border-radius:8px;border:2px dashed var(--line);background:#0f0d16;display:grid;place-items:center;position:relative;overflow:hidden;color:var(--mute);font-size:11px;padding:0}
+.socket.full{border-style:solid;border-color:#cbab66}.socket img{width:100%;height:100%;object-fit:contain}.socket img.mob{width:70%;height:70%;image-rendering:pixelated}.socket span{position:absolute;bottom:0;left:0;right:0;background:#000b;font-size:10px;padding:2px}
+.minicards{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.delta{font-size:12px;font-weight:700}.delta.up{color:var(--ok)}.delta.down{color:#ff9b9b}
+.login{display:grid;gap:8px}
 /* abas inferiores */
 .tabs{position:fixed;left:0;right:0;bottom:0;z-index:25;background:var(--panel);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(6,1fr);padding:6px max(6px,env(safe-area-inset-right)) calc(6px + env(safe-area-inset-bottom)) max(6px,env(safe-area-inset-left))}
 .tab{background:none;border:0;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;font-weight:600;color:var(--mute);padding:4px 0;border-radius:8px}.tab span{font-size:20px;line-height:1}
+.tabs.seven{grid-template-columns:repeat(7,1fr)}.tabs.seven .tab{font-size:10px}
 .tab[aria-current="page"]{color:var(--gold);background:var(--panel2)}
 .toast{position:fixed;z-index:40;left:50%;bottom:calc(78px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--gold);color:#241a05;border-radius:10px;padding:10px 16px;box-shadow:0 10px 40px #000a;max-width:min(92vw,480px);font-weight:600;text-align:center;font-size:14px}
 .foot{font-size:11px;text-align:center;color:#6f6889;padding:0 14px}
 @media(min-width:900px){main,.stagewrap,.top-in{max-width:780px}.stage{height:320px}.album{grid-template-columns:repeat(6,1fr)}.mapgrid{grid-template-columns:repeat(3,1fr)}.tabs{max-width:780px;margin:0 auto;border:1px solid var(--line);border-bottom:0;border-radius:12px 12px 0 0}}
 @media(max-width:380px){.stage{height:220px}.tab{font-size:10px}.album{grid-template-columns:repeat(3,1fr)}}
 </style></head><body>
-<header class="top"><div class="top-in"><div class="lv">Nv<b id="tLv">1</b></div><div class="top-mid"><div class="top-name" id="tName">Herói · Aprendiz</div><div class="bar"><i id="tXp"></i></div></div><div class="coins"><span class="dot"></span><span id="tZeny">0</span></div></div></header>
+<header class="top"><div class="top-in"><div class="lv">Nv<b id="tLv">1</b></div><div class="top-mid"><div class="top-name"><span class="sync" id="tSync" title="Salvo neste aparelho"></span><span id="tName">Herói · Aprendiz</span></div><div class="bar"><i id="tXp"></i></div></div><div class="coins"><span class="dot"></span><span id="tZeny">0</span></div></div></header>
 <div class="stagewrap" id="stageWrap"><section class="stagecard">
  <div id="stage" class="stage"><canvas id="scene" width="600" height="340"></canvas>
   <div id="heroSprite" class="character"><span class="char-shadow"></span><canvas id="heroStill" hidden></canvas><img id="heroImg" alt="" hidden><span class="nameplate" id="heroPlate"></span></div>
@@ -155,9 +177,10 @@ details summary{cursor:pointer;font-weight:600;color:var(--gold);list-style:none
 <main id="content" aria-live="polite"></main>
 <div class="foot" style="margin:-96px 0 100px">Projeto fã pessoal e não oficial · Ragnarök Online pertence aos respectivos titulares · Progresso salvo no navegador.</div>
 <nav class="tabs" id="tabs" aria-label="Abas do jogo">
- <button class="tab" data-tab="rotina"><span>✅</span>Rotina</button><button class="tab" data-tab="mundo"><span>🗺</span>Mundo</button><button class="tab" data-tab="heroi"><span>🧙</span>Herói</button><button class="tab" data-tab="classe"><span>🌟</span>Classe</button><button class="tab" data-tab="cartas"><span>🃏</span>Cartas</button><button class="tab" data-tab="config"><span>⚙️</span>Ajustes</button>
+ <button class="tab" data-tab="rotina"><span>✅</span>Rotina</button><button class="tab" data-tab="mundo"><span>🗺</span>Mundo</button><button class="tab" data-tab="heroi"><span>🧙</span>Herói</button><button class="tab" data-tab="classe"><span>🌟</span>Classe</button><button class="tab" data-tab="cartas"><span>🃏</span>Cartas</button><button class="tab" data-tab="config"><span>⚙️</span>Ajustes</button><button class="tab" data-tab="mestre" id="tabMaster" hidden><span>👑</span>Mestre</button>
 </nav>
 <div id="toast" class="toast" hidden role="status"></div>
+<script src="config.js"></script>
 <script>
 'use strict';
 const ASSET_DEFAULT='https://assets.latam-tools.com.br';
@@ -223,8 +246,10 @@ const JOBS={novice:{id:0,name:'Aprendiz',branches:[],cats:['exercicio','estudo',
  merchant:{id:5,name:'Mercador',orig:'Híbrida Trabalho + Projetos',branches:['Blacksmith','Alchemist'],cats:['trabalho','projeto'],stats:['disciplina','criatividade'],req:half('paladino','arqueiro'),desc:'Zeny e forja. Metade das metas de Noviço e de Arqueiro.'},
  thief:{id:6,name:'Gatuno',orig:'Híbrida Exercício + Projetos',branches:['Assassin','Rogue'],cats:['exercicio','projeto'],stats:['forca','criatividade'],req:half('guerreiro','arqueiro'),desc:'Esquiva e crítico. Metade das metas de Espadachim e de Arqueiro.'}};
 const SECOND={Knight:{id:7,name:'Cavaleiro'},Crusader:{id:14,name:'Templário'},Wizard:{id:9,name:'Bruxo'},Sage:{id:16,name:'Sábio'},Hunter:{id:11,name:'Caçador'},Bard:{id:19,name:'Bardo'},Priest:{id:8,name:'Sacerdote'},Monk:{id:15,name:'Monge'},Blacksmith:{id:10,name:'Ferreiro'},Alchemist:{id:18,name:'Alquimista'},Assassin:{id:12,name:'Mercenário'},Rogue:{id:17,name:'Arruaceiro'}};
-const PROMO={first:{base:10,job:10},second:{base:40,job:40,mult:3}};
-
+/* Ajustes globais (o Mestre pode mudar no painel; valem para todos) */
+const CFG_DEF={xpMult:1,zenyMult:1,cardMult:1,jobMult:1,killsPerStage:3,stagesPerCity:10,firstBase:5,firstJob:5,secondBase:40,secondJob:40,resetCost:1000,motd:'',offMissions:[]};
+let CFG={...CFG_DEF};try{Object.assign(CFG,JSON.parse(localStorage.getItem('torre-ro-cfg')||'{}'))}catch{}
+const PROMO={get first(){return {base:CFG.firstBase,job:CFG.firstJob}},get second(){return {base:CFG.secondBase,job:CFG.secondJob,mult:3}}};
 /* ===================== MUNDO ===================== */
 const PROLOGUE='Aethelgard era iluminado pela Torre da Disciplina, um farol alimentado pelos pequenos hábitos de cada habitante. Quando o povo começou a deixar tudo para depois, a luz enfraqueceu e a Névoa Cinzenta subiu dos vales, trazendo criaturas nascidas da procrastinação, da ansiedade e da estagnação. Cada cidade apagou, uma a uma. Você é um Aprendiz comum que decide acender a primeira vela.';
 const REGIONS=[
@@ -259,19 +284,61 @@ const WSTYLE={
  mace:{n:'Maça / marreta',act:80,alt:40,aspd:1150,range:125,fx:'smash',mult:1.2,shake:1,stun:.12},
  rod:{n:'Cajado',act:96,alt:40,aspd:1050,range:320,fx:'orb',mult:1,magic:1},
  bow:{n:'Arco',act:88,alt:40,aspd:1000,range:440,fx:'arrow',mult:1}};
+/* t = cidade que libera o item na loja (0 = Alvorada). Chaves antigas mantidas para o save. */
 const ITEMS={
-knife:{id:1201,name:'Faca [1]',slot:'weapon',atk:5,cost:35,sockets:1,weapon:1,style:'dagger',emoji:'🗡️'},
-sword:{id:1101,name:'Espada [2]',slot:'weapon',atk:13,cost:130,sockets:2,weapon:2,style:'sword',emoji:'⚔️'},
-rod:{id:1601,name:'Bastão [1]',slot:'weapon',atk:8,matk:12,cost:125,sockets:1,weapon:10,style:'rod',emoji:'🪄'},
-bow:{id:1701,name:'Arco [2]',slot:'weapon',atk:15,cost:150,sockets:2,weapon:11,style:'bow',emoji:'🏹'},
-mace:{id:1501,name:'Maça [1]',slot:'weapon',atk:14,def:1,cost:115,sockets:1,weapon:8,style:'mace',emoji:'🔨'},
-axe:{id:1301,name:'Machado [2]',slot:'weapon',atk:20,cost:180,sockets:2,weapon:6,style:'axe',emoji:'🪓'},
-shield:{id:2101,name:'Broquel [1]',slot:'shield',def:8,cost:130,sockets:1,emoji:'🛡️'},
-armor:{id:2301,name:'Armadura [1]',slot:'armor',def:12,cost:190,sockets:1,emoji:'🥋'},
-shirt:{id:2303,name:'Túnica [1]',slot:'armor',def:6,cost:95,sockets:1,emoji:'👕'},
-cap:{id:2226,name:'Gorro',slot:'head',def:3,cost:85,sockets:0,headgear:4,emoji:'🧢'},
-boots:{id:2401,name:'Botas [1]',slot:'shoes',def:5,cost:110,sockets:1,emoji:'👢'},
-ring:{id:2601,name:'Anel [1]',slot:'accessory',atk:4,cost:220,sockets:1,emoji:'💍'}};
+knife:{id:1201,name:'Faca [1]',slot:'weapon',atk:5,cost:35,sockets:1,weapon:1,style:'dagger',emoji:'🗡️',t:0},
+cutter:{id:1204,name:'Cutter [3]',slot:'weapon',atk:12,cost:320,sockets:3,weapon:1,style:'dagger',emoji:'🗡️',t:1},
+gauche:{id:1207,name:'Main Gauche [3]',slot:'weapon',atk:24,crit:3,cost:900,sockets:3,weapon:1,style:'dagger',emoji:'🗡️',t:3},
+stiletto:{id:1216,name:'Stiletto [2]',slot:'weapon',atk:45,crit:5,cost:2600,sockets:2,weapon:1,style:'dagger',emoji:'🗡️',t:5},
+sword:{id:1101,name:'Espada [2]',slot:'weapon',atk:13,cost:130,sockets:2,weapon:2,style:'sword',emoji:'⚔️',t:0},
+falchion:{id:1104,name:'Falchion [3]',slot:'weapon',atk:26,cost:600,sockets:3,weapon:2,style:'sword',emoji:'⚔️',t:1},
+blade:{id:1107,name:'Lâmina [3]',slot:'weapon',atk:40,cost:1500,sockets:3,weapon:2,style:'sword',emoji:'⚔️',t:3},
+tsurugi:{id:1119,name:'Tsurugi [2]',slot:'weapon',atk:70,cost:4200,sockets:2,weapon:2,style:'sword',emoji:'⚔️',t:6},
+rod:{id:1601,name:'Bastão [1]',slot:'weapon',atk:8,matk:12,cost:125,sockets:1,weapon:10,style:'rod',emoji:'🪄',t:0},
+wand:{id:1604,name:'Varinha [2]',slot:'weapon',atk:14,matk:24,cost:620,sockets:2,weapon:10,style:'rod',emoji:'🪄',t:1},
+staff:{id:1607,name:'Cajado [2]',slot:'weapon',atk:24,matk:40,cost:1600,sockets:2,weapon:10,style:'rod',emoji:'🪄',t:3},
+arcwand:{id:1610,name:'Cajado Arcano [1]',slot:'weapon',atk:36,matk:68,cost:4300,sockets:1,weapon:10,style:'rod',emoji:'🪄',t:6},
+bow:{id:1701,name:'Arco [2]',slot:'weapon',atk:15,cost:150,sockets:2,weapon:11,style:'bow',emoji:'🏹',t:0},
+cbow:{id:1704,name:'Arco Composto [3]',slot:'weapon',atk:28,cost:650,sockets:3,weapon:11,style:'bow',emoji:'🏹',t:1},
+gbow:{id:1707,name:'Arco Longo [2]',slot:'weapon',atk:44,cost:1700,sockets:2,weapon:11,style:'bow',emoji:'🏹',t:3},
+xbow:{id:1713,name:'Besta [2]',slot:'weapon',atk:72,cost:4400,sockets:2,weapon:11,style:'bow',emoji:'🏹',t:6},
+mace:{id:1501,name:'Clava [1]',slot:'weapon',atk:14,def:1,cost:115,sockets:1,weapon:8,style:'mace',emoji:'🔨',t:0},
+mace2:{id:1504,name:'Maça [3]',slot:'weapon',atk:27,def:1,cost:620,sockets:3,weapon:8,style:'mace',emoji:'🔨',t:1},
+smasher:{id:1507,name:'Esmagador [2]',slot:'weapon',atk:43,def:2,cost:1650,sockets:2,weapon:8,style:'mace',emoji:'🔨',t:3},
+mstar:{id:1513,name:'Morning Star [1]',slot:'weapon',atk:74,def:3,cost:4500,sockets:1,weapon:8,style:'mace',emoji:'🔨',t:6},
+axe:{id:1301,name:'Machado [2]',slot:'weapon',atk:20,cost:180,sockets:2,weapon:6,style:'axe',emoji:'🪓',t:0},
+baxe:{id:1351,name:'Machado de Batalha [2]',slot:'weapon',atk:36,cost:800,sockets:2,weapon:7,style:'axe',emoji:'🪓',t:2},
+hammer:{id:1354,name:'Martelo de Guerra [2]',slot:'weapon',atk:55,cost:2200,sockets:2,weapon:7,style:'axe',emoji:'🔨',t:4},
+buster:{id:1357,name:'Buster [1]',slot:'weapon',atk:90,cost:5600,sockets:1,weapon:7,style:'axe',emoji:'🪓',t:7},
+shirt:{id:2303,name:'Túnica [1]',slot:'armor',def:6,cost:95,sockets:1,emoji:'👕',t:0},
+armor:{id:2301,name:'Armadura [1]',slot:'armor',def:12,cost:190,sockets:1,emoji:'🥋',t:0},
+advsuit:{id:2305,name:'Traje de Aventureiro [1]',slot:'armor',def:16,hp:20,cost:520,sockets:1,emoji:'🥋',t:1},
+coat:{id:2309,name:'Casaco [1]',slot:'armor',def:22,hp:40,cost:1100,sockets:1,emoji:'🧥',t:2},
+chain:{id:2314,name:'Cota de Malha [1]',slot:'armor',def:32,cost:2300,sockets:1,emoji:'🛡️',t:4},
+plate:{id:2316,name:'Armadura Completa [1]',slot:'armor',def:46,cost:5200,sockets:1,emoji:'🛡️',t:6},
+shield:{id:2101,name:'Broquel [1]',slot:'shield',def:8,cost:130,sockets:1,emoji:'🛡️',t:0},
+buckler:{id:2103,name:'Escudo Redondo [1]',slot:'shield',def:14,cost:560,sockets:1,emoji:'🛡️',t:1},
+bshield:{id:2105,name:'Escudo [1]',slot:'shield',def:22,cost:1500,sockets:1,emoji:'🛡️',t:3},
+mirror:{id:2107,name:'Escudo Espelhado [1]',slot:'shield',def:32,cost:4000,sockets:1,emoji:'🪞',t:5},
+cap:{id:2226,name:'Gorro',slot:'head',def:3,cost:85,sockets:0,headgear:4,emoji:'🧢',t:0},
+helm:{id:2228,name:'Elmo [1]',slot:'head',def:9,cost:780,sockets:1,emoji:'⛑️',t:2},
+biretta:{id:2216,name:'Barrete [1]',slot:'head',def:6,mp:20,cost:900,sockets:1,emoji:'🎓',t:3},
+boots:{id:2401,name:'Sandálias [1]',slot:'shoes',def:5,cost:110,sockets:1,emoji:'👡',t:0},
+shoes:{id:2403,name:'Sapatos [1]',slot:'shoes',def:9,cost:480,sockets:1,emoji:'👞',t:1},
+boots2:{id:2405,name:'Botas [1]',slot:'shoes',def:14,hp:20,cost:1300,sockets:1,emoji:'👢',t:3},
+ring:{id:2601,name:'Anel [1]',slot:'accessory',atk:4,cost:220,sockets:1,emoji:'💍',t:0},
+earring:{id:2602,name:'Brinco [1]',slot:'accessory',mp:25,cost:600,sockets:1,emoji:'✨',t:1},
+necklace:{id:2603,name:'Colar [1]',slot:'accessory',hp:60,cost:700,sockets:1,emoji:'📿',t:2},
+glove:{id:2604,name:'Luva [1]',slot:'accessory',atk:10,cost:1200,sockets:1,emoji:'🧤',t:3},
+brooch:{id:2605,name:'Broche [1]',slot:'accessory',crit:4,luck:2,cost:1800,sockets:1,emoji:'📌',t:4},
+rosary:{id:2608,name:'Rosário [1]',slot:'accessory',hp:120,mp:40,cost:3600,sockets:1,emoji:'📿',t:6}};
+/* Visuais (cosméticos): só aparência. view = palpite; o jogo confirma o view real em /raw/items.json do servidor. */
+const COSTUMES=[[2208,'Laço',17,300],[2211,'Bandana',6,300],[2213,'Tiara de Gatinho',58,600],[2214,'Tiara de Coelho',15,600],[2220,'Chapéu',16,400],[2234,'Tiara',19,900],[2235,'Coroa',45,1500],[2244,'Laço Grande',57,700],[2252,'Chapéu de Mago',67,1200],[2254,'Asas de Anjo',69,1500],[2255,'Asas do Mal',70,1500],[2257,'Chifre de Unicórnio',72,1800],[2280,'Sakkat',94,800],[2201,'Óculos Escuros',12,400],[2241,'Barba de Vovô',47,500],[2218,'Máscara',27,400]].map(([id,n,v,cost])=>({id,n,v,cost}));
+const COS=Object.fromEntries(COSTUMES.map(c=>[c.id,c]));
+const SKIN_TONES=[[1,'#f6d5b4','Original'],[2,'#d9a066','Morena'],[3,'#a86b45','Parda'],[4,'#6b4128','Negra']];
+const REFINE_CH=[100,100,100,100,90,75,60,45,30,20];
+const refineCost=r=>(r+1)*120;
+const sellPrice=inst=>{const it=ITEMS[inst.id];return Math.floor((it?.cost||0)*.5)+(inst.refine||0)*60};
 const SLOT={weapon:'Arma',shield:'Escudo',armor:'Armadura',head:'Cabeça',shoes:'Sapatos',accessory:'Acessório'};
 
 /* ===================== CARTAS: uma por monstro, com ID real da carta de RO ===================== */
@@ -321,7 +388,7 @@ const SKILLS=[
 const STORE='torre-disciplina-ro-fan-v1',OLD_STORE='torre-disciplina-2-v3';
 const newWeek=()=>({week:weekKey(),picks:[],cat:{},focus:0,perf:0,days:[],kills:0,boss:0,cards:0,claimed:[]});
 const newDay=()=>({date:dateKey(),selected:[],locked:false,completed:[],perf:false});
-function baseState(){return {v:2,name:'',baseLevel:1,xp:0,jobLevel:1,jobXP:0,skillPoints:1,skills:{firstaid:1},equippedSkills:['firstaid'],path:null,promoted:false,second:null,zeny:250,hp:160,sp:100,attrs:{forca:0,intelecto:0,disciplina:0,criatividade:0},counters:{},customDaily:[],daily:newDay(),weekly:newWeek(),focus:{start:0,cat:'estudo'},stats:{totalMissions:0,focusMin:0,kills:0},region:0,map:0,unlocked:0,bosses:[],killMaps:{},pity:{},inventory:[{uid:1,id:'knife',cards:[]},{uid:2,id:'shirt',cards:[]}],equipped:{weapon:1,armor:2,shield:null,head:null,shoes:null,accessory:null},cards:{},seenCards:{},look:{gender:'male',head:3},settings:{roAssets:true,assetBase:ASSET_DEFAULT,stageAll:false},location:'city',lastSeen:Date.now(),uid:3,log:'Seu progresso nasce da rotina real.',prologue:false}}
+function baseState(){return {v:3,stages:{},stageKills:0,costumes:[],updatedAt:0,name:'',baseLevel:1,xp:0,jobLevel:1,jobXP:0,skillPoints:1,skills:{firstaid:1},equippedSkills:['firstaid'],path:null,promoted:false,second:null,zeny:250,hp:160,sp:100,attrs:{forca:0,intelecto:0,disciplina:0,criatividade:0},counters:{},customDaily:[],daily:newDay(),weekly:newWeek(),focus:{start:0,cat:'estudo'},stats:{totalMissions:0,focusMin:0,kills:0},region:0,map:0,unlocked:0,bosses:[],killMaps:{},pity:{},inventory:[{uid:1,id:'knife',cards:[]},{uid:2,id:'shirt',cards:[]}],equipped:{weapon:1,armor:2,shield:null,head:null,shoes:null,accessory:null},cards:{},seenCards:{},look:{gender:'male',head:3,hairColor:-1,bodyColor:-1,skinTone:1,skinColor:'',costume:[]},settings:{roAssets:true,assetBase:ASSET_DEFAULT,stageAll:false,cityTex:true},location:'city',lastSeen:Date.now(),uid:3,log:'Seu progresso nasce da rotina real.',prologue:false}}
 function migrateOld(v){let x=baseState();x.baseLevel=clamp(Number(v.level)||1,1,100);x.xp=Math.max(0,Number(v.xp)||0);x.jobLevel=clamp(Number(v.classLevel)||1,1,100);x.zeny=Math.max(0,Number(v.gold)||250);if(v.attrs)for(const k of Object.keys(x.attrs))x.attrs[k]=Number(v.attrs[k])||0;x.region=clamp(Number(v.region)||0,0,8);x.unlocked=clamp(Number(v.unlocked)||0,0,8);x.stats.kills=Number(v.stats?.kills)||0;return x}
 let state;try{state=JSON.parse(localStorage.getItem(STORE)||'null');if(!state){let legacy=JSON.parse(localStorage.getItem(OLD_STORE)||'null');state=legacy?migrateOld(legacy):baseState()}}catch{state=baseState()}
 function normalize(){const d=baseState();state={...d,...state,attrs:{...d.attrs,...state.attrs},look:{...d.look,...state.look},settings:{...d.settings,...state.settings},stats:{...d.stats,...state.stats},focus:{...d.focus,...state.focus}};
@@ -335,22 +402,25 @@ function normalize(){const d=baseState();state={...d,...state,attrs:{...d.attrs,
  if(!state.daily||state.daily.date!==dateKey())state.daily=newDay();
  if(state.daily.selected.some(id=>!missionById(id))){state.daily=newDay()}
  if(!state.weekly||state.weekly.week!==weekKey()||!Array.isArray(state.weekly.picks))state.weekly=newWeek();
- if(state.second&&!state.promoted)state.promoted=true;}
-function allDaily(){return [...BASE_DAILY,...state.customDaily]}
+ if(state.second&&!state.promoted)state.promoted=true;
+ state.stages=state.stages||{};state.stageKills=Number(state.stageKills)||0;state.costumes=Array.isArray(state.costumes)?state.costumes:[];if(!Array.isArray(state.look.costume))state.look.costume=[];
+ for(const ri of state.bosses)state.stages[ri]={cur:CFG.stagesPerCity,max:CFG.stagesPerCity};recalcUnlock();}
+function allDaily(){return [...BASE_DAILY.filter(m=>!(CFG.offMissions||[]).includes(m.id)),...state.customDaily]}
+function recalcUnlock(){let u=0;while(u<8&&state.bosses.includes(u))u++;state.unlocked=u;state.region=clamp(state.region,0,u)}
 function missionById(id){return allDaily().find(m=>m.id===id)}
 normalize();
 let tab='rotina',sub='aparencia',csub='caminho',catFilter='all',selectedItem=null,enemy=null,frameTime=performance.now(),lastHUD=0,heroPose='idle',poseUntil=0,spawnAt=0,attackAt=0,skillAt={},scenePhase=0,toastTimer,mobPose='walk',mobPoseUntil=0,stunUntil=0;
 const ui={dir:0,ppose:'idle',spin:false,pjob:null,spinTimer:0,showWeekly:false};
 /* mundo do palco: altura fixa 340, largura acompanha a proporção da tela */
 let W=600;const H=340,GROUND=296;let heroX=170,enemyX=760;
-function save(){state.lastSeen=Date.now();try{localStorage.setItem(STORE,JSON.stringify(state))}catch(e){console.warn('Não foi possível salvar',e)}}
+function save(){state.lastSeen=Date.now();state.updatedAt=Date.now();try{localStorage.setItem(STORE,JSON.stringify(state))}catch(e){console.warn('Não foi possível salvar',e)}scheduleRemote()}
 function toast(m){const n=$('toast');n.textContent=m;n.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>n.hidden=true,3200)}
 function dailyRollover(){let ch=false;if(state.daily.date!==dateKey()){state.daily=newDay();ch=true}if(state.weekly.week!==weekKey()){state.weekly=newWeek();ch=true}if(ch){save();if(tab==='rotina')render()}}
 
 /* ===================== ATRIBUTOS ===================== */
 const cnt=k=>Number(state.counters[k])||0;
 function pageDone(ri){const r=REGIONS[ri];return [...r.mobs,r.elite,r.boss].every(([id])=>MONSTER_CARDS[id]&&state.seenCards[MONSTER_CARDS[id].id])}
-function statGear(){let o={atk:0,def:0,hp:0,mp:0,crit:0,luck:0,matk:0};for(let uid of Object.values(state.equipped)){let inst=state.inventory.find(x=>x.uid===uid);if(!inst)continue;let it=ITEMS[inst.id];if(!it)continue;o.atk+=it.atk||0;o.def+=it.def||0;o.matk+=it.matk||0;for(let id of inst.cards||[]){const c=CARD_BY_ID[id];if(c)for(let k of Object.keys(STATL))o[k]+=c[k]||0}}
+function statGear(){let o={atk:0,def:0,hp:0,mp:0,crit:0,luck:0,matk:0};for(let uid of Object.values(state.equipped)){let inst=state.inventory.find(x=>x.uid===uid);if(!inst)continue;let it=ITEMS[inst.id];if(!it)continue;for(const k of Object.keys(o))o[k]+=it[k]||0;const r=inst.refine||0;if(it.slot==='weapon'){o.atk+=r*3;o.matk+=r*2}else if(it.slot==='accessory')o.hp+=r*8;else o.def+=r*2;for(let id of inst.cards||[]){const c=CARD_BY_ID[id];if(c)for(let k of Object.keys(STATL))o[k]+=c[k]||0}}
  REGIONS.forEach((r,i)=>{if(pageDone(i)){o.atk+=2;o.def+=2;o.hp+=20;o.luck+=2}});return o}
 const maxHP=()=>Math.floor(160+state.baseLevel*12+state.attrs.forca*5+state.attrs.disciplina*2+statGear().hp);
 const maxSP=()=>Math.floor(100+state.attrs.intelecto*2+state.jobLevel+statGear().mp);
@@ -362,10 +432,10 @@ function weaponItem(){const w=ownedItem(state.equipped.weapon);return w?ITEMS[w.
 function weaponStyle(){const it=weaponItem();return WSTYLE[it?.style||'none']}
 const aspd=()=>weaponStyle().aspd*clamp(1-state.attrs.criatividade*.002,.7,1);
 function xpNeed(){return Math.floor(42+state.baseLevel*26+Math.pow(state.baseLevel,1.24)*7)}
-function gainXP(v){state.xp+=Math.round(v);let up=false;while(state.xp>=xpNeed()&&state.baseLevel<100){state.xp-=xpNeed();state.baseLevel++;state.hp=maxHP();up=true}if(up){checkUnlock();toast('✨ Nível de Base '+state.baseLevel+'!')}}
+function gainXP(v){state.xp+=Math.round(v*CFG.xpMult);let up=false;while(state.xp>=xpNeed()&&state.baseLevel<100){state.xp-=xpNeed();state.baseLevel++;state.hp=maxHP();up=true}if(up)toast('✨ Nível de Base '+state.baseLevel+'!')}
 const jobNeed=()=>state.jobLevel*5;
-function gainJobXP(v){if(!(v>0))return;state.jobXP=Math.round((state.jobXP+v)*100)/100;let up=0;while(state.jobXP>=jobNeed()&&state.jobLevel<80){state.jobXP-=jobNeed();state.jobLevel++;state.skillPoints++;up++}if(up)setTimeout(()=>toast('🌟 Nível de Classe '+state.jobLevel+'! +'+up+' ponto de habilidade'),900)}
-function checkUnlock(){while(state.unlocked<8&&state.bosses.includes(state.unlocked)&&state.baseLevel>=REGIONS[state.unlocked+1].min)state.unlocked++}
+function gainJobXP(v){if(!(v>0))return;v*=CFG.jobMult;state.jobXP=Math.round((state.jobXP+v)*100)/100;let up=0;while(state.jobXP>=jobNeed()&&state.jobLevel<80){state.jobXP-=jobNeed();state.jobLevel++;state.skillPoints++;up++}if(up)setTimeout(()=>toast('🌟 Nível de Classe '+state.jobLevel+'! +'+up+' ponto de habilidade'),900)}
+function checkUnlock(){recalcUnlock()}
 function activeJob(){return state.second?SECOND[state.second]:state.promoted&&state.path?JOBS[state.path]:JOBS.novice}
 const currentJobId=()=>activeJob().id;
 const pathJob=()=>state.path?JOBS[state.path]:JOBS.novice;
@@ -388,11 +458,20 @@ const itemIcon=i=>imageBase()+'/icons/item/'+i+'.png',skillIcon=i=>imageBase()+'
 const DIRN=['Frente','Frente-esquerda','Esquerda','Costas-esquerda','Costas','Costas-direita','Direita','Frente-direita'];
 const POSES={idle:{n:'Parado',act:0},walk:{n:'Andando',act:8},sit:{n:'Sentado',act:16},ready:{n:'Em guarda',act:32},attack:{n:'Atacando',act:null},skill:{n:'Conjurando',act:96},hurt:{n:'Dano',act:48}};
 function poseAct(pose,alt){if(pose==='attack')return alt?weaponStyle().alt:weaponStyle().act;if(pose==='skill')return alt?40:96;return POSES[pose]?.act??0}
-function heroUrl(pose='idle',o={}){const dir=o.dir??6,job=o.job??currentJobId();
- const p=new URLSearchParams({job:String(job),action:String(poseAct(pose,o.alt)+dir),gender:state.look.gender,head:String(state.look.head)});
- const h=ownedItem(state.equipped.head),w=ownedItem(state.equipped.weapon);
- if(h&&ITEMS[h.id]?.headgear)p.set('headgear',String(ITEMS[h.id].headgear));if(w&&ITEMS[w.id]?.weapon)p.set('weapon',String(ITEMS[w.id].weapon));
- if(o.still)p.set('frame','0');return imageBase()+'/image?'+p}
+function viewOf(id){return Number(VIEWS[id]??COS[id]?.v??Object.values(ITEMS).find(i=>i.id===id)?.headgear??0)}
+function headgearViews(){const out=[];for(const id of state.look.costume||[]){const v=viewOf(id);if(v&&!out.includes(v))out.push(v)}if(!out.length){const h=ownedItem(state.equipped.head);if(h&&ITEMS[h.id]){const v=viewOf(ITEMS[h.id].id);if(v)out.push(v)}}return out.slice(0,3)}
+function heroUrl(pose='idle',o={}){const dir=o.dir??6,job=o.job??currentJobId(),L=state.look;
+ const p=new URLSearchParams({job:String(job),action:String(poseAct(pose,o.alt)+dir),gender:L.gender,head:String(L.head)});
+ if(L.hairColor>=0)p.set('headPalette',String(L.hairColor));if(L.bodyColor>=0)p.set('bodyPalette',String(L.bodyColor));
+ if(/^#?[0-9a-f]{6}$/i.test(L.skinColor||''))p.set('skinColor',L.skinColor.replace('#',''));else if(L.skinTone>1)p.set('skinTone',String(L.skinTone));
+ const hg=headgearViews();if(hg.length)p.set('headgear',hg.join(','));const w=ownedItem(state.equipped.weapon);if(w&&ITEMS[w.id]?.weapon)p.set('weapon',String(ITEMS[w.id].weapon));
+ if(pose==='idle'||pose==='sit'||pose==='ready')p.set('headdir','straight');if(o.still)p.set('frame','0');return imageBase()+'/image?'+p}
+/* Dados do servidor (cores de cabelo/roupa e view real dos visuais), guardados no aparelho */
+let VIEWS={},HAIRSW=null,CLASSSW={};try{VIEWS=JSON.parse(localStorage.getItem('torre-ro-views')||'{}');HAIRSW=JSON.parse(localStorage.getItem('torre-ro-hair')||'null');CLASSSW=JSON.parse(localStorage.getItem('torre-ro-class')||'{}')}catch{}
+let rawBusy={};async function rawJSON(name){if(rawBusy[name])return null;rawBusy[name]=1;try{const r=await fetch(imageBase()+'/raw/'+name);if(!r.ok)throw 0;return await r.json()}catch{return null}finally{rawBusy[name]=0}}
+async function loadHair(){if(HAIRSW)return;const d=await rawJSON('hair.json');if(!Array.isArray(d))return;HAIRSW={};for(const g of d)if(g.race==='human')HAIRSW[g.gender]=g.swatches||[];try{localStorage.setItem('torre-ro-hair',JSON.stringify(HAIRSW))}catch{}if(tab==='heroi')render()}
+async function loadClasses(){if(CLASSSW.ok)return;const d=await rawJSON('classes.json');if(!Array.isArray(d))return;CLASSSW={ok:1};for(const c of d)if(c.id<=19)CLASSSW[c.id]={m:c.palettes?.m?.swatches||[],f:c.palettes?.f?.swatches||[]};try{localStorage.setItem('torre-ro-class',JSON.stringify(CLASSSW))}catch{}if(tab==='heroi')render()}
+async function loadViews(){if(VIEWS.ok)return;const d=await rawJSON('items.json');if(!Array.isArray(d))return;const want=new Set([...COSTUMES.map(c=>c.id),...Object.values(ITEMS).filter(i=>i.slot==='head').map(i=>i.id)]);const nv={ok:1};for(const it of d)if(want.has(it.id)){const v=it.spriteView||it.view;if(v)nv[it.id]=v}VIEWS=nv;try{localStorage.setItem('torre-ro-views',JSON.stringify(VIEWS))}catch{}heroKey='';stillCache.clear();if(tab==='heroi')render()}
 const monsterUrl=(id,act=0,still)=>imageBase()+'/image?job='+id+'&action='+act+(still?'&frame=0':'');
 const mobStill=id=>imageBase()+'/image?job='+id+'&frame=0';
 /* Imagem parada: carrega o quadro 0 e desenha num canvas (fica imóvel mesmo se o servidor devolver APNG animado). */
@@ -432,21 +511,27 @@ function shake(){const s=$('stage');s.classList.remove('shake');void s.offsetWid
 function pose(which,ms=510){heroPose=which;poseUntil=Date.now()+ms;updateHeroAsset(true)}
 function statusLog(t,d){state.log=d;$('logTitle').textContent=t;$('logText').textContent=d}
 function stopHunt(visitStore=true){state.location='city';enemy=null;enemyX=W+60;heroX=Math.round(W*.36);heroPose='idle';poseUntil=0;skillAt={};save();if(visitStore){tab='heroi';sub='loja'}render();updateStageAssets();statusLog('🏘 '+REGIONS[state.region].city,'Cidade segura · loja, forja e viagens disponíveis.')}
-function startHunt(ri=state.region,map=state.map){ri=Number(ri);map=Number(map);if(ri>state.unlocked||ri<0||map<0||map>1){toast('Esta área está bloqueada.');return}state.region=ri;state.map=map;state.location='hunt';enemy=null;heroX=Math.round(W*.24);enemyX=W+60;spawnAt=performance.now()+400;attackAt=0;skillAt={};save();tab='mundo';render();statusLog('⚔ '+REGIONS[ri].area,'Monstros surgem sozinhos. Ataques e skills são automáticos.')}
-const mapKills=()=>state.killMaps[state.region+':'+state.map]||0;
-const bossAvailable=()=>mapKills()>=100&&!state.bosses.includes(state.region);
-function startBoss(){if(!bossAvailable()&&!state.bosses.includes(state.region)){toast('Derrote 100 monstros neste mapa para liberar o chefe.');return}if(state.location!=='hunt')startHunt(state.region,state.map);spawnEnemy('boss')}
-function spawnEnemy(mode='normal'){const r=REGIONS[state.region];let arr,kind;if(mode==='boss'){arr=r.boss;kind='boss'}else if(Math.random()<.09){arr=r.elite;kind='elite'}else{arr=r.mobs[Math.floor(Math.random()*4)];kind='normal'}
- const hp=Math.floor((65+state.region*52+state.baseLevel*5)*(kind==='boss'?11:kind==='elite'?3.2:1)*(state.map?1.25:1));
- enemy={id:arr[0],name:arr[1],kind,hp,maxhp:hp,atk:Math.round((5+state.region*4)*(kind==='boss'?2.2:kind==='elite'?1.4:1)*(state.map?1.15:1)),attackAt:performance.now()+1500,spriteOK:false};mobPose='walk';mobPoseUntil=0;enemyX=W+20;updateEnemyAsset(true)}
-function creditEnemy(){if(!enemy)return;const e=enemy,id=e.id,ri=state.region;state.stats.kills++;state.weekly.kills++;const mk=ri+':'+state.map;state.killMaps[mk]=(state.killMaps[mk]||0)+1;
- const z=Math.floor((3+ri*3)*(e.kind==='boss'?28:e.kind==='elite'?5:1)*(state.map?1.2:1));state.zeny+=z;gainXP(e.kind==='boss'?30+ri*10:e.kind==='elite'?4:1);
- const chance=e.kind==='boss'?.1:e.kind==='elite'?.01:.002;state.pity[id]=(state.pity[id]||0)+1;
+function startHunt(ri=state.region){ri=Number(ri);if(ri>state.unlocked||ri<0){toast('Vença o chefe da cidade anterior para liberar esta.');return}state.region=ri;state.location='hunt';enemy=null;heroX=Math.round(W*.24);enemyX=W+20;spawnAt=performance.now()+400;attackAt=0;skillAt={};save();tab='mundo';render();const S=stageOf(ri);statusLog('⚔ '+REGIONS[ri].area+' · Fase '+S.cur,'Derrote '+KPS()+' monstros para avançar de fase.')}
+const SPC=()=>clamp(Math.round(CFG.stagesPerCity)||10,2,20),KPS=()=>clamp(Math.round(CFG.killsPerStage)||3,1,50);
+function stageOf(ri=state.region){if(!state.stages[ri])state.stages[ri]={cur:1,max:1};return state.stages[ri]}
+const cleared=ri=>state.bosses.includes(ri);
+const mapKills=()=>state.stageKills;
+const bossAvailable=()=>cleared(state.region)||stageOf().max>=SPC();
+function startBoss(){if(!bossAvailable()){toast('Avance pelas fases até a fase '+SPC()+' para enfrentar o chefe.');return}const S=stageOf();S.cur=SPC();state.stageKills=0;if(state.location!=='hunt')startHunt(state.region);else{enemy=null}spawnEnemy('boss')}
+function spawnEnemy(mode='normal'){const r=REGIONS[state.region],S=stageOf(),st=S.cur;let arr,kind;
+ if(mode==='boss'||(st>=SPC()&&!cleared(state.region))){arr=r.boss;kind='boss'}else if((st%5===0&&state.stageKills===KPS()-1)||Math.random()<.05){arr=r.elite;kind='elite'}else{arr=r.mobs[Math.floor(Math.random()*4)];kind='normal'}
+ const p=state.region*SPC()+st;const hp=Math.floor((45+p*14)*(kind==='boss'?8:kind==='elite'?3:1));
+ enemy={id:arr[0],name:arr[1],kind,hp,maxhp:hp,atk:Math.round((4+p*1.6)*(kind==='boss'?1.6:kind==='elite'?1.3:1)),attackAt:performance.now()+1500,spriteOK:false};mobPose='walk';mobPoseUntil=0;enemyX=W+20;updateEnemyAsset(true)}
+function creditEnemy(){if(!enemy)return;const e=enemy,id=e.id,ri=state.region,S=stageOf(ri);state.stats.kills++;state.weekly.kills++;const mk=ri+':'+S.cur;state.killMaps[mk]=(state.killMaps[mk]||0)+1;
+ const z=Math.floor((3+ri*3)*(1+S.cur*.06)*(e.kind==='boss'?25:e.kind==='elite'?5:1)*CFG.zenyMult);state.zeny+=z;gainXP(e.kind==='boss'?30+ri*15:e.kind==='elite'?5+ri*2:1+ri);
+ const chance=(e.kind==='boss'?.1:e.kind==='elite'?.01:.002)*CFG.cardMult;state.pity[id]=(state.pity[id]||0)+1;
  if(state.pity[id]>=500||Math.random()<chance*(1+luck()/100)){const c=MONSTER_CARDS[id];if(c){state.cards[c.id]=(state.cards[c.id]||0)+1;const first=!state.seenCards[c.id];state.seenCards[c.id]=1;state.weekly.cards++;state.pity[id]=0;toast('🃏 Drop raro: '+c.name+'!'+(first?' (nova no álbum)':''));popNum('🃏 CARTA','crit',enemyX,.9)}}
- if(Math.random()<(e.kind==='boss'?.75:e.kind==='elite'?.13:.02)){let pool=Object.keys(ITEMS);let item=pool[Math.floor(Math.random()*pool.length)];state.inventory.push({uid:state.uid++,id:item,cards:[]});toast('🎁 Item obtido: '+ITEMS[item].name)}
- if(e.kind==='boss'){state.weekly.boss++;if(!state.bosses.includes(ri)){state.bosses.push(ri);state.zeny+=250+ri*150;toast('🏆 Chefe derrotado! '+REGIONS[ri].key+' obtido. Leia o capítulo no Mundo.');checkUnlock();if(ri<8&&state.baseLevel>=REGIONS[ri+1].min)state.unlocked=Math.max(state.unlocked,ri+1)}}
- statusLog('⚔ '+e.name.split(' · ')[0]+' derrotado','+'+z+' zeny · '+fmt(state.stats.kills)+' monstros no total');mobPose='dead';
- enemy=null;spawnAt=performance.now()+800;updateEnemyAsset(true);save();if(tab==='mundo'&&e.kind!=='normal')render()}
+ if(Math.random()<(e.kind==='boss'?.75:e.kind==='elite'?.12:.015)){const pool=Object.keys(ITEMS).filter(k=>(ITEMS[k].t||0)<=ri+1);const item=pool[Math.floor(Math.random()*pool.length)];state.inventory.push({uid:state.uid++,id:item,cards:[],refine:0});toast('🎁 Item obtido: '+ITEMS[item].name)}
+ let title='⚔ '+e.name.split(' · ')[0]+' derrotado',msg='+'+z+' zeny';
+ if(e.kind==='boss'){state.weekly.boss++;state.stageKills=0;if(!cleared(ri)){state.bosses.push(ri);state.zeny+=Math.floor((250+ri*150)*CFG.zenyMult);recalcUnlock();S.max=SPC();
+   toast(ri<8?'🏆 '+REGIONS[ri].key+' obtido! '+REGIONS[ri+1].city+' foi liberada.':'🏆 Você venceu o Eu de Amanhã!');title='🏆 Chefe derrotado!';msg=ri<8?'Próxima cidade liberada: '+REGIONS[ri+1].city:'A Torre voltou a brilhar.'}}
+ else{state.stageKills++;if(state.stageKills>=KPS()){state.stageKills=0;if(S.cur<SPC()){S.cur++;S.max=Math.max(S.max,S.cur);msg='Fase '+S.cur+'/'+SPC()+(S.cur===SPC()&&!cleared(ri)?' · CHEFE!':'');popNum('FASE '+S.cur,'info',heroX,1.1)}}else msg+=' · '+state.stageKills+'/'+KPS()+' da fase '+S.cur}
+ statusLog(title,msg);mobPose='dead';enemy=null;spawnAt=performance.now()+700;updateEnemyAsset(true);save();if(tab==='mundo')render()}
 function damageEnemy(mult=1,kind='physical'){if(!enemy)return;const critical=Math.random()<critPct()/100;const dmg=Math.max(2,Math.floor(atk()*mult*rnd(.86,1.14)*(critical?1.65:1)-state.region*1.6));enemy.hp=Math.max(0,enemy.hp-dmg);mobPose='hurt';mobPoseUntil=Date.now()+260;updateEnemyAsset(true);const m=$('monsterSprite');m.classList.remove('hit');void m.offsetWidth;m.classList.add('hit');
  popNum((critical?'CRIT ':'')+dmg,critical?'crit':'',enemyX,.75);if(critical)shake();if(enemy.hp<=0)creditEnemy()}
 /* Ataque básico conforme a arma equipada */
@@ -477,6 +562,7 @@ function sceneDraw(time){const cv=$('scene'),c=cv.getContext('2d'),w=W,h=H,t=tim
  if(state.map===1){c.fillStyle='#00000022';c.fillRect(0,0,w,h)}
  c.fillStyle=ri===6?'#ffb07055':ri===7?'#d8e0d044':'#fff3c8aa';c.beginPath();c.arc(w*.8,60,24,0,7);c.fill();
  const hor=GROUND-70;
+ if(!hunt){drawCity(c,w,ri);if(!heroSpriteOK())drawFallbackCharacter(c,heroX,GROUND+6,3,false,null,t,0);return}
  const layer=(col,par,amp,step,base,shape)=>{c.fillStyle=col;const off=(scroll*par*40)%step;for(let i=-1;i<w/step+2;i++){const x=i*step-off;c.beginPath();if(shape==='peak'){c.moveTo(x,base);c.lineTo(x+step/2,base-amp-((i*37)%23));c.lineTo(x+step,base)}else{c.moveTo(x,base);c.quadraticCurveTo(x+step/2,base-amp-((i*29)%17),x+step,base)}c.fill()}c.fillRect(0,base,w,GROUND-base+2)};
  if(S.bg==='sea'){c.fillStyle=S.far;c.fillRect(0,hor+20,w,GROUND-hor);c.fillStyle='#ffffff55';for(let i=0;i<14;i++){const x=((i*83-scroll*15)%(w+80)+w+80)%(w+80)-40;c.fillRect(x,hor+30+(i%4)*9,22,2)}c.fillStyle='#6b4a2a';for(let i=0;i<5;i++){const x=((i*170-scroll*30)%(w+170)+w+170)%(w+170)-80;c.fillRect(x,hor+40,8,40)}}
  else if(S.bg==='peaks'){layer(S.far,.2,90,160,hor+30,'peak');c.fillStyle='#fff';const off=(scroll*8)%160;for(let i=-1;i<w/160+2;i++){const x=i*160-off,pk=hor+30-90-((i*37)%23);c.beginPath();c.moveTo(x+80,pk);c.lineTo(x+62,pk+24);c.lineTo(x+98,pk+24);c.fill()}layer(S.mid,.45,50,120,hor+50,'peak')}
@@ -491,7 +577,6 @@ function sceneDraw(time){const cv=$('scene'),c=cv.getContext('2d'),w=W,h=H,t=tim
  c.fillStyle=S.path;c.fillRect(0,GROUND-6,w,14);c.fillStyle='#00000018';for(let i=0;i<w/24+2;i++){const x=((i*24-scroll*100)%(w+24)+w+24)%(w+24)-24;c.fillRect(x,GROUND+2,10,2)}
  /* objetos (passam no ritmo do chão) */
  const pOff=(scroll*70)%180;for(let i=-1;i<w/180+2;i++){const x=i*180-pOff+((i*71)%60),y=GROUND-22;prop(c,S.prop,x,y,i)}
- if(!hunt)drawCity(c,w,ri);
  /* partículas */
  if(S.fx){for(let i=0;i<26;i++){const sx=(i*97+t*(S.fx==='snow'?18:8)*(i%3+1))%w,sy=S.fx==='embers'?(GROUND-((t*30*(i%4+1)+i*53)%GROUND)):((t*(S.fx==='snow'?30:8)*(i%3+1)+i*61)%GROUND);
   if(S.fx==='snow'){c.fillStyle='#fff';c.fillRect(sx,sy,2,2)}else if(S.fx==='embers'){c.fillStyle=i%2?'#ffb14a':'#ff6a2a';c.fillRect(sx,sy,2,2)}else if(S.fx==='fireflies'||S.fx==='motes'){c.fillStyle=S.fx==='motes'?'#c9b8ff':'#e8ff8a';c.globalAlpha=.4+.6*Math.abs(Math.sin(t*2+i));c.fillRect(sx,(sy*.6)+60,2,2);c.globalAlpha=1}else if(S.fx==='fog'){c.fillStyle='#d8e0d010';c.beginPath();c.ellipse((sx*1.3)%w,GROUND-20-(i%5)*14,90,14,0,0,7);c.fill()}}}
@@ -504,15 +589,38 @@ function prop(c,k,x,y,i){const R=(a,b,w,h,col)=>{c.fillStyle=col;c.fillRect(Math
  else if(k==='column'){R(x,y-50,14,52,'#9f97c0');R(x-4,y-54,22,6,'#bdb5dd');if(i%2)R(x-4,y-20,22,4,'#7f77a0')}
  else if(k==='rock'){c.fillStyle='#3d2620';c.beginPath();c.moveTo(x-14,y+2);c.lineTo(x,y-26);c.lineTo(x+18,y+2);c.fill();R(x-2,y-10,4,4,'#ff6a2a')}
  else if(k==='deadtree'){R(x,y-40,6,42,'#2a2420');R(x-12,y-36,14,3,'#2a2420');R(x+4,y-28,14,3,'#2a2420');R(x-12,y-44,3,10,'#2a2420')}}
-function drawCity(c,w,ri){const th=REGIONS[ri].theme;const base=GROUND-8;const bx=w*.5;
- const house=(x,wd,ht,roof,label,win)=>{c.fillStyle='#4a3a4a';c.fillRect(x,base-ht,wd,ht);c.fillStyle='#c09b70';c.fillRect(x+6,base-ht+14,wd-12,ht-14);c.fillStyle=roof;c.beginPath();c.moveTo(x-10,base-ht+14);c.lineTo(x+wd/2,base-ht-24);c.lineTo(x+wd+10,base-ht+14);c.fill();c.fillStyle='#3a2a3a';c.fillRect(x+wd/2-10,base-30,20,30);c.fillStyle=win;c.fillRect(x+12,base-ht+26,14,14);c.fillRect(x+wd-26,base-ht+26,14,14);if(label){c.fillStyle='#1d1830';c.fillRect(x+wd/2-28,base-ht-4,56,15);c.fillStyle='#f2c14e';c.font='bold 11px monospace';c.textAlign='center';c.fillText(label,x+wd/2,base-ht+7);c.textAlign='left'}};
- house(bx-10,110,86,'#7e394a','LOJA','#ffd987');house(bx+130,96,74,'#5a5f7a','FORJA','#ff9a4a');if(w>560)house(bx-150,90,70,th,'','#ffd987');
- c.fillStyle='#8a8aa0';c.fillRect(w*.12,base-14,40,14);c.fillStyle='#8fd3ff';c.fillRect(w*.12+4,base-12,32,4);
- c.fillStyle='#1d1830cc';c.fillRect(w*.04,22,Math.min(240,w*.5),26);c.fillStyle='#f1ead9';c.font='bold 15px monospace';c.fillText('🏘 '+REGIONS[ri].city,w*.04+8,40)}
-
+const PRT_TEX={floor:'89b52cd603ca1c0a',wall:'f53808329a788cd6',wall2:'37c09ea58d06e535',roof:'902bb499566d0508',roof2:'0fb41800b7380e46',castle:'b6acf6ed28636960',castle2:'34019ba41735b114',tower:'6730bdfc782890d1',shop:'1b0d82f5f4eacb23',forge:'2f97f21f5c5da72e',hwall:'ae12be7466ce5dd6'};
+const TEX={};function tex(k){if(!state.settings.cityTex||!state.settings.roAssets)return null;let t=TEX[k];if(!t){t=TEX[k]={img:new Image(),ok:false};t.img.crossOrigin='anonymous';t.img.onload=()=>t.ok=true;t.img.src=imageBase()+'/maps/_t/'+PRT_TEX[k]+'.png'}return t.ok?t.img:null}
+const NPCS=[{id:117,n:'Kafra',x:.5}];const npcImg={};
+function npc(id){let t=npcImg[id];if(!t){t=npcImg[id]={img:new Image(),ok:false};t.img.onload=()=>t.ok=true;t.img.src=monsterUrl(id,0,true)}return t.ok?t.img:null}
+function fillTex(c,img,x,y,w,h,col,scale=.5){if(img){const p=c.createPattern(img,'repeat');p.setTransform(new DOMMatrix().translate(x,y).scale(scale));c.fillStyle=p}else c.fillStyle=col;c.fillRect(x,y,w,h)}
+function drawCity(c,w,ri){const base=GROUND-24,th=REGIONS[ri].theme;
+ /* castelo ao fundo */
+ const cx=w*.5,cw=Math.min(300,w*.55),ch=120,cy=base-ch-50;
+ const castle=tex('castle'),tower=tex('tower');
+ if(castle)c.drawImage(castle,cx-cw/2,cy,cw,ch);else{c.fillStyle='#b9ad98';c.fillRect(cx-cw/2,cy,cw,ch);c.fillStyle='#8f8676';for(let i=0;i<8;i++)c.fillRect(cx-cw/2+i*cw/8+6,cy+20,10,22)}
+ c.fillStyle='#00000022';c.fillRect(cx-cw/2,cy,cw,ch);
+ for(const tx of [cx-cw/2-26,cx+cw/2-8,cx-17]){const tall=tx===cx-17?ch+46:ch+24,ty=cy+ch-tall;if(tower)c.drawImage(tower,tx,ty,34,tall);else{c.fillStyle='#c4b9a3';c.fillRect(tx,ty,34,tall)}c.fillStyle='#a33a2e';c.beginPath();c.moveTo(tx-6,ty);c.lineTo(tx+17,ty-38);c.lineTo(tx+40,ty);c.fill();c.fillStyle='#f2c14e';c.fillRect(tx+16,ty-50,2,14);c.fillStyle=th;c.fillRect(tx+18,ty-50,10,6)}
+ /* muralha */
+ fillTex(c,tex('hwall'),0,base-62,w,40,'#9d927e',.35);c.fillStyle='#00000030';c.fillRect(0,base-24,w,3);c.fillStyle='#8a8070';for(let x=0;x<w;x+=22)c.fillRect(x,base-70,12,9);
+ /* casas, loja e forja */
+ const house=(x,bw,bh,wallK,roofK,label,col)=>{const y=base-bh;const wi=tex(wallK);if(wi)c.drawImage(wi,x,y,bw,bh);else{c.fillStyle='#e3d3b0';c.fillRect(x,y,bw,bh);c.fillStyle='#6b4a2a';c.fillRect(x+bw/2-9,base-28,18,28);c.fillStyle='#8fd3ff';c.fillRect(x+10,y+14,14,14);c.fillRect(x+bw-24,y+14,14,14)}
+  c.strokeStyle='#5a4632';c.lineWidth=2;c.strokeRect(x,y,bw,bh);
+  c.save();c.beginPath();c.moveTo(x-10,y+2);c.lineTo(x+bw/2,y-34);c.lineTo(x+bw+10,y+2);c.closePath();c.clip();fillTex(c,tex(roofK),x-10,y-34,bw+20,36,col,.3);c.restore();
+  if(label){c.fillStyle='#2a1d12';c.fillRect(x+bw/2-30,y+4,60,16);c.fillStyle='#f2c14e';c.font='bold 11px Rubik,sans-serif';c.textAlign='center';c.fillText(label,x+bw/2,y+16);c.textAlign='left'}};
+ if(w>520)house(w*.02,96,70,'wall2','roof','','#b8442f');
+ house(w*.24,110,84,'shop','roof','LOJA','#b8442f');house(w*.66,104,78,'forge','roof2','FORJA','#7a3a2a');
+ /* chão de pedra de Prontera */
+ fillTex(c,tex('floor'),0,base,w,H-base,'#b8b0a0',.5);if(!tex('floor')){c.fillStyle='#a69e8e';for(let y=base;y<H;y+=12)for(let x=((y/12)%2)*16;x<w;x+=32)c.fillRect(x,y,30,10)}
+ /* fonte */
+ const fx=w*.12,fy=base+16;c.fillStyle='#8f8a80';c.beginPath();c.ellipse(fx,fy,34,10,0,0,7);c.fill();c.fillStyle='#5ab0e8';c.beginPath();c.ellipse(fx,fy-2,28,7,0,0,7);c.fill();c.fillStyle='#c9c3b6';c.fillRect(fx-4,fy-34,8,32);c.fillStyle='#bfe7ff';const tt=performance.now()/300;for(let i=0;i<5;i++)c.fillRect(fx-10+i*5,fy-30+((tt*8+i*5)%22),2,4);
+ /* NPCs */
+ for(const n of NPCS){const im=npc(n.id);if(im){const sc=1.1;c.drawImage(im,w*n.x-im.naturalWidth*sc/2,base+8-im.naturalHeight*sc,im.naturalWidth*sc,im.naturalHeight*sc)}}
+ c.fillStyle=th+'22';c.fillRect(0,0,w,H);
+}
 /* ===================== VISTAS ===================== */
 const pressed=b=>`aria-pressed="${b?'true':'false'}"`;
-function render(){dailyRollover();const views={rotina:viewRoutine,mundo:viewWorld,heroi:viewHero,classe:viewClass,cartas:viewCards,config:viewSettings};
+function render(){dailyRollover();const views={rotina:viewRoutine,mundo:viewWorld,heroi:viewHero,classe:viewClass,cartas:viewCards,config:viewSettings,mestre:viewMaster};if(tab==='mestre'&&!net.master)tab='config';
  document.querySelectorAll('[data-tab]').forEach(b=>b.dataset.tab===tab?b.setAttribute('aria-current','page'):b.removeAttribute('aria-current'));
  const showStage=tab==='mundo'||state.settings.stageAll;const sw=$('stageWrap');const was=sw.hidden;sw.hidden=!showStage;
  $('content').innerHTML=(views[tab]||viewRoutine)();if(showStage&&was){resizeStage();heroKey='';mobKey='';updateStageAssets()}
@@ -546,20 +654,25 @@ function viewRoutine(){const d=state.daily,done=d.completed.length,chosen=d.sele
  <div><span class="label">Nível de Base ${state.baseLevel}</span>${bar(state.xp,xpNeed())}<span class="tiny mute num">${fmt(state.xp)}/${fmt(xpNeed())}</span></div><div><span class="label">Nível de Classe ${state.jobLevel}</span>${bar(state.jobXP,jobNeed(),'gold')}<span class="tiny mute num">${fmtC(Math.floor(state.jobXP*10)/10)}/${fmt(jobNeed())}</span></div></section>`;
  return prologue+day+focus+goals+weekly+stats}
 function wprog(m){const w=state.weekly;if(m.key.startsWith('cat:'))return w.cat[m.key.slice(4)]||0;if(m.key==='days')return w.days.length;return w[m.key]||0}
-function viewWorld(){const r=REGIONS[state.region],k=mapKills(),beat=state.bosses.includes(state.region);
+function viewWorld(){const r=REGIONS[state.region],beat=cleared(state.region),S=stageOf(),N=SPC();
+ const stages=`<div class="stages">${Array.from({length:N},(_,i)=>i+1).map(n=>`<button class="stg ${n<S.max||beat?'done':''} ${n===S.cur?'cur':''} ${n===N?'boss':''}" data-act="stage" data-n="${n}" ${n>S.max&&!beat?'disabled':''} aria-label="Fase ${n}">${n===N?'👑':n}</button>`).join('')}</div>`;
+ const pips=`<div class="pips"><span class="small mute">Abates da fase</span>${Array.from({length:KPS()},(_,i)=>`<i class="${i<state.stageKills?'on':''}"></i>`).join('')}</div>`;
  const where=`<section class="card"><div class="head"><div><div class="label">Capítulo ${state.region+1} · ${state.location==='hunt'?'Caçando':'Na cidade'}</div><h2>${safe(r.city)}</h2></div><span class="chip plain">${safe(r.key)}${beat?' ✓':''}</span></div>
- <div class="seg"><button data-act="map" data-n="0" ${pressed(state.map===0)}>Campo I</button><button data-act="map" data-n="1" ${pressed(state.map===1)}>Campo II</button></div>
+ ${CFG.motd?`<div class="note">📢 ${safe(CFG.motd)}</div>`:''}
+ <div class="head"><span class="label">${safe(r.area)} · Fase ${S.cur}/${N}${S.cur===N&&!beat?' · Chefe':''}</span>${S.cur<N||beat?pips:''}</div>${stages}
+ <p class="tiny mute">Cada fase pede ${KPS()} abates. A fase 5 termina com o elite e a fase ${N} é o chefe. Vencer o chefe libera a próxima cidade, sem exigir nível. Toque numa fase já alcançada para farmar nela.</p>
  <div class="mobs">${[...r.mobs.map(m=>[...m,'normal']),[...r.elite,'elite'],[...r.boss,'boss']].map(([id,n,kd])=>`<div class="mob ${kd}"><div class="m">${state.settings.roAssets?`<img src="${mobStill(id)}" alt="" loading="lazy" onerror="this.replaceWith(document.createTextNode('👾'))">`:'👾'}</div><b>${safe(n.split(' · ')[0])}</b><div class="tiny mute">${kd==='boss'?'Chefe':kd==='elite'?'Elite':'Comum'}${MONSTER_CARDS[id]&&state.seenCards[MONSTER_CARDS[id].id]?' · 🃏':''}</div></div>`).join('')}</div>
- <div><span class="label">Abates neste mapa ${fmt(Math.min(k,100))}/100 para o chefe</span>${bar(k,100,'gold')}</div>
- <div class="row fill"><button class="btn main" data-act="hunt">${state.location==='hunt'?'⚔ Caçando…':'⚔ Caçar aqui'}</button><button class="btn ${bossAvailable()?'red':''}" data-act="boss" ${!bossAvailable()&&!beat?'disabled':''}>👑 ${beat?'Revanche':'Chefe'}</button></div>
- <div class="combat"><div><b class="num">${Math.floor(atk())}</b><small>ATQ</small></div><div><b class="num">${Math.floor(def())}</b><small>DEF</small></div><div><b class="num">${(1000/aspd()).toFixed(2)}</b><small>golpes/s</small></div><div><b class="num">${Math.round(critPct())}%</b><small>crítico</small></div></div>
+ <div class="row fill"><button class="btn main" data-act="hunt">${state.location==='hunt'?'⚔ Caçando…':'⚔ Caçar aqui'}</button><button class="btn ${bossAvailable()?'red':''}" data-act="boss" ${bossAvailable()?'':'disabled'}>👑 ${beat?'Revanche':'Chefe'}</button></div>
+ <div class="combat"><div><b>${Math.floor(atk())}</b><small>ATQ</small></div><div><b>${Math.floor(def())}</b><small>DEF</small></div><div><b>${(1000/aspd()).toFixed(2)}</b><small>golpes/s</small></div><div><b>${Math.round(critPct())}%</b><small>crítico</small></div></div>
  <p class="small mute">Arma: <b>${safe(weaponStyle().n)}</b>${weaponStyle().range>200?' · ataca à distância antes do monstro chegar':''}.</p></section>`;
- const lore=`<section class="card"><div class="label">História</div><div class="lore">${safe(beat?r.close:r.open)}${beat?`<div class="lesson">${safe(r.lesson)}</div>`:''}</div>${beat&&state.region<8&&state.baseLevel<REGIONS[state.region+1].min?`<p class="small" style="color:var(--gold)">O próximo capítulo pede Nível de Base ${REGIONS[state.region+1].min}.</p>`:''}</section>`;
- const map=`<section class="card"><div class="head"><h2>Mapa de Aethelgard</h2><span class="chip plain">${state.unlocked+1}/9</span></div><div class="mapgrid">${REGIONS.map((x,i)=>`<button class="node ${i===state.region?'on':''}" style="--t:${x.theme}" data-act="travel" data-n="${i}" ${i>state.unlocked?'disabled':''}><b>${i+1}. ${safe(x.city)}</b><small>${i>state.unlocked?'🔒 Nv '+x.min:state.bosses.includes(i)?'🏆 Liberta':'⚔ Névoa'}</small></button>`).join('')}</div><p class="tiny mute">Vença o chefe e alcance o nível pedido para abrir a próxima cidade. Viajar é grátis.</p></section>`;
+ const lore=`<section class="card"><div class="label">História</div><div class="lore">${safe(beat?r.close:r.open)}${beat?`<div class="lesson">${safe(r.lesson)}</div>`:''}</div></section>`;
+ const map=`<section class="card"><div class="head"><h2>Mapa de Aethelgard</h2><span class="chip plain">${state.unlocked+1}/9</span></div><div class="mapgrid">${REGIONS.map((x,i)=>{const st=state.stages[i];return `<button class="node ${i===state.region?'on':''}" style="--t:${x.theme}" data-act="travel" data-n="${i}" ${i>state.unlocked?'disabled':''}><b>${i+1}. ${safe(x.city)}</b><small>${i>state.unlocked?'🔒 Chefe de '+safe(REGIONS[i-1].city):cleared(i)?'🏆 Liberta':'⚔ Fase '+(st?.max||1)+'/'+SPC()}</small></button>`}).join('')}</div><p class="tiny mute">Cada cidade abre quando você vence o chefe da anterior. Viajar é grátis.</p></section>`;
  return where+lore+map}
 function itemPic(it){return `<span class="pic">${it.emoji||'📦'}${state.settings.roAssets?`<img src="${itemIcon(it.id)}" alt="" onerror="this.remove()">`:''}</span>`}
-function inventoryItem(inst){const it=ITEMS[inst.id];if(!it)return '';const worn=Object.values(state.equipped).includes(inst.uid);return `<div class="item ${worn?'on':''}">${itemPic(it)}<div><span class="item-n">${safe(it.name)}</span><span class="item-s">${SLOT[it.slot]}${it.style?' · '+WSTYLE[it.style].n:''} · ATQ +${it.atk||0} · DEF +${it.def||0} · cartas ${inst.cards.length}/${it.sockets}${inst.cards.length?' ('+inst.cards.map(n=>safe(CARD_BY_ID[n]?.name||'Carta')).join(', ')+')':''}</span></div><div class="acts"><button class="btn sm ${worn?'good':''}" data-act="${worn?'unequip':'equip'}" data-uid="${inst.uid}">${worn?'Retirar':'Equipar'}</button>${it.sockets?`<button class="btn sm" data-act="forgeitem" data-uid="${inst.uid}">🔨</button>`:''}</div></div>`}
-function viewHero(){const tabs=[['aparencia','Aparência'],['bolsa','Bolsa'],['loja','Loja'],['forja','Forja']];return `<div class="seg">${tabs.map(([k,v])=>`<button data-sub="${k}" ${pressed(sub===k)}>${v}</button>`).join('')}</div>`+(sub==='aparencia'?heroAppearance():sub==='bolsa'?heroInventory():sub==='loja'?heroShop():heroForge())}
+const itemName=inst=>(inst.refine?'+'+inst.refine+' ':'')+(ITEMS[inst.id]?.name||'Item');
+function inventoryItem(inst){const it=ITEMS[inst.id];if(!it)return '';const worn=Object.values(state.equipped).includes(inst.uid);return `<div class="item ${worn?'on':''}">${itemPic(it)}<div><span class="item-n">${safe(itemName(inst))}</span><span class="item-s">${SLOT[it.slot]}${it.style?' · '+WSTYLE[it.style].n:''} · ${statLine(it,inst)} · cartas ${inst.cards.length}/${it.sockets}${inst.cards.length?' ('+inst.cards.map(n=>safe(CARD_BY_ID[n]?.name||'Carta')).join(', ')+')':''}</span></div><div class="acts"><button class="btn sm ${worn?'good':''}" data-act="${worn?'unequip':'equip'}" data-uid="${inst.uid}">${worn?'Retirar':'Equipar'}</button>${it.sockets||true?`<button class="btn sm" data-act="forgeitem" data-uid="${inst.uid}" aria-label="Forja">🔨</button>`:''}${worn?'':`<button class="btn sm" data-act="sell" data-uid="${inst.uid}">Vender ${fmt(sellPrice(inst))}z</button>`}</div></div>`}
+function statLine(it,inst){const r=inst?.refine||0,a=(it.atk||0)+(it.slot==='weapon'?r*3:0),d=(it.def||0)+(it.slot!=='weapon'&&it.slot!=='accessory'?r*2:0);const parts=[];if(a)parts.push('ATQ +'+a);if(it.matk)parts.push('MAG +'+(it.matk+(it.slot==='weapon'?r*2:0)));if(d)parts.push('DEF +'+d);if(it.hp||(it.slot==='accessory'&&r))parts.push('HP +'+((it.hp||0)+(it.slot==='accessory'?r*8:0)));if(it.mp)parts.push('Energia +'+it.mp);if(it.crit)parts.push('Crít +'+it.crit+'%');if(it.luck)parts.push('Sorte +'+it.luck+'%');return parts.join(' · ')||'sem bônus'}
+function viewHero(){const tabs=[['aparencia','Visual'],['bolsa','Bolsa'],['loja','Loja'],['forja','Forja']];return `<div class="seg">${tabs.map(([k,v])=>`<button data-sub="${k}" ${pressed(sub===k)}>${v}</button>`).join('')}</div>`+(sub==='aparencia'?heroAppearance():sub==='bolsa'?heroInventory():sub==='loja'?heroShop():heroForge())}
 function heroAppearance(){const j=ui.pjob!=null?Object.values(JOBS).concat(Object.values(SECOND)).find(x=>x.id===ui.pjob):activeJob(),L=state.look;
  return `<section class="card"><div class="head"><h2>${safe(state.name||'Herói')}</h2><span class="chip gold plain">${safe(j?.name||'')}${ui.pjob!=null?' · prévia':''}</span></div>
  <div class="pview" id="pview"><canvas id="pfb" width="320" height="280"></canvas><span class="floor"></span><canvas id="pstill" hidden></canvas><img id="panim" alt="Herói" hidden><span class="pv-label chip plain" id="pdir">${DIRN[ui.dir]}</span><div class="dirs">${DIRN.map((_,i)=>`<i class="${i===ui.dir?'on':''}"></i>`).join('')}</div></div>
@@ -567,16 +680,43 @@ function heroAppearance(){const j=ui.pjob!=null?Object.values(JOBS).concat(Objec
  <div class="filters">${Object.entries(POSES).filter(([k])=>k!=='hurt').map(([k,v])=>`<button data-act="ppose" data-id="${k}" ${pressed(ui.ppose===k)}>${v.n}</button>`).join('')}</div>
  ${ui.pjob!=null?`<button class="btn sm" data-act="pjobreset">Voltar para minha classe</button>`:''}
  <p class="tiny mute">Arraste o herói para os lados para girar. "Parado" mostra um quadro fixo, sem mexer a cabeça. Ataque usa a animação da arma: ${safe(weaponStyle().n)}.</p>
+ ${lookControls()}
  <div class="row fill"><label class="f">Nome<input id="nameEdit" maxlength="18" value="${safe(state.name)}" placeholder="Seu nome"></label><label class="f">Gênero<select data-look="gender"><option value="male" ${L.gender==='male'?'selected':''}>Masculino</option><option value="female" ${L.gender==='female'?'selected':''}>Feminino</option></select></label><label class="f">Cabelo<select data-look="head">${Array.from({length:20},(_,i)=>`<option value="${i+1}" ${L.head===i+1?'selected':''}>Estilo ${i+1}</option>`).join('')}</select></label></div></section>
  <section class="card"><h2>Ficha</h2><div class="combat"><div><b class="num">${state.baseLevel}</b><small>Base</small></div><div><b class="num">${state.jobLevel}</b><small>Classe</small></div><div><b class="num">${maxHP()}</b><small>HP</small></div><div><b class="num">${maxSP()}</b><small>Energia</small></div><div><b class="num">${Math.floor(atk())}</b><small>ATQ</small></div><div><b class="num">${Math.floor(def())}</b><small>DEF</small></div><div><b class="num">${Math.round(critPct())}%</b><small>Crítico</small></div><div><b class="num">${luck()}%</b><small>Sorte</small></div></div>
  <div class="items">${Object.entries(SLOT).map(([k,l])=>{const o=ownedItem(state.equipped[k]);return `<div class="item"><span class="pic">${o?ITEMS[o.id].emoji:'·'}</span><div><span class="slot-tag label">${l}</span><span class="item-n">${safe(o?ITEMS[o.id].name:'Vazio')}</span></div><span></span></div>`}).join('')}</div></section>`}
-function heroInventory(){return `<section class="card"><div class="head"><h2>Bolsa</h2><span class="chip plain">${state.inventory.length} itens</span></div><p class="small mute">A arma muda a animação e o jeito de atacar: faca é rápida, machado e maça batem forte e tremem a tela, arco e cajado atacam de longe.</p><div class="items">${state.inventory.length?state.inventory.map(inventoryItem).join(''):'<div class="note">Sua bolsa está vazia.</div>'}</div></section>`}
-function heroShop(){return `<section class="card"><div class="head"><h2>Loja de ${safe(REGIONS[state.region].city)}</h2><span class="chip gold plain">${fmt(state.zeny)} zeny</span></div><div class="items">${Object.entries(ITEMS).map(([id,it])=>`<div class="item">${itemPic(it)}<div><span class="item-n">${safe(it.name)}</span><span class="item-s">${SLOT[it.slot]}${it.style?' · '+WSTYLE[it.style].n+' · '+(1000/WSTYLE[it.style].aspd).toFixed(1)+' golpes/s':''} · ATQ ${it.atk||0} · DEF ${it.def||0} · ${it.sockets} slot(s)</span></div><button class="btn sm main" data-act="buy" data-id="${id}" ${state.zeny<it.cost?'disabled':''}>${it.cost}z</button></div>`).join('')}</div></section>`}
+function heroInventory(){const free=state.inventory.filter(i=>!Object.values(state.equipped).includes(i.uid));const total=free.reduce((a,i)=>a+sellPrice(i),0);
+ return `<section class="card"><div class="head"><h2>Bolsa</h2><span class="chip plain">${state.inventory.length} itens</span></div><p class="small mute">Itens equipados não podem ser vendidos. Ao vender, as cartas encaixadas voltam para o álbum. A arma muda o jeito de atacar.</p>
+ ${free.length>1?`<button class="btn sm" data-act="sellall">Vender todos os não equipados (${fmt(total)} zeny)</button>`:''}
+ <div class="items">${state.inventory.length?state.inventory.map(inventoryItem).join(''):'<div class="note">Sua bolsa está vazia.</div>'}</div></section>`}
+function lookControls(){const L=state.look,g=L.gender==='female'?'f':'m',hs=(HAIRSW&&HAIRSW[g])||[],bs=(CLASSSW[currentJobId()]||{})[g]||[];loadHair();loadClasses();loadViews();
+ const hairN=Math.max(hs.length,9),bodyN=Math.max(bs.length,4);
+ const sw=(n,list,cur,act)=>`<div class="sw"><button data-act="${act}" data-n="-1" ${pressed(cur<0)} style="--c:#3a3354" title="Padrão">↺</button>${Array.from({length:n},(_,i)=>`<button data-act="${act}" data-n="${i}" ${pressed(cur===i)} style="--c:${list[i]||'hsl('+(i*40)+' 45% 45%)'}" title="Cor ${i}">${list[i]?'':i}</button>`).join('')}</div>`;
+ const own=state.costumes.map(id=>COS[id]).filter(Boolean);
+ return `<div><span class="label">Cor do cabelo</span>${sw(hairN,hs,L.hairColor,'hairc')}</div>
+ <div><span class="label">Cor da roupa</span>${sw(bodyN,bs,L.bodyColor,'bodyc')}</div>
+ <div><span class="label">Tom de pele</span><div class="sw">${SKIN_TONES.map(([n,c,l])=>`<button data-act="skin" data-n="${n}" ${pressed(!L.skinColor&&L.skinTone===n)} style="--c:${c}" title="${l}"></button>`).join('')}<label class="btn sm" style="gap:6px">Outra<input type="color" id="skinPick" value="${L.skinColor||'#c68e63'}" style="width:28px;height:24px;padding:0;border:0;background:none"></label></div><span class="tiny mute">Tom de pele é um recurso do servidor de sprites (não existe no RO oficial).</span></div>
+ <div><span class="label">Visuais (${own.length})</span>${own.length?`<div class="costumes">${own.map(c=>`<button class="cos ${L.costume.includes(c.id)?'on':''}" data-act="wearcos" data-n="${c.id}"><span class="pic">🎩<img src="${itemIcon(c.id)}" alt="" onerror="this.remove()"></span>${safe(c.n)}</button>`).join('')}</div><span class="tiny mute">Até 3 ao mesmo tempo. O visual aparece por cima do chapéu equipado.</span>`:`<div class="note">Compre visuais na <b>Loja › Visual</b>.</div>`}</div>`}
+let shopCat='weapon';
+function heroShop(){const cats=[['weapon','Armas'],['def','Defesa'],['accessory','Acessórios'],['visual','Visual']];
+ const head=`<section class="card"><div class="head"><h2>Loja de ${safe(REGIONS[state.region].city)}</h2><span class="chip gold plain">${fmt(state.zeny)} zeny</span></div><div class="filters">${cats.map(([k,l])=>`<button data-act="shopcat" data-id="${k}" ${pressed(shopCat===k)}>${l}</button>`).join('')}</div>`;
+ if(shopCat==='visual'){loadViews();return head+`<p class="small mute">Visuais mudam só a aparência do herói (cabeça). Ficam na aba Herói › Visual.</p><div class="items">${COSTUMES.map(c=>{const has=state.costumes.includes(c.id);return `<div class="item ${has?'on':''}"><span class="pic">🎩<img src="${itemIcon(c.id)}" alt="" onerror="this.remove()"></span><div><span class="item-n">${safe(c.n)}</span><span class="item-s">Visual de cabeça${VIEWS.ok&&!VIEWS[c.id]?' · sem sprite neste servidor':''}</span></div>${has?'<span class="chip good plain">Seu</span>':`<button class="btn sm main" data-act="buycos" data-n="${c.id}" ${state.zeny<c.cost?'disabled':''}>${fmt(c.cost)}z</button>`}</div>`}).join('')}</div></section>`}
+ const pick=([k,it])=>shopCat==='def'?['armor','shield','head','shoes'].includes(it.slot):it.slot===shopCat;
+ const list=Object.entries(ITEMS).filter(pick).sort((a,b)=>(a[1].t||0)-(b[1].t||0)||a[1].cost-b[1].cost);
+ return head+`<div class="items">${list.map(([id,it])=>{const lock=(it.t||0)>state.unlocked;const cur=ownedItem(state.equipped[it.slot]),ci=cur?ITEMS[cur.id]:null;const da=(it.atk||0)-(ci?.atk||0),dd=(it.def||0)-(ci?.def||0);
+  const delta=[da?`<span class="delta ${da>0?'up':'down'}">${da>0?'▲':'▼'} ${Math.abs(da)} ATQ</span>`:'',dd?`<span class="delta ${dd>0?'up':'down'}">${dd>0?'▲':'▼'} ${Math.abs(dd)} DEF</span>`:''].join(' ');
+  return `<div class="item ${lock?'locked':''}">${itemPic(it)}<div><span class="item-n">${safe(it.name)}</span><span class="item-s">${SLOT[it.slot]}${it.style?' · '+WSTYLE[it.style].n+' · '+(1000/WSTYLE[it.style].aspd).toFixed(1)+' golpes/s':''} · ${statLine(it)} · ${it.sockets} slot(s)</span>${lock?`<span class="item-s">🔒 Liberado em ${safe(REGIONS[it.t].city)}</span>`:delta?`<span>${delta} <span class="tiny mute">vs. equipado</span></span>`:''}</div><button class="btn sm main" data-act="buy" data-id="${id}" ${lock||state.zeny<it.cost?'disabled':''}>${fmt(it.cost)}z</button></div>`}).join('')}</div><p class="tiny mute">Novos itens aparecem conforme você libera cidades. Vender devolve metade do preço.</p></section>`}
 function cardArt(c,cls=''){return `<img class="${cls}" src="${imageBase()}/illust/card/${c.id}.png" alt="" loading="lazy" onerror="cardFallback(this,${c.mob})">`}
 function cardFallback(img,mid){if(img.dataset.fb){img.remove();return}img.dataset.fb=1;img.classList.add('mob');img.src=mobStill(mid)}
-function heroForge(){const inst=ownedItem(selectedItem),it=inst?ITEMS[inst.id]:null;const comp=it?Object.values(MONSTER_CARDS).filter(c=>c.slot===it.slot&&(state.cards[c.id]||0)>0):[];
- return `<section class="card"><h2>Forja de cartas</h2><p class="small mute">Escolha um equipamento e encaixe cartas do mesmo tipo de slot. Remover custa 100 zeny.</p><div class="filters">${state.inventory.filter(i=>ITEMS[i.id]?.sockets).map(i=>`<button data-act="forgeitem" data-uid="${i.uid}" ${pressed(selectedItem===i.uid)}>${safe(ITEMS[i.id].name)} ${i.cards.length}/${ITEMS[i.id].sockets}</button>`).join('')}</div>
- ${it?`<div class="items">${inst.cards.map((id,i)=>`<div class="item on"><span class="pic">🃏</span><div><span class="item-n">${safe(CARD_BY_ID[id]?.name)}</span><span class="item-s">${safe(CARD_BY_ID[id]?.desc)}</span></div><button class="btn sm" data-act="unsocket" data-uid="${inst.uid}" data-n="${i}" ${state.zeny<100?'disabled':''}>Remover 100z</button></div>`).join('')}</div><span class="label">Cartas para ${SLOT[it.slot]}</span>${comp.length?`<div class="items">${comp.map(c=>`<div class="item"><span class="pic">🃏</span><div><span class="item-n">${safe(c.name)}</span><span class="item-s">${safe(c.desc)} · você tem ${state.cards[c.id]}</span></div><button class="btn sm good" data-act="socket" data-uid="${inst.uid}" data-card="${c.id}" ${inst.cards.length>=it.sockets?'disabled':''}>Encaixar</button></div>`).join('')}</div>`:'<div class="note">Sem cartas para este slot ainda.</div>'}`:'<div class="note">Escolha um equipamento acima.</div>'}</section>`}
+function heroForge(){const inst=ownedItem(selectedItem),it=inst?ITEMS[inst.id]:null;
+ const pickers=`<div class="filters">${state.inventory.filter(i=>ITEMS[i.id]).map(i=>`<button data-act="forgeitem" data-uid="${i.uid}" ${pressed(selectedItem===i.uid)}>${ITEMS[i.id].emoji} ${safe(itemName(i))}</button>`).join('')}</div>`;
+ if(!it)return `<section class="card"><h2>Forja</h2><p class="small mute">Escolha um equipamento para refinar ou encaixar cartas.</p>${pickers}</section>`;
+ const r=inst.refine||0,ch=REFINE_CH[r],cost=refineCost(r),comp=Object.values(MONSTER_CARDS).filter(c=>c.slot===it.slot&&(state.cards[c.id]||0)>0);
+ const sockets=Array.from({length:it.sockets},(_,i)=>{const id=inst.cards[i],c=CARD_BY_ID[id];return c?`<button class="socket full" data-act="unsocket" data-uid="${inst.uid}" data-n="${i}" title="Remover por 100 zeny">${state.settings.roAssets?cardArt(c):''}<span>${safe(c.name.replace('Carta ',''))}</span></button>`:`<div class="socket">vazio</div>`}).join('');
+ return `<section class="card"><h2>Forja</h2>${pickers}
+ <div class="forge"><div class="big">${it.emoji}${state.settings.roAssets?`<img src="${itemIcon(it.id)}" alt="" onerror="this.remove()">`:''}${r?`<span class="ref">+${r}</span>`:''}</div><div><div class="item-n" style="font-size:17px">${safe(itemName(inst))}</div><div class="item-s">${SLOT[it.slot]} · ${statLine(it,inst)}</div>
+ ${r<10?`<button class="btn main sm" style="margin-top:8px" data-act="refine" data-uid="${inst.uid}" ${state.zeny<cost?'disabled':''}>⚒ Refinar para +${r+1} · ${fmt(cost)}z · ${ch}%</button><div class="tiny mute" style="margin-top:4px">${it.slot==='weapon'?'+3 ATQ':it.slot==='accessory'?'+8 HP':'+2 DEF'} por refino. Falhar a partir do +5 volta 1 nível; o item nunca quebra.</div>`:'<div class="chip gold plain" style="margin-top:8px">Refino máximo</div>'}</div></div>
+ ${it.sockets?`<span class="label">Slots de carta (${inst.cards.length}/${it.sockets})</span><div class="sockets">${sockets}</div><span class="tiny mute">Toque numa carta encaixada para remover (100 zeny, ela volta para o álbum).</span>
+ <span class="label">Cartas para ${SLOT[it.slot]}</span>${comp.length?`<div class="minicards">${comp.map(c=>`<div class="ccard got"><div class="art">${state.settings.roAssets?cardArt(c):''}</div><b>${safe(c.name)}</b><small>${safe(c.desc)}</small><small>Você tem ${state.cards[c.id]}</small><button class="btn sm good" data-act="socket" data-uid="${inst.uid}" data-card="${c.id}" ${inst.cards.length>=it.sockets?'disabled':''}>Encaixar</button></div>`).join('')}</div>`:'<div class="note">Você ainda não tem cartas para este tipo de slot.</div>'}`:'<div class="note">Este item não tem slots de carta, mas pode ser refinado.</div>'}</section>`}
 function viewClass(){return `<div class="seg"><button data-act="csub" data-id="caminho" ${pressed(csub==='caminho')}>Caminho</button><button data-act="csub" data-id="skills" ${pressed(csub==='skills')}>Habilidades</button></div>`+(csub==='skills'?viewSkills():viewJobs())}
 function reqChips(key,tier){return Object.entries(reqFor(key,tier)).map(([c,v])=>`<span class="chip ${cnt(c)>=v?'good':''} plain">${fmtC(Math.min(cnt(c),v))}/${fmtC(v)} ${COUNTERS[c].n.toLowerCase()}</span>`).join('')}
 function viewJobs(){const a=activeJob(),needs=promoNeeds();
@@ -585,17 +725,30 @@ function viewJobs(){const a=activeJob(),needs=promoNeeds();
  ${state.path&&!state.promoted?`<button class="btn main block" data-act="promote" ${promoReady()?'':'disabled'}>Promover a ${safe(JOBS[state.path].name)}</button>`:''}`}</section>`;
  const paths=`<section class="card"><div class="head"><h2>Caminhos</h2></div><p class="small mute">As metas são as da Torre original. Escolha uma vez; a troca é bloqueada para preservar a progressão.</p><div class="items">${Object.entries(JOBS).filter(([k])=>k!=='novice').map(([k,j])=>`<div class="item ${state.path===k?'on':''} ${state.path&&state.path!==k?'locked':''}"><span class="pic"><img src="${imageBase()}/icons/job/${j.id}.png" alt="" onerror="this.remove()">${j.cats.map(c=>CATS[c].ic).join('')}</span><div><span class="item-n">${safe(j.name)} <span class="tiny mute">(${safe(j.orig)})</span></span><span class="item-s">${safe(j.desc)}</span><div class="row" style="gap:4px">${reqChips(k,'first')}</div><span class="item-s">Evolui para ${j.branches.map(b=>SECOND[b].name).join(' ou ')}</span></div><div class="acts"><button class="btn sm" data-act="previewjob" data-n="${j.id}">👁</button>${state.path?'':`<button class="btn sm main" data-act="path" data-id="${k}">Escolher</button>`}</div></div>`).join('')}</div></section>`;
  const second=state.path?`<section class="card"><h2>2ª classe</h2><p class="small mute">Pede Base ${PROMO.second.base}, Classe ${PROMO.second.job} e o triplo das metas do caminho.</p><div class="row" style="gap:4px">${reqChips(state.path,'second')}</div><div class="items">${JOBS[state.path].branches.map(code=>{const c=SECOND[code];return `<div class="item ${state.second===code?'on':''}"><span class="pic"><img src="${imageBase()}/icons/job/${c.id}.png" alt="" onerror="this.remove()">🔱</span><div><span class="item-n">${safe(c.name)}</span><span class="item-s">Habilidade exclusiva: ${safe(SKILLS.find(s=>s.job===code)?.name||'')}</span></div><div class="acts"><button class="btn sm" data-act="previewjob" data-n="${c.id}">👁</button><button class="btn sm ${state.second===code?'good':'main'}" data-act="second" data-id="${code}" ${state.second||!state.promoted||!promoReady()?'disabled':''}>${state.second===code?'✓':'Evoluir'}</button></div></div>`}).join('')}</div></section>`:'';
- return now+paths+second}
+ const reset=state.path?`<section class="card"><h2>Resetar classe</h2><p class="small mute">Volta a Aprendiz para escolher outro caminho. Mantém níveis, metas e itens; devolve os pontos de habilidade. Custa ${fmt(CFG.resetCost)} zeny.</p><button class="btn red" data-act="resetclass" ${state.zeny<CFG.resetCost?'disabled':''}>Resetar por ${fmt(CFG.resetCost)} zeny</button></section>`:'';
+ return now+paths+second+reset}
 function availableSkills(){const set=new Set(['novice']);if(state.path&&state.promoted)set.add(state.path);if(state.second)set.add(state.second);return SKILLS.filter(s=>set.has(s.job))}
 function skillPic(sk){return `<span class="pic">${sk.emoji}${state.settings.roAssets?`<img src="${skillIcon(sk.icon)}" alt="" onerror="this.remove()">`:''}</span>`}
 function viewSkills(){const got=availableSkills();return `<section class="card"><div class="head"><h2>Habilidades</h2><span class="chip gold plain">${state.skillPoints} ponto(s)</span></div><p class="small mute">Até 4 na barra. Usadas sozinhas quando há energia e a recarga acabou.</p><div class="items">${got.map(sk=>{const r=state.skills[sk.id]||0,can=state.skillPoints>0&&r<sk.max&&(!sk.req||(state.skills[sk.req]||0)>=2),on=state.equippedSkills.includes(sk.id);return `<div class="item ${on?'on':''}">${skillPic(sk)}<div><span class="item-n">${safe(sk.name)} <span class="tiny mute">Nv ${r}/${sk.max}</span></span><span class="item-s">${safe(sk.desc)} · ${sk.cd}s · ${sk.mp} energia${sk.req?' · pede '+safe(SKILLS.find(x=>x.id===sk.req)?.name)+' Nv 2':''}</span></div><div class="acts"><button class="btn sm" data-act="learn" data-id="${sk.id}" ${can?'':'disabled'}>+1</button><button class="btn sm ${on?'good':''}" data-act="toggleSkill" data-id="${sk.id}" ${r?'':'disabled'}>${on?'✓ Na barra':'Equipar'}</button></div></div>`}).join('')}</div>${!state.promoted?'<div class="note">As habilidades da classe aparecem depois da promoção.</div>':''}</section>`}
 function viewCards(){const total=Object.keys(MONSTER_CARDS).length,got=Object.values(MONSTER_CARDS).filter(c=>state.seenCards[c.id]).length;
  return `<section class="card"><div class="head"><h2>Álbum de cartas</h2><span class="chip gold plain">${got}/${total}</span></div><p class="small mute">Uma carta para cada monstro de Aethelgard. Comum 0,2% · elite 1% · chefe 10%, multiplicado pela sua sorte (hoje +${luck()}%). Após 500 abates do mesmo monstro sem carta, ela vem garantida. Página completa: +2 ATQ, +2 DEF, +20 HP e +2% de sorte.</p></section>`+
  REGIONS.map((r,i)=>{const ids=[...r.mobs,r.elite,r.boss].map(a=>a[0]);const done=pageDone(i),n=ids.filter(id=>state.seenCards[MONSTER_CARDS[id].id]).length;return `<section class="card"><div class="pagebar"><h3>${i+1}. ${safe(r.city)}</h3><span class="chip ${done?'good':''} plain">${done?'✓ Página completa':n+'/6'}</span></div><div class="album">${ids.map(id=>{const c=MONSTER_CARDS[id],q=state.cards[c.id]||0,seen=!!state.seenCards[c.id],kd=mobKind(id);return `<div class="ccard ${seen?'got':''}"><div class="art">${state.settings.roAssets?cardArt(c):''}${seen?'':'<span class="q">?</span>'}</div><b>${safe(c.name)}</b><small>${safe(SLOT[c.slot])} · ${safe(c.desc)}</small><small>${seen?q+' na bolsa':(kd==='boss'?'Chefe':kd==='elite'?'Elite':'Comum')+' · '+(state.pity[id]||0)+'/500'}</small></div>`}).join('')}</div></section>`}).join('')+`<section class="card"><button class="btn" data-act="openforge">🔨 Abrir Forja</button></section>`}
-function viewSettings(){return `<section class="card"><h2>Sprites de Ragnarök</h2><label class="item"><input type="checkbox" data-setting="roAssets" ${state.settings.roAssets?'checked':''} style="width:22px;height:22px"><div><span class="item-n">Usar sprites de RO</span><span class="item-s">Herói, monstros, ícones e cartas. Sem eles, aparecem bonecos pixelados.</span></div><span></span></label>
- <label class="item"><input type="checkbox" data-setting="stageAll" ${state.settings.stageAll?'checked':''} style="width:22px;height:22px"><div><span class="item-n">Mostrar o palco em todas as abas</span><span class="item-s">Por padrão ele aparece só no Mundo, para sobrar espaço no celular.</span></div><span></span></label>
+function viewSettings(){const acc=!FBCFG?`<div class="note">O login aparece no site publicado (precisa do <b>config.js</b> do Firebase ao lado do index.html).</div>`:net.user?`<div class="item on"><span class="pic">👤</span><div><span class="item-n">${safe(net.user.email||'Conectado')}</span><span class="item-s">${net.status==='online'?'Save sincronizado na nuvem':net.status==='err'?'Erro ao sincronizar':'Conectando…'}${net.master?' · 👑 Mestre':''}</span></div><button class="btn sm" data-act="logout">Sair</button></div>`:`<div class="login"><button class="btn main" data-act="glogin">Entrar com Google</button><input id="eMail" type="email" placeholder="E-mail" autocomplete="email"><input id="ePass" type="password" placeholder="Senha (6+ caracteres)" autocomplete="current-password"><div class="row fill"><button class="btn" data-act="elogin">Entrar</button><button class="btn" data-act="esignup">Criar conta</button></div><button class="btn sm" data-act="ereset">Esqueci a senha</button><div class="small" style="color:#ffb3b4" id="lErr"></div></div>`;
+ return `<section class="card"><h2>Conta</h2><p class="small mute">Entrar guarda o save na nuvem e libera o painel Mestre só para a sua conta.</p>${acc}</section>
+ <section class="card"><h2>Sprites de Ragnarök</h2><label class="item"><input type="checkbox" data-setting="roAssets" ${state.settings.roAssets?'checked':''} style="width:22px;height:22px"><div><span class="item-n">Usar sprites de RO</span><span class="item-s">Herói, monstros, ícones e cartas. Sem eles, aparecem bonecos pixelados.</span></div><span></span></label>
+ <label class="item"><input type="checkbox" data-setting="cityTex" ${state.settings.cityTex?'checked':''} style="width:22px;height:22px"><div><span class="item-n">Texturas de Prontera na cidade</span><span class="item-s">Usa as texturas reais do mapa prontera no cenário da cidade.</span></div><span></span></label>
+ <label class="item"><input type="checkbox" data-setting="stageAll" ${state.settings.stageAll?'checked':''} style="width:22px;height:22px"><div><span class="item-n">Mostrar o palco em todas as abas</span><span class="item-s">Por padrão ele aparece só no Mundo.</span></div><span></span></label>
  <label class="f">Servidor de sprites (HTTPS)<input id="assetBaseField" value="${safe(state.settings.assetBase)}" placeholder="${ASSET_DEFAULT}"></label><button class="btn" data-act="assetbase">Salvar servidor</button></section>
- <section class="card"><h2>Salvar e restaurar</h2><p class="small mute">O progresso fica neste navegador. Baixe uma cópia antes de trocar o arquivo.</p><div class="row fill"><button class="btn main" data-act="backup">⬇ Exportar</button><label class="btn" for="restoreInput">⬆ Importar</label><input type="file" id="restoreInput" accept=".json,application/json" hidden></div><div class="tiny mute">Save: ${safe(STORE)} · API: ${safe(imageBase())}</div></section>`}
+ <section class="card"><h2>Salvar e restaurar</h2><p class="small mute">O progresso fica neste navegador${net.user?' e na nuvem':''}. Baixe uma cópia antes de trocar o arquivo.</p><div class="row fill"><button class="btn main" data-act="backup">⬇ Exportar</button><label class="btn" for="restoreInput">⬆ Importar</label><input type="file" id="restoreInput" accept=".json,application/json" hidden></div><div class="tiny mute">Save: ${safe(STORE)} · API: ${safe(imageBase())}</div></section>`}
+function viewMaster(){if(!net.master)return '<section class="card"><p>Somente a conta Mestre.</p></section>';const f=(k,l,step='1')=>`<label class="f">${l}<input id="m_${k}" type="number" step="${step}" value="${CFG[k]}"></label>`;
+ return `<section class="card"><div class="head"><h2>👑 Ajustes do Mestre</h2><span class="chip gold plain">só você vê</span></div><p class="small mute">Valem para todos os jogadores deste site assim que você salvar.</p>
+ <div class="row fill">${f('xpMult','XP ×','0.1')}${f('zenyMult','Zeny ×','0.1')}${f('cardMult','Drop de carta ×','0.1')}${f('jobMult','XP de Classe ×','0.1')}</div>
+ <div class="row fill">${f('killsPerStage','Abates por fase')}${f('stagesPerCity','Fases por cidade')}${f('resetCost','Custo do reset de classe')}</div>
+ <div class="row fill">${f('firstBase','1ª classe: Base')}${f('firstJob','1ª classe: Classe')}${f('secondBase','2ª classe: Base')}${f('secondJob','2ª classe: Classe')}</div>
+ <label class="f">Aviso no Mundo (vazio = nenhum)<input id="m_motd" maxlength="140" value="${safe(CFG.motd)}"></label>
+ <details><summary>Missões diárias ativas</summary><div class="items" style="margin-top:8px">${BASE_DAILY.map(m=>`<label class="item"><input type="checkbox" data-moff="${m.id}" ${(CFG.offMissions||[]).includes(m.id)?'':'checked'} style="width:20px;height:20px"><div><span class="item-n">${safe(m.t)}</span><span class="item-s">${CATS[m.cat].l} · ${DIFF[m.d].l}</span></div><span></span></label>`).join('')}</div></details>
+ <div class="row fill"><button class="btn main" data-act="msave">Salvar para todos</button><button class="btn" data-act="mdefault">Voltar ao padrão</button></div></section>
+ <section class="card"><h2>Ferramentas de teste</h2><p class="small mute">Mexem só no seu save.</p><div class="row fill"><button class="btn sm" data-act="mtool" data-id="zeny">+5.000 zeny</button><button class="btn sm" data-act="mtool" data-id="lvl">+1 Nível de Base</button><button class="btn sm" data-act="mtool" data-id="job">+1 Nível de Classe</button><button class="btn sm" data-act="mtool" data-id="stage">Pular fase</button><button class="btn sm" data-act="mtool" data-id="city">Vencer chefe atual</button><button class="btn sm" data-act="mtool" data-id="card">Carta aleatória</button></div></section>`}
 function updateHud(){const j=activeJob();$('tLv').textContent=state.baseLevel;$('tName').textContent=(state.name||'Herói')+' · '+j.name+' · Classe '+state.jobLevel;$('tXp').style.width=clamp(state.xp/xpNeed()*100,0,100)+'%';$('tZeny').textContent=fmt(state.zeny);
  if($('stageWrap').hidden)return;$('heroName').textContent=j.name+' · Nv '+state.baseLevel;$('hpBar').style.width=clamp(state.hp/maxHP()*100,0,100)+'%';$('mpBar').style.width=clamp(state.sp/maxSP()*100,0,100)+'%';
  $('locBadge').textContent='📍 '+REGIONS[state.region].city+(state.location==='city'?' · Cidade':' · '+REGIONS[state.region].area+' '+(state.map?'II':'I'));
@@ -625,7 +778,7 @@ function completeMission(id){const d=state.daily;if(!d.locked||!d.selected.inclu
 function finishFocus(){if(!state.focus.start)return;const ms=clamp(Date.now()-state.focus.start,0,8*3600*1000),min=Math.floor(ms/60000),cat=state.focus.cat||'estudo';state.focus.start=0;
  if(min){state.stats.focusMin+=min;state.weekly.focus+=min;state.zeny+=min*3;gainXP(min*4);const tens=Math.floor(min/10);state.attrs[CATS[cat].at]+=tens;if(classCat(cat))gainJobXP(tens*2);save();toast(`🎯 ${min} min de foco · +${min*4} XP · +${min*3} zeny`+(tens?` · +${tens} ${ATTR[CATS[cat].at]}`:''))}else{save();toast('Sessão encerrada antes de 1 minuto.')}render()}
 function claimWeekly(id){const q=BASE_WEEKLY.find(x=>x.id===id);if(!q||state.weekly.claimed.includes(id)||!state.weekly.picks.includes(id)||wprog(q)<q.target)return;state.weekly.claimed.push(id);state.zeny+=WREW.z;state.attrs[q.at]+=WREW.p;gainXP(WREW.xp);gainJobXP(8);save();render();toast(`🏅 Semanal concluída! +${WREW.xp} XP · +${WREW.z} zeny · +${WREW.p} ${ATTR[q.at]}`)}
-function buy(id){const it=ITEMS[id];if(!it||state.zeny<it.cost)return;state.zeny-=it.cost;state.inventory.push({uid:state.uid++,id,cards:[]});save();render();toast('🛍 Comprado: '+it.name)}
+function buy(id){const it=ITEMS[id];if(!it||state.zeny<it.cost||(it.t||0)>state.unlocked)return;state.zeny-=it.cost;state.inventory.push({uid:state.uid++,id,cards:[],refine:0});save();render();toast('🛍 Comprado: '+it.name)}
 function equip(uid){const inst=ownedItem(uid);if(!inst)return;state.equipped[ITEMS[inst.id].slot]=inst.uid;state.hp=Math.min(maxHP(),state.hp);save();render();heroKey='';updateHeroAsset(true);toast('Equipado: '+ITEMS[inst.id].name)}
 function socket(uid,cardId){const i=ownedItem(uid),c=CARD_BY_ID[Number(cardId)];if(!i||!c||c.slot!==ITEMS[i.id].slot||i.cards.length>=ITEMS[i.id].sockets||(state.cards[c.id]||0)<1)return;i.cards.push(c.id);state.cards[c.id]--;save();render();toast('🃏 '+c.name+' encaixada')}
 function downloadSave(){save();const blob=new Blob([JSON.stringify({kind:'torre-ragnarok-save',version:2,state},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='torre-disciplina-ro-save-'+dateKey()+'.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),800)}
@@ -667,13 +820,60 @@ function action(e){const a=e.dataset.act,id=e.dataset.id,uid=Number(e.dataset.ui
  case 'spin':if(ui.spin){stopSpin()}else{ui.spin=true;ui.spinTimer=setInterval(()=>rotate(-1),420)}render();break;
  case 'ppose':ui.ppose=id;portraitUpdate();document.querySelectorAll('[data-act="ppose"]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===id));break;
  case 'assetbase':{const input=$('assetBaseField')?.value.trim()||ASSET_DEFAULT;try{const u=new URL(input);if(u.protocol!=='https:'&&u.hostname!=='localhost')throw 0;state.settings.assetBase=u.origin;stillCache.clear();save();render();heroKey=mobKey='';updateStageAssets();toast('Servidor atualizado.')}catch{toast('Informe uma URL HTTPS válida.')}break}
- case 'backup':downloadSave();break}}
+ case 'backup':downloadSave();break;
+ case 'stage':{const S=stageOf();if(n>S.max&&!cleared(state.region))return;S.cur=n;state.stageKills=0;enemy=null;spawnAt=performance.now()+300;if(state.location!=='hunt')startHunt(state.region);else{save();render()}break}
+ case 'sell':{const inst=ownedItem(uid);if(!inst||Object.values(state.equipped).includes(uid))return;const v=sellPrice(inst);if(!confirm('Vender '+itemName(inst)+' por '+v+' zeny?'))return;sellInst(inst);save();render();toast('💰 Vendido por '+v+' zeny');break}
+ case 'sellall':{const free=state.inventory.filter(i=>!Object.values(state.equipped).includes(i.uid));const v=free.reduce((a,i)=>a+sellPrice(i),0);if(!free.length||!confirm('Vender '+free.length+' itens por '+v+' zeny?'))return;free.forEach(sellInst);save();render();toast('💰 '+free.length+' itens vendidos por '+v+' zeny');break}
+ case 'refine':{const inst=ownedItem(uid);if(!inst)return;const r=inst.refine||0,cost=refineCost(r);if(r>=10||state.zeny<cost)return;state.zeny-=cost;if(Math.random()*100<REFINE_CH[r]){inst.refine=r+1;toast('⚒ Sucesso! '+itemName(inst))}else{if(r>=5)inst.refine=r-1;toast('💥 O refino falhou'+(r>=5?' e voltou para +'+inst.refine:'')+'.')}save();render();heroKey='';break}
+ case 'resetclass':{if(!state.path||state.zeny<CFG.resetCost)return;if(!confirm('Resetar a classe por '+CFG.resetCost+' zeny? Você volta a Aprendiz e recebe os pontos de habilidade de volta.'))return;state.zeny-=CFG.resetCost;let pts=0;for(const [id,L] of Object.entries(state.skills))pts+=id==='firstaid'?Math.max(0,L-1):L;pts-=(state.promoted?1:0)+(state.second?1:0);state.skills={firstaid:Math.max(1,state.skills.firstaid||1)>=1?1:1};state.skillPoints=Math.max(0,state.skillPoints+pts+((state.skills.firstaid||1)-1));state.path=null;state.promoted=false;state.second=null;state.equippedSkills=['firstaid'];save();heroKey='';render();updateHeroAsset(true);toast('🔄 Classe resetada. Escolha um novo caminho.');break}
+ case 'shopcat':shopCat=id;render();break;
+ case 'buycos':{const c=COS[n];if(!c||state.costumes.includes(n)||state.zeny<c.cost)return;state.zeny-=c.cost;state.costumes.push(n);save();render();toast('🎩 Visual comprado: '+c.n+'. Use em Herói › Visual.');break}
+ case 'wearcos':{const L=state.look,i=L.costume.indexOf(n);if(i>=0)L.costume.splice(i,1);else{if(L.costume.length>=3)L.costume.shift();L.costume.push(n)}save();heroKey='';render();updateHeroAsset(true);break}
+ case 'hairc':state.look.hairColor=n;save();heroKey='';render();updateHeroAsset(true);break;
+ case 'bodyc':state.look.bodyColor=n;save();heroKey='';render();updateHeroAsset(true);break;
+ case 'skin':state.look.skinTone=n;state.look.skinColor='';save();heroKey='';render();updateHeroAsset(true);break;
+ case 'glogin':case 'elogin':case 'esignup':case 'ereset':authAction(a);break;
+ case 'logout':logout();break;
+ case 'msave':masterSave(false);break;case 'mdefault':masterSave(true);break;
+ case 'mtool':masterTool(id);break}}
+function sellInst(inst){for(const cd of inst.cards||[])state.cards[cd]=(state.cards[cd]||0)+1;state.zeny+=sellPrice(inst);state.inventory=state.inventory.filter(i=>i!==inst);if(selectedItem===inst.uid)selectedItem=null}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-act],[data-tab],[data-sub]');if(b&&!b.disabled)action(b)});
 document.addEventListener('change',e=>{const el=e.target;
  if(el.dataset.look){if(el.dataset.look==='head')state.look.head=clamp(Number(el.value)||3,1,20);else state.look.gender=el.value==='female'?'female':'male';save();heroKey='';render();updateHeroAsset(true);return}
+ if(el.id==='skinPick'){state.look.skinColor=el.value;save();heroKey='';render();updateHeroAsset(true);return}
+ if(el.dataset.moff){const L=new Set(CFG.offMissions||[]);el.checked?L.delete(el.dataset.moff):L.add(el.dataset.moff);CFG.offMissions=[...L];return}
  if(el.id==='nameEdit'){state.name=el.value.trim().slice(0,18);save();updateHud();updateHeroAsset(true);return}
  if(el.dataset.setting){state.settings[el.dataset.setting]=el.checked;save();heroKey=mobKey='';render();updateStageAssets();return}
  if(el.id==='restoreInput'&&el.files?.length)restoreSave(el.files[0])});
+/* ===================== NUVEM E CONTA MESTRE (Firebase do site) ===================== */
+const FBC=window.TORRE_FIREBASE,FBCFG=FBC&&FBC.apiKey&&!/COLE/i.test(FBC.apiKey)?FBC:null;
+const net={user:null,master:false,status:'local',fb:null,saveRef:null,cfgRef:null,timer:null};
+function setSync(st){net.status=st;const d=$('tSync');if(d){d.className='sync'+(st==='online'?' on':st==='err'?' err':'');d.title={local:'Salvo neste aparelho',online:'Sincronizado na nuvem',err:'Erro ao sincronizar'}[st]||''}}
+function scheduleRemote(){if(!net.saveRef)return;clearTimeout(net.timer);net.timer=setTimeout(pushRemote,2500)}
+async function pushRemote(){if(!net.saveRef)return;try{await net.fb.FS.setDoc(net.saveRef,{ro:JSON.parse(JSON.stringify(state)),roUpdatedAt:state.updatedAt||Date.now()},{merge:true});setSync('online')}catch(e){setSync('err')}}
+function setMaster(v){net.master=!!v;$('tabMaster').hidden=!net.master;$('tabs').classList.toggle('seven',net.master);if(!net.master&&tab==='mestre')tab='config';render()}
+function applyCfg(d){CFG={...CFG_DEF,...(d||{})};try{localStorage.setItem('torre-ro-cfg',JSON.stringify(CFG))}catch{}render()}
+const AUTHERR={'auth/invalid-credential':'E-mail ou senha incorretos.','auth/wrong-password':'E-mail ou senha incorretos.','auth/user-not-found':'Não existe conta com esse e-mail.','auth/email-already-in-use':'Esse e-mail já tem conta. Toque em Entrar.','auth/weak-password':'A senha precisa ter pelo menos 6 caracteres.','auth/invalid-email':'Esse e-mail não parece válido.','auth/popup-closed-by-user':'Login cancelado.','auth/unauthorized-domain':'Este site não está autorizado no Firebase (Authentication › Domínios autorizados).','auth/network-request-failed':'Sem conexão com a internet.'};
+const authErr=e=>{const m=AUTHERR[e&&e.code]||'Não foi possível entrar. Tente de novo.';const el=$('lErr');if(el)el.textContent=m;else toast(m)};
+async function sha256(t){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+async function connectFirebase(){if(!FBCFG)return;const base='https://www.gstatic.com/firebasejs/10.12.2/';let A,AU,FS;
+ try{[A,AU,FS]=await Promise.all(['firebase-app.js','firebase-auth.js','firebase-firestore.js'].map(f=>import(base+f)))}catch(e){setSync('err');return}
+ const app=A.initializeApp(FBCFG),auth=AU.getAuth(app),db=FS.getFirestore(app);net.fb={AU,FS,auth,db};
+ net.cfgRef=FS.doc(db,'game','roConfig');FS.onSnapshot(net.cfgRef,d=>applyCfg(d.exists()?d.data():null),()=>{});
+ AU.getRedirectResult(auth).catch(authErr);
+ AU.onAuthStateChanged(auth,async user=>{net.user=user||null;if(!user){net.saveRef=null;setSync('local');setMaster(false);return}
+  try{const h=user.email&&user.emailVerified?await sha256(user.email.trim().toLowerCase()):'';setMaster(!!(FBCFG.masterHash&&h===String(FBCFG.masterHash).toLowerCase()))}catch{}
+  net.saveRef=FS.doc(db,'saves',user.uid);
+  try{const d=await FS.getDoc(net.saveRef);const r=d.exists()?d.data():null;if(r&&r.ro&&(r.roUpdatedAt||0)>(state.updatedAt||0)){state=r.ro;normalize();try{localStorage.setItem(STORE,JSON.stringify(state))}catch{}toast('☁ Save da nuvem carregado.');heroKey=mobKey=''}await pushRemote()}catch(e){setSync('err')}
+  render();updateStageAssets()})}
+async function authAction(a){if(!net.fb)return toast('Login indisponível agora.');const {AU,auth}=net.fb,em=($('eMail')?.value||'').trim(),pw=$('ePass')?.value||'';
+ try{if(a==='glogin'){const pr=new AU.GoogleAuthProvider();try{await AU.signInWithPopup(auth,pr)}catch(e){if(e&&(e.code==='auth/popup-blocked'||e.code==='auth/operation-not-supported-in-this-environment'))AU.signInWithRedirect(auth,pr);else throw e}}
+  else if(a==='elogin')await AU.signInWithEmailAndPassword(auth,em,pw);else if(a==='esignup'){if(!em||pw.length<6)return authErr({code:'auth/weak-password'});await AU.createUserWithEmailAndPassword(auth,em,pw)}
+  else if(a==='ereset'){if(!em)return toast('Digite seu e-mail primeiro.');await AU.sendPasswordResetEmail(auth,em);toast('Enviamos o link para o seu e-mail.')}}catch(e){authErr(e)}}
+async function logout(){if(!net.fb)return;await pushRemote();try{await net.fb.AU.signOut(net.fb.auth)}catch{}net.user=null;render()}
+async function masterSave(def){if(!net.master||!net.cfgRef)return;let o={...CFG_DEF};if(!def){for(const k of Object.keys(CFG_DEF)){const el=$('m_'+k);if(!el)continue;o[k]=k==='motd'?el.value.trim().slice(0,140):Math.max(0,Number(el.value)||CFG_DEF[k])}o.offMissions=CFG.offMissions||[]}
+ try{await net.fb.FS.setDoc(net.cfgRef,o);toast('👑 Ajustes salvos para todos.')}catch(e){toast('Sem permissão para salvar (confira as regras do Firestore).')}}
+function masterTool(id){if(!net.master)return;const S=stageOf();if(id==='zeny')state.zeny+=5000;else if(id==='lvl'){state.xp=xpNeed();gainXP(0)}else if(id==='job')gainJobXP(jobNeed()-state.jobXP+.01);else if(id==='stage'){if(S.cur<SPC()){S.cur++;S.max=Math.max(S.max,S.cur)}state.stageKills=0}else if(id==='city'){if(!cleared(state.region)){state.bosses.push(state.region);S.cur=S.max=SPC();recalcUnlock()}}else if(id==='card'){const c=Object.values(MONSTER_CARDS)[Math.floor(Math.random()*38)];state.cards[c.id]=(state.cards[c.id]||0)+1;state.seenCards[c.id]=1}save();render();toast('Feito.')}
 $('btnCity').addEventListener('click',()=>stopHunt(true));$('btnHunt').addEventListener('click',()=>startHunt());
 window.addEventListener('resize',()=>{resizeStage();heroKey=mobKey='';updateStageAssets()});
 window.addEventListener('beforeunload',save);document.addEventListener('visibilitychange',()=>{if(document.hidden)save()});
@@ -685,5 +885,5 @@ function animationLoop(time){const dt=clamp((time-frameTime)/1000,0,.07);frameTi
  if(visible){$('monsterSprite').style.left=px(enemyX)+'%';sceneDraw(time)}requestAnimationFrame(animationLoop)}
 if(!state.prologue&&state.stats.totalMissions>0)state.prologue=true;
 if(state.location==='hunt'){spawnAt=performance.now()+500}
-render();resizeStage();updateStageAssets();requestAnimationFrame(animationLoop);setInterval(save,25000);
+if(net.master)setMaster(true);render();resizeStage();updateStageAssets();requestAnimationFrame(animationLoop);setInterval(save,25000);connectFirebase();
 </script></body></html>
