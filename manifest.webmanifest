@@ -1,15 +1,17 @@
 {
-  "name": "Torre da Disciplina",
+  "name": "Torre da Disciplina · Crônicas de Aethelgard",
   "short_name": "Torre",
+  "description": "A rotina real fortalece o herói de Aethelgard.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#14121d",
-  "theme_color": "#201c2f",
+  "background_color": "#efe3cc",
+  "theme_color": "#efe3cc",
   "lang": "pt-BR",
   "icons": [
-    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png"},
-    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
   ]
 }
