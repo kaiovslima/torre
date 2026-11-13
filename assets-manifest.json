@@ -1,0 +1,181 @@
+{
+ "gerado_em": "2026-11-13",
+ "herois": {
+  "folhas": "2 por classe (movimento_ataque A0-A5, reacoes_corrida B0-B5), grade 3x2 de 512 px, escala 0.5",
+  "estados": {
+   "parado": [
+    "A0",
+    "A1"
+   ],
+   "corrida": [
+    "A2",
+    "A3",
+    "B4",
+    "B5"
+   ],
+   "ataque": [
+    "A4 preparacao",
+    "A5 golpe"
+   ],
+   "poder": [
+    "B0"
+   ],
+   "dano": [
+    "B1"
+   ],
+   "derrota": [
+    "B2"
+   ],
+   "vitoria": [
+    "B3"
+   ]
+  },
+  "classes_integradas": [
+   "arcanista",
+   "arqueiro",
+   "arquimago",
+   "atirador",
+   "atirador_fantasma",
+   "avatar_natureza",
+   "berserker",
+   "cacador",
+   "cavaleiro",
+   "cruzado",
+   "druida",
+   "feiticeiro",
+   "guardiao_sagrado",
+   "guardiao_verde",
+   "guerreiro",
+   "iluminado",
+   "inquisidor",
+   "juiz_divino",
+   "lorde_cavaleiro",
+   "mago",
+   "mestre_punho",
+   "mestre_tempo",
+   "mestre_ventos",
+   "monge",
+   "paladino",
+   "punho_celestial",
+   "sabio_chi",
+   "senhor_feras",
+   "senhor_guerra",
+   "xama_fera"
+  ],
+  "camadas": {
+   "cabelo": "10 estilos em cinza tingidos em 10 cores, encaixados pelo cranio detectado em cada quadro",
+   "capacete": "item de cabeca substitui o cabelo",
+   "arma_escudo": "apenas Guerreiro (folha sem arma)"
+  },
+  "pendente": [
+   "Aprendiz: nenhuma folha de poses foi gerada; usa a miniatura estatica"
+  ]
+ },
+ "monstros": {
+  "integrados": 117,
+  "com_corrompido": 117,
+  "com_libertado": 117,
+  "animacao_libertado_na_purificacao": [
+   "Fada da Notificação",
+   "Lobo Inquieto",
+   "Planta Dispersa",
+   "Coruja Insone",
+   "Esquilo Pula-Assunto",
+   "Mariposa do Pisca-Pisca",
+   "Cogumelo dos Ecos",
+   "Raposa Bifoco",
+   "Caracol Rolagem Infinita",
+   "Cervo dos Cem Sinais",
+   "Ent do Foco Partido",
+   "Dríade das Mil Abas"
+  ],
+  "pendente": [
+   "Sapo do So Mais Um: folha de animacao com apenas 1 quadro recortavel; nao usada"
+  ]
+ },
+ "cartas": {
+  "integradas": 76,
+  "pendentes": [
+   "Quimera das Comparações",
+   "Arquivista do Impostor",
+   "Salamandra",
+   "Golem de Magma",
+   "Diabrete da Pressa",
+   "Fênix Apagada",
+   "Carvoeiro Sem Pausa",
+   "Lagarto do Turno Infinito",
+   "Morcego da Fuligem",
+   "Besouro da Carga Excessiva",
+   "Braseiro de Pavio Curto",
+   "Martelo da Meta Sem Fim",
+   "Capataz das Fornalhas",
+   "Colosso do Último Turno",
+   "Dragão do Esgotamento",
+   "Sombra Faminta",
+   "Sussurrante",
+   "Aranha do Vazio",
+   "Afogado",
+   "Sapo do Pior Cenário",
+   "Libélula Hipervigilante",
+   "Caramujo do Pensamento Circular",
+   "Junco dos Mil Presságios",
+   "Peixe do Sobressalto",
+   "Máscara do E Se",
+   "Hidra dos Cenários Impossíveis",
+   "Tecelã dos Maus Presságios",
+   "Senhora dos Mil Amanhãs",
+   "Guarda Apagado",
+   "Sentinela Apagada",
+   "Eco da Dúvida",
+   "Eco do Esgotamento",
+   "Escudeiro do Depois",
+   "Arauto do Sem Tempo",
+   "Escriba da Culpa Alheia",
+   "Marionete do Não Consigo",
+   "Lanterna da Exceção Eterna",
+   "Cavaleiro do Quando Estiver Pronto",
+   "Marechal das Mil Justificativas",
+   "Guardião do Primeiro Passo Negado",
+   "O Eu de Amanhã"
+  ]
+ },
+ "cenarios": {
+  "regioes_com_camadas": 9,
+  "camadas": "ceu (cobre), fundo distante (parallax 0.12), meio (0.35), chao (1.0) com repeticao espelhada; cidade como fundo inteiro no modo descanso"
+ },
+ "efeitos": [
+  "arrows",
+  "aura",
+  "bash",
+  "blizzard",
+  "bolt",
+  "chi",
+  "fire",
+  "heal",
+  "holy",
+  "ice",
+  "leaves",
+  "mana",
+  "meteor",
+  "rain",
+  "roots",
+  "shock",
+  "slash",
+  "spores",
+  "stun",
+  "thorns"
+ ],
+ "nao_usados": {
+  "versoes_substituidas": [
+   "03_mago_movimento_ataque_original (fundo opaco; usada a 13)",
+   "60_guardiao_verde_reacoes (fundo opaco; usada a 61)",
+   "31/32 atirador inicial (usadas 33/34)",
+   "14 comparacao de guerreiros",
+   "cabelos 01-03 iniciais (usados 04/05 adaptados)",
+   "monstros 001-003, 016, 018, 019 preliminares",
+   "116 carta errada da Miragem"
+  ],
+  "pecas_de_equipamento_A": "pecas soltas para vestir no personagem; nao usadas porque as folhas das classes ja trazem arma e roupa desenhadas (so o Guerreiro vem sem arma, e usa os icones)",
+  "originais": "os PNGs originais (644 MB) nao foram enviados ao repositorio; o jogo usa versoes WebP processadas embutidas em art-*.js"
+ }
+}
