@@ -266,6 +266,10 @@ img.unseen{filter:brightness(0) opacity(.22)!important}
 @keyframes lungeA{50%{transform:translateX(22px) rotate(6deg)}}
 @keyframes lungeB{50%{transform:translateX(-22px) scaleX(-1)}}
 @keyframes hurt{30%{filter:brightness(2.2);translate:-6px 0}70%{translate:5px 0}}
+.swatches{display:flex;gap:6px;flex-wrap:wrap}
+.sw{width:30px;height:30px;border-radius:50%;border:2px solid var(--rule);background:var(--c);padding:0}
+.sw.on{outline:3px solid var(--wine);outline-offset:2px}
+.portrait img{object-fit:contain}
 </style>
 </head>
 <body>
@@ -564,7 +568,7 @@ function fresh(){return{v:4,lvl:1,xp:0,gold:60,pc:0,pcTotal:0,cls:'aprendiz',ski
   tasks:DEFAULT_TASKS.map((n,i)=>({id:'t'+i,name:n})),done:{date:dayKey(),ids:[]},history:{},focus:{start:0,credited:0},focusMin:0,
   kills:{},rk:{},seen:{},region:0,unlocked:0,bosses:[],tower:{best:0,floor:1,kills:0},mode:'city',
   inv:[{u:1,i:0,r:0},{u:2,i:1,r:0}],eq:{arma:1,mao:null,corpo:2,cabeca:null,acc1:null,acc2:null},uid:3,
-  cards:{},sockets:{arma:null,mao:null,corpo:null,cabeca:null,acc:null},pity:{},potions:3,autoPot:true,last:Date.now(),tid:6,name:'',pvp:{day:'',n:0,w:0,l:0},updatedAt:0,resetAt:0}}
+  cards:{},sockets:{arma:null,mao:null,corpo:null,cabeca:null,acc:null},pity:{},potions:3,autoPot:true,last:Date.now(),tid:6,name:'',pvp:{day:'',n:0,w:0,l:0},updatedAt:0,resetAt:0,jobLvl:1,jobXp:0,look:{hair:'repicado',color:'original'}}}
 let S;
 try{S=JSON.parse(localStorage.getItem(STORE)||'null')}catch{S=null}
 if(S&&S.v===3){const old=S,map={slime:'slime_sonolento',cogumelo:'cogumelo_preguicoso',coelho:'coelho_distraido',abelha:'abelha_atrasada',rei:'rei_soneca'};
@@ -573,7 +577,7 @@ if(S&&S.v===3){const old=S,map={slime:'slime_sonolento',cogumelo:'cogumelo_pregu
   delete S.boss;delete S.regionKills;if(S.mode==='boss')S.mode='hunt'}
 if(!S||S.v!==4){S=fresh();try{const ro=JSON.parse(localStorage.getItem('torre-disciplina-ro-fan-v1')||'null');if(ro&&ro.name)S.name=String(ro.name).slice(0,20)}catch{}}
 function normalizeState(x){const f=fresh();x={...f,...x,done:{...f.done,...x.done},focus:{...f.focus,...x.focus},tower:{...f.tower,...x.tower},eq:{...f.eq,...x.eq},sockets:{...f.sockets,...x.sockets},pvp:{...f.pvp,...x.pvp}};
- if(!CLASSES[x.cls])x.cls='aprendiz';x.inv=(x.inv||[]).filter(i=>ITEMS[i.i]);return x}
+ if(!CLASSES[x.cls])x.cls='aprendiz';if(x.jobLvl==null||x.jobLvl===1&&x.jobXp===0&&x.pcTotal>0){x.jobLvl=1+(x.pcTotal||0);x.jobXp=0}x.inv=(x.inv||[]).filter(i=>ITEMS[i.i]);return x}
 S=normalizeState(S);
 function save(){S.last=Date.now();S.updatedAt=Date.now();try{localStorage.setItem(STORE,JSON.stringify(S))}catch{}if(typeof scheduleRemote==='function')scheduleRemote()}
 function rollDay(){const k=dayKey();if(S.done.date!==k){S.done={date:k,ids:[]};save();return true}return false}
@@ -877,7 +881,7 @@ function draw(){const t=T;drawBackground(t);
   if(c.tier===3||(c.artless&&c.tier===2)){ctx.save();const a=c.tier===3?.5:.25;const rg=ctx.createRadialGradient(HERO_X,GROUND-60,10,HERO_X,GROUND-60,90);rg.addColorStop(0,`rgba(246,214,140,${a*(.7+.3*Math.sin(t*3))})`);rg.addColorStop(1,'rgba(246,214,140,0)');ctx.fillStyle=rg;ctx.fillRect(HERO_X-100,GROUND-170,200,180);ctx.restore()}
   if(hero.shieldT>T&&hero.shieldHp>0){ctx.save();ctx.strokeStyle='rgba(120,170,230,.8)';ctx.fillStyle='rgba(120,170,230,.12)';ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(HERO_X,GROUND-62,52,70,0,0,7);ctx.fill();ctx.stroke();ctx.restore()}
   if(hero.reflT>T){ctx.save();ctx.strokeStyle='rgba(224,189,92,.8)';ctx.lineWidth=3;ctx.beginPath();ctx.arc(HERO_X+40,GROUND-60,26+3*Math.sin(t*10),-1,1);ctx.stroke();ctx.restore()}
-  const himg=sprite(c.img);
+  const himg=FRAMESETS[S.cls]&&drawFrameHero(t,hp)?null:sprite(c.img);
   if(himg){if(hero.evadeT>T)drawImg(himg,HERO_X-14,GROUND,128,{...hp,alpha:.3},false);
     if(hp.glow>0){ctx.save();const col=S.cls.includes('druid')||S.cls.includes('verde')||S.cls.includes('fera')?'120,190,90':S.cls.includes('palad')||S.cls.includes('cruz')||S.cls.includes('inqu')?'240,200,110':'150,130,240';const rg=ctx.createRadialGradient(HERO_X,GROUND-70,4,HERO_X,GROUND-70,80);rg.addColorStop(0,`rgba(${col},${.45*hp.glow})`);rg.addColorStop(1,`rgba(${col},0)`);ctx.fillStyle=rg;ctx.fillRect(HERO_X-90,GROUND-160,180,170);ctx.restore()}
     drawImg(himg,HERO_X,GROUND,128,hp,false);if(hero.flash>0){const w=sprite(c.img,'white');if(w)drawImg(w,HERO_X,GROUND,128,{...hp,alpha:Math.min(1,hero.flash*5)*.85},false)}}
@@ -925,6 +929,60 @@ function drawFx(f){const p=f.t/f.d;ctx.save();
    case'shock':ctx.globalAlpha=1-p;ctx.strokeStyle='#8d7aa8';ctx.lineWidth=4;ctx.beginPath();ctx.ellipse(f.x,f.y,20+150*p,6+14*p,0,0,7);ctx.stroke();break;
    case'bell':ctx.globalAlpha=1-p;ctx.strokeStyle='#c7973c';ctx.lineWidth=2.5;for(let i=0;i<3;i++){ctx.beginPath();ctx.arc(f.x,f.y,8+i*10+p*20,-2.6,-.5);ctx.stroke()}break;
   }ctx.restore()}
+/* ---------- Herói em quadros: corpo careca + cabelo + equipamento ---------- */
+const GW={"A0": {"w": 165, "h": 283, "sk": [4.3, 101.7, 13.0, 125.2], "front": [150.7, 193.4], "back": [21.1, 152.5]}, "A1": {"w": 166, "h": 280, "sk": [5.0, 109.7, 24.8, 134.5], "front": [153.1, 195.9], "back": [19.8, 204.6]}, "A2": {"w": 205, "h": 277, "sk": [5.0, 114.1, 68.2, 177.9], "front": [191.0, 138.9], "back": [18.0, 168.0]}, "A3": {"w": 154, "h": 282, "sk": [5.0, 115.3, 37.2, 146.9], "front": [141.4, 155.0], "back": [50.2, 174.8]}, "A4": {"w": 219, "h": 280, "sk": [5.0, 109.1, 57.0, 164.9], "front": [204.6, 169.9], "back": [26.0, 113.5]}, "A5": {"w": 264, "h": 277, "sk": [4.3, 107.9, 86.8, 195.3], "front": [248.6, 115.9], "back": [124.0, 214.5]}, "B0": {"w": 178, "h": 276, "sk": [4.3, 99.2, 5.0, 116.6], "front": [152.5, 36.0], "back": [38.4, 115.9]}, "B1": {"w": 195, "h": 262, "sk": [4.3, 104.2, 4.3, 120.9], "front": [183.5, 121.5], "back": [53.3, 171.1]}, "B2": {"w": 191, "h": 233, "sk": [4.3, 108.5, 19.8, 133.9], "front": [100.4, 130.8], "back": [22.9, 214.5]}, "B3": {"w": 169, "h": 285, "sk": [4.3, 106.0, 29.8, 135.8], "front": [155.0, 161.2], "back": [18.6, 62.0]}, "B4": {"w": 219, "h": 274, "sk": [4.3, 109.7, 88.7, 195.3], "front": [206.5, 136.4], "back": [32.2, 160.0]}, "B5": {"w": 198, "h": 267, "sk": [5.0, 105.4, 53.9, 163.7], "front": [183.5, 121.5], "back": [16.7, 164.3]}};
+const FRAMESETS={guerreiro:'gw'};
+const HAIRS={repicado:{name:'Repicado',W:1.42,TOP:.30,DX:-.04},aprendiz:{name:'Bagunçado',W:1.45,TOP:.30,DX:-.02},rabo:{name:'Rabo de cavalo',W:1.85,TOP:.30,DX:-.12}};
+const HAIRCOL={original:['Original',null],castanho:['Castanho','#7a4a2a'],preto:['Preto','#2e2830'],ruivo:['Ruivo','#b4442c'],loiro:['Loiro','#d9ab4c'],prata:['Prata','#b8b6c8'],branco:['Branco','#efe8dc'],azul:['Azul','#3f6fb0'],verde:['Verde','#4f8a4a'],rosa:['Rosa','#d9708f'],violeta:['Violeta','#7a4fa8']};
+const WROT={A0:-15,A1:-15,A2:25,A3:15,A4:-120,A5:55,B0:-25,B1:-45,B2:95,B3:-5,B4:25,B5:20};
+const RUN=['A2','A3','B4','B5'];
+const LOOKC={};
+function heroLook(){const L=S.look||{};return{hair:HAIRS[L.hair]?L.hair:'repicado',color:HAIRCOL[L.color]?L.color:'original'}}
+function hairImg(style,color){const id=style+'|'+color;if(LOOKC[id])return LOOKC[id];const im=IMG['hair_'+style];if(!im||!im.complete||!im.naturalWidth)return null;
+  const hex=HAIRCOL[color][1];if(!hex)return LOOKC[id]=im;
+  const c=document.createElement('canvas');c.width=im.naturalWidth;c.height=im.naturalHeight;const x=c.getContext('2d');x.drawImage(im,0,0);
+  const d=x.getImageData(0,0,c.width,c.height),a=d.data;let sum=0,n=0;for(let i=0;i<a.length;i+=4){if(a[i+3]<100)continue;const l=a[i]*.3+a[i+1]*.55+a[i+2]*.15;if(l>60){sum+=l;n++}}
+  const ref=n?sum/n:100,tr=parseInt(hex.slice(1,3),16),tg=parseInt(hex.slice(3,5),16),tb=parseInt(hex.slice(5,7),16);
+  for(let i=0;i<a.length;i+=4){if(!a[i+3])continue;const l=a[i]*.3+a[i+1]*.55+a[i+2]*.15;if(l<55)continue;const k=Math.pow(l/ref,1.1);a[i]=Math.min(255,tr*k);a[i+1]=Math.min(255,tg*k);a[i+2]=Math.min(255,tb*k)}
+  x.putImageData(d,0,0);return LOOKC[id]=c}
+function eqImg(slot){const it=itemOf(S.eq[slot]);if(!it)return null;const key=ITEMS[it.i].img;const im=IMG[key];return im&&im.complete&&im.naturalWidth?{im,key}:null}
+function composeFrame(fr){const m=GW[fr],body=IMG['gw_'+fr];if(!m||!body||!body.complete)return null;const L=heroLook();
+  const w=eqImg('arma'),sh=eqImg('mao'),hm=eqImg('cabeca');
+  const sig=[fr,L.hair,L.color,w&&w.key,sh&&sh.key,hm&&hm.key].join('|');if(LOOKC[sig])return LOOKC[sig];
+  const[y0,y1,x0,x1]=m.sk,sw=x1-x0,shh=y1-y0,pad=Math.round(sw*1.4);
+  const c=document.createElement('canvas');c.width=m.w+pad*2;c.height=m.h+pad;const x=c.getContext('2d');const ox=pad,oy=pad;
+  if(sh&&m.back){const s=sw*1.0,h=s*sh.im.naturalHeight/sh.im.naturalWidth;x.drawImage(sh.im,ox+m.back[0]-s/2,oy+m.back[1]-h/2,s,h)}
+  x.drawImage(body,ox,oy);
+  if(hm){const s=sw*1.24,h=s*hm.im.naturalHeight/hm.im.naturalWidth;x.drawImage(hm.im,ox+(x0+x1)/2-s/2,oy+y0-.22*shh,s,h)}
+  else{const H=HAIRS[L.hair],hi=hairImg(L.hair,L.color);if(hi){const s=sw*H.W,h=s*hi.height/hi.width;x.drawImage(hi,ox+(x0+x1)/2+H.DX*sw-s/2,oy+y0-H.TOP*shh,s,h)}}
+  if(w&&m.front){const L2=sw*1.35,h=L2*w.im.naturalHeight/w.im.naturalWidth;x.save();x.translate(ox+m.front[0],oy+m.front[1]);x.rotate(WROT[fr]*Math.PI/180);
+    if(w.key.startsWith('it'))x.rotate(Math.PI);x.drawImage(w.im,-.2*L2,-.8*h,L2,h);x.restore()}
+  return LOOKC[sig]={c,ax:ox+(x0+x1)/2,ay:oy+m.h}}
+function heroFrame(t){const a=hero.anim;
+  if(hero.dead&&!a)return'B2';
+  if(a){const p=clamp(a.t/a.dur,0,1);switch(a.name){
+    case'slash':case'dash':case'bash':case'spin':case'shoot':return p<.4?'A4':'A5';
+    case'punch':case'punch3':return Math.floor(p*6)%2?'A5':'A4';
+    case'cast':return'B0';case'hurt':return'B1';case'down':return p<.4?'B1':'B2'}}
+  if(hero.lvlFx&&T-hero.lvlFx<1.2)return'B3';
+  if(isRunning())return RUN[Math.floor(t*9)%4];
+  return Math.floor(t/.7)%2?'A1':'A0'}
+function drawFrameHero(t,o){const fr=heroFrame(t),cf=composeFrame(fr);if(!cf)return false;const m=GW.A0;const k=122/m.h;
+  const q={...o};if(isRunning()&&!hero.anim){q.dy*=.35;q.rot*=.3;q.sx=1;q.sy=1}else{q.rot*=.35}
+  const w=cf.c.width*k,h=cf.c.height*k;ctx.save();ctx.globalAlpha=q.alpha;ctx.translate(HERO_X+q.dx,GROUND+q.dy);ctx.rotate(hero.dead&&!hero.anim||fr==='B2'?0:q.rot);ctx.scale(q.sx,q.sy);
+  ctx.drawImage(cf.c,-cf.ax*k,-cf.ay*k,w,h);
+  if(hero.flash>0){const id='white|'+fr;let wc=LOOKC[id];if(!wc){wc=document.createElement('canvas');wc.width=cf.c.width;wc.height=cf.c.height;const x=wc.getContext('2d');x.drawImage(cf.c,0,0);x.globalCompositeOperation='source-in';x.fillStyle='#fff';x.fillRect(0,0,wc.width,wc.height);LOOKC[id]=wc}
+    ctx.globalAlpha=Math.min(1,hero.flash*5)*.8;ctx.drawImage(wc,-cf.ax*k,-cf.ay*k,w,h)}
+  ctx.restore();return true}
+function lookPortrait(){const cf=composeFrame('A0');return cf?cf.c.toDataURL():null}
+function viewAparencia(){const L=heroLook(),framed=!!FRAMESETS[S.cls];
+  return `<section class="sheet"><div class="ribbon teal">Aparência</div>
+  ${framed?'':`<p class="small muted">A aparência e o equipamento visível já funcionam no Guerreiro. As outras classes entram quando chegarem as folhas de poses delas.</p>`}
+  <p class="small" style="margin-top:6px"><b>Cabelo</b></p><div class="row">${Object.entries(HAIRS).map(([k,h])=>`<button class="btn sm ${L.hair===k?'on':''}" data-act="hair" data-id="${k}">${h.name}</button>`).join('')}</div>
+  <p class="small" style="margin-top:10px"><b>Cor</b></p><div class="swatches">${Object.entries(HAIRCOL).map(([k,[n,c]])=>`<button class="sw ${L.color===k?'on':''}" data-act="hcolor" data-id="${k}" title="${n}" aria-label="${n}" style="--c:${c||'linear-gradient(135deg,#b4442c,#7a4a2a)'}"></button>`).join('')}</div>
+  <p class="tiny muted" style="margin-top:8px">Arma, escudo e capacete equipados aparecem no herói. Capacete esconde o cabelo.</p></section>`}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b)return;const a=b.dataset.act;
+  if(a==='hair'||a==='hcolor'){S.look={...heroLook(),[a==='hair'?'hair':'color']:b.dataset.id};save();const y=scrollY;render();scrollTo(0,y)}});
 /* ---------- Conta, nuvem, PvP e Mestre (Firebase via config.js) ---------- */
 const CFG_DEF={epoch:0,resetMap:{},pvpPerDay:10,xpMult:1,goldMult:1,cardMult:1,motd:''};
 let CFG={...CFG_DEF};try{Object.assign(CFG,JSON.parse(localStorage.getItem('torre-aeth-cfg')||'{}'))}catch{}
@@ -995,7 +1053,7 @@ function viewMaster(){if(!net.master)return '<section class="sheet"><p>Somente a
  const f=(k,l,step='1')=>`<label class="field">${l}<input id="m_${k}" type="number" step="${step}" value="${CFG[k]}"></label>`;
  const seg=`<div class="row" style="margin-top:4px">${[['ajustes','Jogo'],['reset','Resetar'],['teste','Testes']].map(([k,l])=>`<button class="btn sm ${msub===k?'on':''}" data-act="msub" data-id="${k}">${l}</button>`).join('')}</div>`;
  if(msub==='reset'){if(!playersCache)loadPlayers();return seg+`<section class="sheet"><div class="ribbon">Resetar progresso</div><p class="small muted">O jogador volta ao começo na próxima vez que abrir o jogo. O nome é mantido.</p><div class="gap"></div><button class="btn wine" data-act="mreset" data-id="*">Resetar todos</button><div class="shop" style="margin-top:10px">${(playersCache||[]).map(p=>`<div class="it"><img src="${ART[CLASSES[p.cls].img]}" alt=""><div><b>${esc(p.name)}</b><br><span class="small muted">${esc(p.job)} · Nv ${p.lvl}</span></div><button class="btn sm" data-act="mreset" data-id="${p.uid}">Resetar</button></div>`).join('')||'<p class="muted">Nenhum jogador.</p>'}</div></section>`}
- if(msub==='teste')return seg+`<section class="sheet"><div class="ribbon">Testes no seu herói</div><p class="small muted">Só mudam o seu próprio save.</p><div class="row" style="margin-top:8px">${[['gold','+5.000 ouro'],['lvl','+1 nível'],['lvl10','+10 níveis'],['pc','+10 pontos de classe'],['boss','Libertar chefe da região'],['card','Carta aleatória'],['open','Abrir todas as regiões']].map(([k,l])=>`<button class="btn sm" data-act="mtool" data-id="${k}">${l}</button>`).join('')}</div></section>`;
+ if(msub==='teste')return seg+`<section class="sheet"><div class="ribbon">Testes no seu herói</div><p class="small muted">Só mudam o seu próprio save.</p><div class="row" style="margin-top:8px">${[['gold','+5.000 ouro'],['lvl','+1 nível'],['lvl10','+10 níveis'],['pc','+1 nível de classe'],['boss','Libertar chefe da região'],['card','Carta aleatória'],['open','Abrir todas as regiões']].map(([k,l])=>`<button class="btn sm" data-act="mtool" data-id="${k}">${l}</button>`).join('')}</div></section>`;
  return seg+`<section class="sheet"><div class="ribbon">Ajustes do jogo</div><p class="small muted">Valem para todos os jogadores ao salvar.</p><div class="mgrid">${f('xpMult','XP dos monstros (×)','0.1')}${f('goldMult','Ouro (×)','0.1')}${f('cardMult','Chance de cartas (×)','0.1')}${f('pvpPerDay','Duelos por dia')}</div><label class="field">Aviso para todos<input id="m_motd" maxlength="140" value="${esc(CFG.motd||'')}"></label><div class="row" style="margin-top:10px"><button class="btn wine" data-act="msave">Salvar para todos</button><button class="btn ghost" data-act="mdefault">Voltar ao padrão</button></div></section>`}
 async function masterSave(def){if(!net.master||!net.cfgRef)return;let o=def?{...CFG_DEF,epoch:CFG.epoch||0,resetMap:CFG.resetMap||{}}:{...CFG};
   if(!def){for(const k of['xpMult','goldMult','cardMult','pvpPerDay']){const el=$('#m_'+k);if(el)o[k]=Math.max(0,Number(el.value)||CFG_DEF[k])}o.motd=($('#m_motd')?.value||'').trim().slice(0,140)}
@@ -1004,7 +1062,7 @@ async function masterReset(uid){if(!net.master||!net.cfgRef)return;const o={...C
   try{await net.fb.FS.setDoc(net.cfgRef,{aeth:o},{merge:true});toast(uid==='*'?'Reset geral enviado.':'Reset enviado para o jogador.')}catch(e){toast('Sem permissão para salvar.')}}
 function masterTool(id){if(!net.master)return;const R=S.region;
   if(id==='gold')S.gold+=5000;else if(id==='lvl')gainXP(xpNeed(S.lvl)-S.xp);else if(id==='lvl10'){for(let i=0;i<10;i++)gainXP(xpNeed(S.lvl)-S.xp)}
-  else if(id==='pc'){S.pc+=10;S.pcTotal+=10}else if(id==='boss'){if(!S.bosses.includes(R))S.bosses.push(R);unlockCheck(true)}
+  else if(id==='pc'){gainJob(jobNeed(S.jobLvl)-S.jobXp)}else if(id==='boss'){if(!S.bosses.includes(R))S.bosses.push(R);unlockCheck(true)}
   else if(id==='card'){const ids=MONIDS.filter(hasArt);const k=ids[ri(0,ids.length-1)];S.cards[k]=(S.cards[k]||0)+1;S.seen[k]=1;toast('Carta: '+MONS[k].name)}
   else if(id==='open'){S.unlocked=8}
   save();render();toast('Feito.')}
@@ -1063,16 +1121,19 @@ function updateModes(){document.querySelectorAll('[data-act="mode"]').forEach(b=
 let toastT;function toast(m){const n=$('#toast');n.textContent=m;n.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>n.hidden=true,3400)}
 
 /* ---------- Rotina ---------- */
-function toggleTask(id){if(S.done.ids.includes(id)){if(S.pc<=0){toast('Esse ponto já foi gasto numa habilidade.');return}S.done.ids=S.done.ids.filter(x=>x!==id);S.pc--;S.pcTotal--;S.history[S.done.date]=Math.max(0,(S.history[S.done.date]||1)-1)}
-  else{S.done.ids.push(id);S.pc++;S.pcTotal++;S.history[S.done.date]=(S.history[S.done.date]||0)+1;toast('+1 ponto de classe')}save();render();hud()}
-function focusTick(){const f=S.focus;if(!f.start)return;const mins=(Date.now()-f.start)/60000;const blocks=Math.floor(Math.min(mins,240)/FOCUS_BLOCK);if(blocks>f.credited){const n=blocks-f.credited;f.credited=blocks;S.pc+=n;S.pcTotal+=n;S.history[dayKey()]=(S.history[dayKey()]||0)+n;toast(`Foco de ${FOCUS_BLOCK} minutos: +${n} ponto de classe`);save();if(tab==='rotina')render()}
+const JOBXP=10,jobNeed=n=>20+10*n;
+function gainJob(v){S.jobXp+=v;let up=0;while(S.jobXp>=jobNeed(S.jobLvl)){S.jobXp-=jobNeed(S.jobLvl);S.jobLvl++;S.pc++;S.pcTotal++;up++}if(up)setTimeout(()=>toast(`Nível de classe ${S.jobLvl}! +${up} ponto de habilidade`),900);return up}
+function toggleTask(id){if(S.done.ids.includes(id)){if(S.jobXp<JOBXP){toast('Esse XP já virou nível de classe.');return}S.done.ids=S.done.ids.filter(x=>x!==id);S.jobXp-=JOBXP;S.history[S.done.date]=Math.max(0,(S.history[S.done.date]||1)-1)}
+  else{S.done.ids.push(id);S.history[S.done.date]=(S.history[S.done.date]||0)+1;toast(`+${JOBXP} XP de classe`);gainJob(JOBXP)}save();render();hud()}
+function focusTick(){const f=S.focus;if(!f.start)return;const mins=(Date.now()-f.start)/60000;const blocks=Math.floor(Math.min(mins,240)/FOCUS_BLOCK);if(blocks>f.credited){const n=blocks-f.credited;f.credited=blocks;S.history[dayKey()]=(S.history[dayKey()]||0)+n;toast(`Foco de ${FOCUS_BLOCK} minutos: +${n*JOBXP} XP de classe`);gainJob(n*JOBXP);save();if(tab==='rotina')render()}
   const el=$('#fClock');if(el){const left=FOCUS_BLOCK-(mins%FOCUS_BLOCK);el.textContent=String(Math.floor(left)).padStart(2,'0')+':'+String(Math.floor((left%1)*60)).padStart(2,'0');const c=$('#fArc');if(c)c.setAttribute('stroke-dashoffset',String(301.6*(1-(mins%FOCUS_BLOCK)/FOCUS_BLOCK)))}}
 function viewRotina(){const d=S.done.ids,running=!!S.focus.start;const days=[];for(let i=13;i>=0;i--){const x=new Date();x.setDate(x.getDate()-i);const v=S.history[dayKey(x)]||0;days.push(`<span class="${v>=5?'l3':v>=3?'l2':v>=1?'l1':''} ${i===0?'now':''}" title="${dayKey(x)}: ${v} ponto(s)"></span>`)}
  const st=streak();
  return `<div class="cols"><div>
  <section class="sheet"><div class="ribbon">Rotina de hoje</div>
-  <div class="points"><span class="n">${S.pc}</span><span class="l">pontos de classe<br><span class="muted small">para gastar em habilidades</span></span></div>
-  <p class="lede">Qualquer tarefa concluída vale 1 ponto, seja treino, estudo, trabalho ou casa. A força do herói vem das caçadas.</p>
+  <div class="points"><span class="n">${S.jobLvl}</span><span class="l">nível de classe<br><span class="muted small">${S.jobXp}/${jobNeed(S.jobLvl)} XP · ${S.pc} ponto${S.pc===1?'':'s'} de habilidade</span></span></div>
+  <div class="meter xp" style="height:8px;margin-bottom:10px"><i style="width:${S.jobXp/jobNeed(S.jobLvl)*100}%"></i></div>
+  <p class="lede">Qualquer tarefa concluída vale ${JOBXP} XP de classe. Cada nível de classe dá 1 ponto de habilidade. A força do herói vem das caçadas.</p>
   <ul class="tasks">${S.tasks.map(t=>{const on=d.includes(t.id);return `<li class="task ${on?'done':''}"><button class="tick" data-act="task" data-id="${t.id}" aria-pressed="${on}" aria-label="${on?'Desmarcar':'Concluir'}: ${esc(t.name)}">✓</button><div class="t"><span>${esc(t.name)}</span></div><button class="x" data-act="deltask" data-id="${t.id}" aria-label="Remover ${esc(t.name)}">×</button></li>`}).join('')||'<li class="muted">Sem tarefas. Escreva a primeira abaixo.</li>'}</ul>
   <form class="addrow" id="addTask"><input id="taskName" maxlength="70" placeholder="Nova tarefa, por exemplo: caminhar 20 minutos" aria-label="Nova tarefa"><button class="btn wine" type="submit">Adicionar</button></form>
   <div class="divider"></div>
@@ -1080,12 +1141,12 @@ function viewRotina(){const d=S.done.ids,running=!!S.focus.start;const days=[];f
  </section></div><div>
  <section class="sheet"><div class="ribbon teal">Modo foco</div>
   <div class="focus"><div class="ring"><svg viewBox="0 0 110 110"><circle cx="55" cy="55" r="48" fill="none" stroke="var(--rule)" stroke-width="6"/><circle id="fArc" cx="55" cy="55" r="48" fill="none" stroke="var(--teal)" stroke-width="6" stroke-linecap="round" stroke-dasharray="301.6" stroke-dashoffset="${running?0:301.6}"/></svg><b id="fClock">${running?'··':String(FOCUS_BLOCK)+':00'}</b></div>
-  <div><p class="small">Cada bloco de ${FOCUS_BLOCK} minutos sem distração rende 1 ponto. Pode fechar o app; o tempo continua contando.</p><div class="gap"></div>
+  <div><p class="small">Cada bloco de ${FOCUS_BLOCK} minutos sem distração rende ${JOBXP} XP de classe. Pode fechar o app; o tempo continua contando.</p><div class="gap"></div>
   ${running?`<button class="btn" data-act="focusstop">Encerrar foco</button>`:`<button class="btn teal" data-act="focusstart">Começar foco</button>`}
   <p class="tiny muted" style="margin-top:8px">Total: ${fmt(S.focusMin)} minutos</p></div></div>
  </section>
  <section class="sheet"><div class="ribbon">Constância</div>
-  <div class="row between"><span class="lede" style="color:var(--ink)">${st} dia${st===1?'':'s'} seguidos</span><span class="small muted">${fmt(S.pcTotal)} pontos ganhos ao todo</span></div>
+  <div class="row between"><span class="lede" style="color:var(--ink)">${st} dia${st===1?'':'s'} seguidos</span><span class="small muted">nível de classe ${S.jobLvl}</span></div>
   <div class="days" aria-label="Últimos 14 dias">${days.join('')}</div>
   <p class="tiny muted" style="margin-top:6px">Cada bolinha é um dia. Quanto mais escura, mais tarefas.</p>
  </section></div></div>`}
@@ -1145,10 +1206,11 @@ function viewHeroi(){const s=stats(),c=CLASSES[S.cls];const eqSet=new Set(Object
  const sp=s.card;
  return `<div class="cols"><div>
  <section class="sheet"><div class="ribbon">${c.name}</div>
-  <div class="herohead"><div class="portrait ${c.tier===3?'trans':''}"><img src="${ART[c.img]}" alt="${c.name}"></div><div><div class="row between"><b style="font-family:var(--sc);font-size:22px">Nível ${S.lvl}</b><span class="small muted">${fmt(S.xp)} / ${fmt(xpNeed(S.lvl))} XP</span></div><div class="meter xp" style="height:8px"><i style="width:${S.xp/xpNeed(S.lvl)*100}%"></i></div><p class="small muted" style="margin-top:8px">Cada nível vem de monstros libertados e aumenta todos os atributos de acordo com a classe.</p></div></div>
+  <div class="herohead"><div class="portrait ${c.tier===3?'trans':''}"><img src="${(FRAMESETS[S.cls]&&lookPortrait())||ART[c.img]}" alt="${c.name}"></div><div><div class="row between"><b style="font-family:var(--sc);font-size:22px">Nível ${S.lvl}</b><span class="small muted">${fmt(S.xp)} / ${fmt(xpNeed(S.lvl))} XP</span></div><div class="meter xp" style="height:8px"><i style="width:${S.xp/xpNeed(S.lvl)*100}%"></i></div><p class="small muted" style="margin-top:8px">Cada nível vem de monstros libertados e aumenta todos os atributos de acordo com a classe.</p></div></div>
   <div class="statgrid">${statRows.map(([a,b])=>`<div class="stat"><span>${a}</span><b>${b}</b></div>`).join('')}</div>
   ${sp.set||sp.pages?`<p class="tiny muted" style="margin-top:8px">${sp.set?'Conjunto de 3 cartas da mesma região: +6% de ataque e vida. ':''}${sp.pages?`${sp.pages} página(s) do álbum completas: +${sp.pages*2}% de vida.`:''}</p>`:''}
  </section></div><div>
+ ${viewAparencia()}
  <section class="sheet"><div class="ribbon teal">Equipamento</div>${sub}${heroSub==='equip'?equipView:shopView}</section>
  <section class="sheet"><div class="ribbon">Conta</div><p class="small muted">Nome, login, nuvem, convite e backup ficam na aba Conta.</p><div class="gap"></div><button class="btn sm" data-tab="conta">Abrir Conta</button></section>
  </div></div>`}
@@ -1171,7 +1233,7 @@ function viewHabilidades(){const c=CLASSES[S.cls];let box;
  const groups=lineage().map(l=>`<div class="divider"></div><h3 style="font-family:var(--serif)">${CLASSES[l].name}</h3>${SK.filter(s=>s.cls===l).map(skillRow).join('')}`).join('');
  return `<div class="cols"><div>
  <section class="sheet"><div class="ribbon">Classe</div>${box}${sheet}</section></div><div>
- <section class="sheet"><div class="ribbon teal">Habilidades</div><div class="points"><span class="n">${S.pc}</span><span class="l">pontos para gastar<br><span class="muted small">cada nível de habilidade custa 1</span></span></div>
+ <section class="sheet"><div class="ribbon teal">Habilidades</div><div class="points"><span class="n">${S.pc}</span><span class="l">pontos de habilidade<br><span class="muted small">nível de classe ${S.jobLvl} · ${S.jobXp}/${jobNeed(S.jobLvl)} XP</span></span></div>
   ${groups}
   <div class="divider"></div><button class="btn sm ghost" data-act="respec" ${S.gold<300?'disabled':''}>Redistribuir pontos · 300 ouro</button>
  </section></div></div>`}
