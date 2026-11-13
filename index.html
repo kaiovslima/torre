@@ -296,6 +296,10 @@ img.unseen{filter:brightness(0) opacity(.22)!important}
 @media (prefers-reduced-motion:reduce){.sn.av{animation:none}}
 .sn b{color:var(--ink)!important}.sn em{color:var(--ink)!important}
 .sn.lock b{color:var(--ink-soft)!important}
+.portrait{background:radial-gradient(ellipse 42% 7% at 50% 95%,var(--shadow),transparent)!important}
+#cardTop{margin:12px 0 4px;padding:10px;border:1px solid var(--rule);border-radius:12px;background:var(--paper)}
+.album{margin-top:14px}
+@media (max-width:520px){#cardTop.cardview{grid-template-columns:40% 1fr!important;gap:10px}#cardTop .art{max-width:none!important}#cardTop h2{font-size:18px!important}#cardTop .tag{font-size:11.5px}#cardTop p{font-size:14px}}
 </style>
 </head>
 <body>
@@ -846,13 +850,15 @@ function heroPose(t){const a=hero.anim;let o={dx:0,dy:0,rot:0,sx:1,sy:1,alpha:1,
    case'hurt':o.dx=-12*(1-p);o.rot=-.08*(1-p);break;
    case'down':{const e=ease(p);o.rot=-1.35*e;o.dx=-14*e;o.dy=6*e;o.alpha=1-.25*e;break}
   }return o}
-function foePose(f,t){const M=MONS[f.id],a=f.anim,tt=t-f.t0;let o={dx:0,dy:0,rot:0,sx:1,sy:1,alpha:1};const moving=f.state==='approach';
+function foePose(f,t){const M=MONS[f.id],a=f.anim,tt=t-f.t0;let o={dx:0,dy:0,rot:0,sx:1,sy:1,alpha:1};const moving=f.state==='approach';const ph=(f.zz||0);
+  /* respiração contínua para todos, para o monstro nunca ficar parado */
+  const br=Math.sin(tt*3.4+ph);o.sy=1+.04*br;o.sx=1-.03*br;
   switch(M.motion){
-   case'slime':if(moving){const ph=tt*6,h=Math.abs(Math.sin(ph));o.dy=-h*16;o.sy=1+.12*h-(.14*(1-h)*(1-h));o.sx=2-o.sy}else{o.sy=1+.07*Math.sin(tt*4);o.sx=1-.05*Math.sin(tt*4)}break;
-   case'shroom':if(moving){o.rot=.1*Math.sin(tt*5);o.dy=-Math.abs(Math.sin(tt*5))*3}else{o.rot=.05*Math.sin(tt*1.5);o.sy=1+.015*Math.sin(tt*3)}break;
-   case'hop':if(moving){const h=Math.abs(Math.sin(tt*7));o.dy=-h*22;o.rot=-.1*Math.cos(tt*7);o.sy=1+.06*h;o.sx=1-.04*h}else{const h=Math.max(0,Math.sin(tt*3.2));o.dy=-h*h*7;o.sy=1-.03*(1-h)}break;
-   case'fly':o.dy=Math.sin(tt*5)*7;o.rot=.06*Math.sin(tt*9);o.dx=Math.sin(tt*23)*1;o.sy=1+.02*Math.sin(tt*42);break;
-   case'king':o.sy=1+.035*Math.sin(tt*1.6);o.sx=1-.02*Math.sin(tt*1.6);if(moving){o.rot=.04*Math.sin(tt*4);o.dy=-Math.abs(Math.sin(tt*4))*4}break;
+   case'slime':if(moving){const k=tt*6,h=Math.abs(Math.sin(k));o.dy=-h*16;o.sy=1+.12*h-(.16*(1-h)*(1-h));o.sx=2-o.sy}else{o.sy=1+.08*Math.sin(tt*4+ph);o.sx=1-.06*Math.sin(tt*4+ph);o.dx=Math.sin(tt*1.7)*3}break;
+   case'shroom':if(moving){o.rot=.12*Math.sin(tt*5);o.dy=-Math.abs(Math.sin(tt*5))*5}else{o.rot=.07*Math.sin(tt*1.8+ph);o.dx=Math.sin(tt*1.8+ph)*2}break;
+   case'hop':if(moving){const h=Math.abs(Math.sin(tt*7));o.dy=-h*22;o.rot=-.1*Math.cos(tt*7);o.sy=1+.08*h;o.sx=1-.05*h}else{const c=(tt*1.4+ph)%1,h=c<.35?Math.sin(c/.35*Math.PI):0;o.dy=-h*12;o.sy=1+(h>0?.06*h:-.05*Math.sin(tt*6));o.sx=2-o.sy;o.rot=-.05*h}break;
+   case'fly':o.dy=Math.sin(tt*5+ph)*8;o.rot=.08*Math.sin(tt*9);o.dx=Math.sin(tt*2.3)*6;o.sy=1+.05*Math.sin(tt*30);o.sx=1-.03*Math.sin(tt*30);break;
+   case'king':o.sy=1+.045*Math.sin(tt*1.8+ph);o.sx=1-.03*Math.sin(tt*1.8+ph);if(moving){o.rot=.05*Math.sin(tt*4);o.dy=-Math.abs(Math.sin(tt*4))*6}else{o.rot=.025*Math.sin(tt*1.2);o.dx=Math.sin(tt*1.2)*3}break;
   }
   if(f.stun>T)o.rot+=.05*Math.sin(t*30);
   if(!a)return o;const p=clamp(a.t/a.dur,0,1);
@@ -1001,9 +1007,11 @@ const FRAMESETS=Object.fromEntries(Object.keys(HMETA).map(k=>[k,k]));
 const HAT_CLASSES={feiticeiro:1,arquimago:1};
 const WEAPON_OVERLAY={guerreiro:1};
 const HAIRS={1:'Bagunçado',2:'Espetado',3:'Rabo alto',4:'Coque',5:'Longo ondulado',6:'Trança',7:'Raspado',8:'Cachos',9:'Chanel',10:'Meia-cauda'};
-const HAIRFIT={d:[1.2,.26,-.05],5:[1.28,.26,-.06],6:[1.24,.26,-.06],10:[1.28,.26,-.07]};
+const HAIRFIT={d:[1.27,.28,-.07],5:[1.32,.28,-.08],6:[1.28,.28,-.08],9:[1.3,.29,-.06],10:[1.32,.28,-.08]};
 const HAIRCOL={castanho:['Castanho','#7a4a2a'],preto:['Preto','#2e2830'],ruivo:['Ruivo','#b4442c'],loiro:['Loiro','#d9ab4c'],prata:['Prata','#b8b6c8'],branco:['Branco','#efe8dc'],azul:['Azul','#3f6fb0'],verde:['Verde','#4f8a4a'],rosa:['Rosa','#d9708f'],violeta:['Violeta','#7a4fa8']};
-const WROT={A0:-15,A1:-15,A2:25,A3:15,A4:-120,A5:55,B0:-25,B1:-45,B2:95,B3:-5,B4:25,B5:20};
+/* ângulo da lâmina por quadro (graus somados à posição diagonal do ícone) e ajuste manual da mão quando a detecção erra */
+const WROT={A0:95,A1:95,A2:-20,A3:-20,A4:-110,A5:50,B0:-45,B1:-10,B2:225,B3:-30,B4:-20,B5:-20};
+const HANDFIX={guerreiro:{B2:[15,172]}};
 const LOOKC={};
 function heroLook(){const L=S.look||{};return{hair:HAIRS[L.hair]?String(L.hair):'1',color:HAIRCOL[L.color]?L.color:'castanho'}}
 function hairImg(style,color){const id='h'+style+'|'+color;if(LOOKC[id])return LOOKC[id];const im=IMG['hair_'+style];if(!im||!im.complete||!im.naturalWidth)return null;
@@ -1022,7 +1030,10 @@ function composeFrame(cls,fr){const m=HMETA[cls]&&HMETA[cls][fr],body=IMG[`h_${c
   x.drawImage(body,ox,oy);
   if(!HAT_CLASSES[cls]&&m.sk){if(hm){const s=sw*1.24,h=s*hm.im.naturalHeight/hm.im.naturalWidth;x.drawImage(hm.im,ox+(x0+x1)/2-s/2,oy+y0-.22*shh,s,h)}
     else{const[W,TOP,DX]=HAIRFIT[L.hair]||HAIRFIT.d,hi=hairImg(L.hair,L.color);if(hi){const s=sw*W,h=s*hi.height/hi.width;x.drawImage(hi,ox+(x0+x1)/2+DX*sw-s/2,oy+y0-TOP*shh,s,h)}}}
-  if(w&&m.front){const L2=sw*1.35,h=L2*w.im.naturalHeight/w.im.naturalWidth;x.save();x.translate(ox+m.front[0],oy+m.front[1]);x.rotate(WROT[fr]*Math.PI/180);if(w.key.startsWith('it'))x.rotate(Math.PI);x.drawImage(w.im,-.2*L2,-.8*h,L2,h);x.restore()}
+  const hand=(HANDFIX[cls]&&HANDFIX[cls][fr])||m.front;
+  if(w&&hand){const L2=sw*1.15,h=L2*w.im.naturalHeight/w.im.naturalWidth;x.save();x.translate(ox+hand[0],oy+hand[1]);x.rotate(WROT[fr]*Math.PI/180);
+    /* ícones do atlas antigo (it*) têm a ponta para baixo-esquerda: gira 180° e segura pelo cabo (canto oposto) */
+    if(w.key.startsWith('it')){x.rotate(Math.PI);x.drawImage(w.im,-.8*L2,-.2*h,L2,h)}else x.drawImage(w.im,-.2*L2,-.8*h,L2,h);x.restore()}
   return LOOKC[sig]={c,ax:ox+(x0+x1)/2,ay:oy+m.h}}
 function heroState(){const a=hero.anim;if(hero.dead&&!a)return['down',1];
   if(a){const p=clamp(a.t/a.dur,0,1);switch(a.name){case'slash':case'dash':case'bash':case'spin':case'shoot':case'punch':case'punch3':return['attack',p];case'cast':return['cast',p];case'hurt':return['hurt',p];case'down':return['down',p]}}
@@ -1320,8 +1331,7 @@ function viewAlbum(){const ids=regMons(albumReg);const got=ids.filter(k=>S.cards
   <div class="row between"><span class="lede" style="color:var(--ink)">${all} de ${MONIDS.length} cartas</span><span class="small muted">Página completa: +2% de vida</span></div>
   <div class="chips2">${REGIONS.map((R,i)=>{const n=regMons(i).filter(k=>S.cards[k]).length;return `<button class="btn sm ${i===albumReg?'on':''}" data-act="albumreg" data-n="${i}" ${i>S.unlocked?'disabled':''}>${R.name} <span class="tiny">${n}/13</span></button>`}).join('')}</div>
   <div class="meter xp" style="height:8px;margin-top:10px"><i style="width:${got/13*100}%"></i></div>
-  <div class="album">${ids.map(k=>{const X=MONS[k],h=S.cards[k];return `<button class="card ${h?'':'miss'} ${rcls(CARDS[k].rar)} ${selCard===k?'sel':''}" data-act="card" data-k="${k}"><div class="art">${cardArt(k)}</div><b>${h||S.seen[k]?X.name:'???'}</b><span class="stars">${h?'★'.repeat(stars(k))+'☆'.repeat(5-stars(k)):''}</span></button>`}).join('')}</div>
-  <div class="cardview"><div class="art ${rcls(C.rar)} ${have?'':'miss'}">${cardArt(selCard)}</div><div>
+  <div class="cardview" id="cardTop"><div class="art ${rcls(C.rar)} ${have?'':'miss'}">${cardArt(selCard)}</div><div>
    <h2 style="font-family:var(--serif);font-size:22px">${seen?M.name:'Carta desconhecida'}</h2>
    <div class="row" style="margin:6px 0"><span class="tag">${M.el}</span><span class="tag">${M.kind}</span><span class="tag">${M.size}</span><span class="tag ${C.rar==='lendária'?'gold':''}">${C.rar}</span><span class="tag">encaixe: ${SLOTN[C.slot]}</span></div>
    <p>${C.text(m)}</p>${have&&st<5?`<p class="small muted">Próxima estrela: ${C.text(1+.25*st)}. Cada cópia extra soma uma estrela.</p>`:''}
@@ -1329,13 +1339,15 @@ function viewAlbum(){const ids=regMons(albumReg);const got=ids.filter(k=>S.cards
    ${S.kills[selCard]?`<p class="verse">“${esc(M.before)}”</p>`:''}
    <div class="gap"></div>${have?`<button class="btn ${socketed?'':'wine'}" data-act="socket" data-k="${selCard}">${socketed?'Remover do encaixe':'Encaixar em '+SLOTN[C.slot].toLowerCase()}</button>`:''}
    <p class="tiny muted" style="margin-top:8px">Encaixes: ${Object.entries(S.sockets).map(([sl,id])=>SLOTN[sl]+': '+(id?MONS[id].name:'vazio')).join(' · ')}. Três cartas da mesma região ativam +6% de ataque e vida.</p>
-  </div></div></section>`}
+  </div></div>
+  <div class="album">${ids.map(k=>{const X=MONS[k],h=S.cards[k];return `<button class="card ${h?'':'miss'} ${rcls(CARDS[k].rar)} ${selCard===k?'sel':''}" data-act="card" data-k="${k}"><div class="art">${cardArt(k)}</div><b>${h||S.seen[k]?X.name:'???'}</b><span class="stars">${h?'★'.repeat(stars(k))+'☆'.repeat(5-stars(k)):''}</span></button>`}).join('')}</div>
+</section>`}
 
 /* ---------- Render e eventos ---------- */
 let tab='rotina';
 const VIEWS={rotina:viewRotina,cacada:viewCacada,heroi:viewHeroi,habilidades:viewHabilidades,album:viewAlbum,pvp:viewPvp,mestre:viewMaster,conta:viewConta};
 function render(){document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('on',b.dataset.tab===tab));$('#view').innerHTML=VIEWS[tab]();updateModes();hud()}
-let refreshQ=0;function refreshIfVisible(){if(!$('#modal').hidden)return;if(tab==='cacada'||tab==='album'||(tab==='heroi'&&heroSub==='equip')){clearTimeout(refreshQ);refreshQ=setTimeout(()=>{const y=scrollY;render();scrollTo(0,y)},250)}}
+let refreshQ=0,lastRefresh=0;function refreshIfVisible(){if(!$('#modal').hidden)return;if(tab==='cacada'||tab==='album'){if(refreshQ)return;const wait=Math.max(300,4000-(performance.now()-lastRefresh));refreshQ=setTimeout(()=>{refreshQ=0;lastRefresh=performance.now();const y=scrollY;render();scrollTo(0,y)},wait)}}
 function modal(html){const m=$('#modal');m.innerHTML=html;m.hidden=false}
 let pending=null;function ask(msg,ok,fn){pending=fn;modal(`<section class="sheet"><p class="lede" style="color:var(--ink)">${msg}</p><div class="gap"></div><div class="row"><button class="btn wine" data-act="askok">${ok}</button><button class="btn ghost" data-act="close">Cancelar</button></div></section>`)}
 document.addEventListener('click',e=>{const tb=e.target.closest('[data-tab]');if(tb){tab=tb.dataset.tab;render();scrollTo({top:0});if(location.hash!=='#'+tab)history.replaceState(null,'','#'+tab);return}
@@ -1363,7 +1375,7 @@ document.addEventListener('click',e=>{const tb=e.target.closest('[data-tab]');if
  if(a==='swapclass'){if(S.gold<800)return;ask('Voltar a Aprendiz e escolher a classe de novo por 800 ouro? Os pontos gastos fora do Aprendiz voltam para você.','Recomeçar',()=>{S.gold-=800;for(const s of SK)if(s.cls!=='aprendiz'&&S.skills[s.id]){S.pc+=S.skills[s.id];delete S.skills[s.id]}S.cls='aprendiz';for(const k of EQ){const it=itemOf(S.eq[k]);if(it&&!canUse(ITEMS[it.i]))S.eq[k]=null}save();render()});return}
  if(a==='respec'){if(S.gold<300)return;ask('Devolver todos os pontos de habilidade por 300 ouro?','Redistribuir',()=>{S.gold-=300;const back=Object.values(S.skills).reduce((x,v)=>x+v,0);S.pc+=back;S.skills={};save();render()});return}
  if(a==='albumreg'){albumReg=Number(b.dataset.n);selCard=regMons(albumReg)[0];render();scrollTo(0,y);return}
- if(a==='card'){selCard=b.dataset.k;render();scrollTo(0,y);return}
+ if(a==='card'){selCard=b.dataset.k;render();scrollTo(0,y);$('#cardTop')?.scrollIntoView({behavior:'smooth',block:'center'});return}
  if(a==='socket'){const k=b.dataset.k,sl=CARDS[k].slot;S.sockets[sl]=S.sockets[sl]===k?null:k;save();render();scrollTo(0,y);return}
  if(a==='zoom'){modal(`<section class="sheet"><img class="full" src="${ART[b.dataset.k]}" alt=""><div class="gap"></div><button class="btn block" data-act="close">Fechar</button></section>`);return}
  if(a==='reset'){ask('Apagar todo o progresso? Isso não pode ser desfeito.','Apagar tudo',()=>{S=fresh();initVitals();foe=null;hero.dead=0;save();render();modeText()});return}
