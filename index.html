@@ -273,6 +273,29 @@ img.unseen{filter:brightness(0) opacity(.22)!important}
 .card .art,.cardview .art{aspect-ratio:2/3!important}
 .card .art img,.cardview .art img{object-fit:cover}
 .card .art .ph img{object-fit:contain}
+.treewrap{overflow-x:auto;margin:10px -6px 0;padding:4px 6px 8px}
+.tree{position:relative;margin:0 auto}
+.tree svg{position:absolute;inset:0;overflow:visible}
+.tree path{fill:none;stroke:var(--rule);stroke-width:2;stroke-dasharray:5 4}
+.tree path.ok{stroke:var(--wine);stroke-dasharray:none;stroke-width:2.5}
+.tree text{font:700 10.5px var(--sans);fill:var(--ink-soft);text-anchor:middle;paint-order:stroke;stroke:var(--sheet);stroke-width:4px}
+.tree text.ok{fill:var(--wine)}
+.tg{position:absolute;left:0;right:0;font-family:var(--sc);font-weight:700;font-size:14px;color:var(--teal);border-bottom:1px dashed var(--rule);padding-bottom:2px}
+.sn{position:absolute;transform:translate(-50%,-50%);width:56px;height:56px;border:2px solid var(--rule);background:var(--paper);border-radius:50%;padding:0;display:grid;place-items:center;color:var(--ink)}
+.sn.pas{border-radius:13px}
+.sn .ic{font-size:22px;line-height:1}
+.sn em{position:absolute;bottom:-7px;right:-9px;font-style:normal;font-size:10.5px;font-weight:800;background:var(--sheet);border:1px solid var(--rule);border-radius:999px;padding:0 4px;line-height:15px}
+.sn b{position:absolute;top:62px;left:50%;width:84px;margin-left:-42px;font-size:11px;line-height:1.15;font-weight:700;text-align:center;font-family:var(--sans)}
+.sn.lock{opacity:.55;border-style:dashed}
+.sn.av{border-color:var(--wine);box-shadow:0 0 0 3px color-mix(in srgb,var(--wine) 25%,transparent);animation:pulse 1.6s ease-in-out infinite}
+.sn.got{background:var(--wine);border-color:var(--wine);color:var(--wine-ink)}
+.sn.max{background:var(--gold);border-color:var(--gold);color:#2b1d12}
+.sn.sel{outline:3px solid var(--teal);outline-offset:3px}
+@keyframes pulse{50%{box-shadow:0 0 0 7px color-mix(in srgb,var(--wine) 8%,transparent)}}
+.skdetail{margin-top:10px;border:1px solid var(--rule);border-radius:10px;padding:2px 10px;background:var(--paper)}
+@media (prefers-reduced-motion:reduce){.sn.av{animation:none}}
+.sn b{color:var(--ink)!important}.sn em{color:var(--ink)!important}
+.sn.lock b{color:var(--ink-soft)!important}
 </style>
 </head>
 <body>
@@ -541,6 +564,8 @@ const SK=[
  {id:'manada',cls:'senhor_feras',name:'Chamado da Manada',type:'ativa',max:5,cd:45,en:50,kind:'hit',fx:'dash',hits:3,v:r=>90+25*r,d:r=>`A manada ataca 3 vezes com ${90+25*r}%`},
  {id:'floresta',cls:'avatar_natureza',name:'Floresta Viva',type:'ativa',max:5,cd:50,en:55,kind:'hit',fx:'root',stun:2,v:r=>300+60*r,d:r=>`${300+60*r}% e prende por 2 s`}
 ];
+const SK_REQ={"sorte": [["olhar", 1]], "maestria": [["golpe", 2]], "raio": [["fogo", 4], ["gelo", 4]], "luz": [["muralha", 2]], "juizo": [["sagrado", 5], ["luz", 1]], "medita": [["combo", 2]], "raizes": [["espinho", 2]], "casca": [["verde", 2]], "muralha_esc": [["vigor", 5]], "refletor": [["provocar", 3], ["muralha_esc", 3]], "juramento": [["refletor", 3], ["muralha_esc", 5]], "furia_s": [["maestria", 5]], "redemoinho": [["investida", 3]], "frenesi": [["redemoinho", 3], ["furia_s", 3]], "maestria_el": [["fogo", 5]], "bola_fogo": [["maestria_el", 2]], "nevasca": [["gelo", 5], ["bola_fogo", 2]], "amplifica": [["recup", 3]], "lentidao": [["gelo", 3]], "barreira": [["manto", 3], ["lentidao", 2]], "mira": [["aguia", 5]], "mosca": [["mira", 2]], "perfura": [["mosca", 2], ["atordoa", 2]], "falcao": [["precisao", 3]], "armadilha": [["agil", 2]], "chuva": [["armadilha", 2], ["duplo", 5]], "devocao": [["muralha", 3]], "escudo_fe": [["devocao", 2]], "cura_maior": [["luz", 3], ["escudo_fe", 1]], "zelo": [["sagrado", 3]], "martelo": [["zelo", 2]], "sentenca": [["martelo", 2], ["juizo", 2]], "punho_ferro": [["combo", 3]], "cem_golpes": [["punho_ferro", 2]], "furia_int": [["cem_golpes", 3]], "fluxo": [["postura", 3]], "palma": [["chi", 2]], "respira": [["fluxo", 2], ["palma", 1]], "selvagem": [["verde", 3]], "urso": [["casca", 3]], "fera": [["selvagem", 2], ["urso", 1]], "veneno": [["casca", 3]], "jardim": [["espinho", 5]], "galhos": [["veneno", 2], ["jardim", 1]], "grito": [["juramento", 1]], "golpe_fim": [["frenesi", 1]], "apocalipse": [["nevasca", 3]], "parar_tempo": [["barreira", 3]], "fantasma": [["perfura", 3]], "tempestade": [["chuva", 3]], "santuario": [["cura_maior", 3]], "sentenca_f": [["sentenca", 3]], "firmamento": [["furia_int", 1]], "iluminacao": [["respira", 3]], "manada": [["fera", 3]], "floresta": [["galhos", 3]]};
+for(const s of SK){if(SK_REQ[s.id])s.req=SK_REQ[s.id];else if(s.req&&!Array.isArray(s.req[0]))s.req=[s.req]}
 const SKM=Object.fromEntries(SK.map(s=>[s.id,s]));
 
 /* ---------- Itens ---------- */
@@ -1260,11 +1285,12 @@ function viewHeroi(){const s=stats(),c=CLASSES[S.cls];const eqSet=new Set(Object
  </div></div>`}
 
 /* ---------- Classe ---------- */
-function reqOk(s){if(!s.req)return true;return rank(s.req[0])>=s.req[1]}
+const reqList=s=>s.req||[];
+function reqOk(s){return reqList(s).every(([id,n])=>rank(id)>=n)}
 function learnableCount(){return SK.filter(s=>clsOk(s.id)&&rank(s.id)<s.max&&reqOk(s)).length}
 function skillRow(s){const r=rank(s.id),ok=reqOk(s),max=r>=s.max;return `<div class="skill"><div><h3>${s.name}<span class="tag">${s.type}${s.type==='ativa'?` · ${s.cd} s · ${s.en} energia`:''}</span></h3><div class="pips">${Array.from({length:s.max},(_,i)=>`<i class="${i<r?'f':''}"></i>`).join('')}</div></div>
  <button class="btn sm act ${!max&&ok&&S.pc>0?'wine':''}" data-act="learn" data-id="${s.id}" ${max||!ok||S.pc<1?'disabled':''}>${max?'Máximo':r?'Melhorar · 1':'Aprender · 1'}</button>
- <p>${r?s.d(r):'Ainda não aprendida.'}${!max?` <span style="color:var(--ink)">Próximo: ${s.d(r+1)}.</span>`:''}${!ok?` <i>Requer ${SKM[s.req[0]].name} ${s.req[1]}.</i>`:''}</p></div>`}
+ <p>${r?s.d(r):'Ainda não aprendida.'}${!max?` <span style="color:var(--ink)">Próximo: ${s.d(r+1)}.</span>`:''}${!ok?` <i>Requer ${reqList(s).filter(([id,n])=>rank(id)<n).map(([id,n])=>SKM[id].name+' '+n).join(' e ')}.</i>`:''}</p></div>`}
 function clsCard(k,ready,label){const C=CLASSES[k];return `<div class="cls ${C.artless?'artless':''}"><img src="${ART[C.img]}" alt=""><b>${C.name}</b><p>${C.desc}</p><button class="btn sm block ${ready?'wine':''}" data-act="promote" data-c="${k}" ${ready?'':'disabled'}>${ready?'Escolher':label}</button></div>`}
 function viewHabilidades(){const c=CLASSES[S.cls];let box;
  if(c.tier===0){const ready=S.lvl>=10;box=`<p class="lede">Aos 10 níveis, o Aprendiz escolhe uma classe.</p><div class="classes">${FIRST.map(k=>clsCard(k,ready,'Nível 10')).join('')}</div>`}
@@ -1274,7 +1300,7 @@ function viewHabilidades(){const c=CLASSES[S.cls];let box;
  if(c.artless)box+=`<p class="tiny muted" style="margin-top:8px">O visual próprio desta classe entra quando a arte com cabelo chegar. Até lá, o herói usa o visual da classe anterior com uma aura.</p>`;
  if(c.tier>0)box+=`<div class="gap"></div><button class="btn sm ghost" data-act="swapclass" ${S.gold<800?'disabled':''}>Recomeçar a escolha de classe · 800 ouro</button><p class="tiny muted" style="margin-top:6px">Volta a Aprendiz e devolve todos os pontos gastos fora do Aprendiz.</p>`;
  const sheet=c.sheet?`<img class="sheetimg" src="${ART[c.sheet]}" alt="Ficha" data-act="zoom" data-k="${c.sheet}" loading="lazy">`:'';
- const groups=lineage().map(l=>`<div class="divider"></div><h3 style="font-family:var(--serif)">${CLASSES[l].name}</h3>${SK.filter(s=>s.cls===l).map(skillRow).join('')}`).join('');
+ const groups=skillTree();
  return `<div class="cols"><div>
  <section class="sheet"><div class="ribbon">Classe</div>${box}${sheet}</section></div><div>
  <section class="sheet"><div class="ribbon teal">Habilidades</div><div class="points"><span class="n">${S.pc}</span><span class="l">pontos de habilidade<br><span class="muted small">nível de classe ${S.jobLvl} · ${S.jobXp}/${jobNeed(S.jobLvl)} XP</span></span></div>
@@ -1362,6 +1388,32 @@ albumReg=S.region;selCard=regMons(albumReg)[0];
 offline();if(S.mode==='boss')S.mode='hunt';unlockCheck(false);nextSpawn=T+.8;modeText();render();updateModes();
 setInterval(save,15000);connectFirebase();
 requestAnimationFrame(frame);
+
+/* ---------- Árvore de habilidades ---------- */
+let selSkill=null;
+function skGlyph(s){const f=s.fx||'',k=s.kind||'',p=s.p?Object.keys(s.p(1)):[];
+  if(f.includes('fire')||f==='apoc')return'🔥';if(f.includes('ice')||f==='blizzard')return'❄';if(f==='bolt')return'⚡';if(f.includes('arrow')||f==='rain')return'➶';if(f==='holy')return'✧';if(f.includes('combo')||f==='chi')return'✊';
+  if(f==='thorn'||f==='root'||f==='leaves')return'❦';if(f==='bash')return'⛨';if(f.includes('slash')||f==='dash'||f==='spin')return'⚔';
+  if(k==='heal'||k==='oath')return'✚';if(k==='shield'||k==='reflect')return'⛨';if(k==='buff'||k==='weaken')return'✪';if(k==='evade')return'≋';
+  if(p.includes('crit')||p.includes('critDmg'))return'◎';if(p.includes('hp')||p.includes('reg'))return'♥';if(p.includes('def'))return'⛨';if(p.includes('atk')||p.includes('skill'))return'⚔';if(p.includes('luck'))return'☘';if(p.includes('enr'))return'✦';if(p.includes('ls'))return'❥';if(p.includes('falcon'))return'➶';return'✦'}
+function skillTree(){const groups=lineage(),CW=88,RH=104,GH=34,NW=56;const pos={};let y=0,maxW=0,html='',edges='';
+  for(const g of groups){const list=SK.filter(s=>s.cls===g);const depth={};const dep=s=>{if(depth[s.id]!=null)return depth[s.id];let d=0;for(const[r]of reqList(s)){const R=SKM[r];if(R&&R.cls===g)d=Math.max(d,dep(R)+1)}return depth[s.id]=d};list.forEach(dep);
+    const cols={};for(const s of list)(cols[depth[s.id]]=cols[depth[s.id]]||[]).push(s);const nCols=Object.keys(cols).length,nRows=Math.max(...Object.values(cols).map(c=>c.length));
+    html+=`<div class="tg" style="top:${y}px">${CLASSES[g].name}</div>`;
+    for(const[d,c]of Object.entries(cols)){const off=(nRows-c.length)*RH/2;c.forEach((s,i)=>{pos[s.id]={x:Number(d)*CW+CW/2,y:y+GH+off+i*RH+NW/2}})}
+    maxW=Math.max(maxW,nCols*CW);y+=GH+nRows*RH}
+  for(const s of SK){if(!pos[s.id])continue;const b=pos[s.id];for(const[r,n]of reqList(s)){const a=pos[r];if(!a)continue;const ok=rank(r)>=n;
+    const sameRow=Math.abs(a.y-b.y)<4,x1=a.x,y1=a.y,x2=b.x,y2=b.y;let path,mx,my;
+    if(a.x<b.x&&Math.abs(a.y-b.y)<RH*1.5){const cx=(x1+x2)/2;path=`M${x1+NW/2} ${y1}C${cx} ${y1} ${cx} ${y2} ${x2-NW/2} ${y2}`;mx=cx;my=(y1+y2)/2}
+    else{const cy=(y1+y2)/2;path=`M${x1} ${y1+NW/2}C${x1} ${cy} ${x2} ${cy} ${x2} ${y2-NW/2-14}`;mx=(x1+x2)/2;my=cy}
+    edges+=`<path d="${path}" class="${ok?'ok':''}" marker-end="url(#ar${ok?'1':'0'})"/><text x="${mx}" y="${my+4}" class="${ok?'ok':''}">nv ${n}</text>`}}
+  const nodes=SK.filter(s=>pos[s.id]).map(s=>{const r=rank(s.id),ok=reqOk(s),st=r>=s.max?'max':r>0?'got':ok?'av':'lock',P=pos[s.id];
+    return `<button class="sn ${st} ${s.type==='ativa'?'act':'pas'} ${selSkill===s.id?'sel':''}" style="left:${P.x}px;top:${P.y}px" data-act="selskill" data-id="${s.id}" aria-label="${esc(s.name)}"><span class="ic">${skGlyph(s)}</span><em>${r}/${s.max}</em><b>${esc(s.name)}</b></button>`}).join('');
+  const sel=selSkill&&pos[selSkill]?SKM[selSkill]:null;
+  return `<p class="tiny muted">Toque numa habilidade para ver e aprender. Linhas cheias: requisito cumprido; tracejadas: ainda falta. Círculo = ativa, quadrado = passiva.</p>
+  <div class="treewrap"><div class="tree" style="width:${maxW}px;height:${y}px"><svg width="${maxW}" height="${y}"><defs><marker id="ar1" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0 0L6 3L0 6z" fill="var(--wine)"/></marker><marker id="ar0" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0 0L6 3L0 6z" fill="var(--rule)"/></marker></defs>${edges}</svg>${html}${nodes}</div></div>
+  ${sel?`<div class="skdetail">${skillRow(sel)}</div>`:'<p class="small muted" style="margin-top:8px">Nenhuma habilidade selecionada.</p>'}`}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-act="selskill"]');if(!b)return;selSkill=b.dataset.id;const y=scrollY;render();scrollTo(0,y)});
 
 </script>
 <script src="art-l1.js" async></script>
